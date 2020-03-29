@@ -1,0 +1,48 @@
+{% extends "budget/base.html" %}
+{% load static %}
+{% block title %}
+<title>
+    Crear cliente - DARAS
+</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-4 offset-lg-4 my-5">
+            <h1 class="text-center">Crear cliente</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input class="form-control" type="text" name="nit" placeholder="NIT de la empresa">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="name" placeholder="Nombre de la empresa">
+                </div>
+                <div class="form-group">
+                    <select name="country" class="countries order-alpha form-control" id="countryId">
+                        <option value="">Pais</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="state" class="states order-alpha form-control" id="stateId">
+                        <option value="">Departamento</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="city" class="cities order-alpha form-control" id="cityId">
+                        <option value="">Ciudad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="address" placeholder="Dirección">
+                </div>
+                <button type="submit" class="btn btn-block btn-primary">CREAR</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% block scripts %}
+    <script src="//geodata.solutions/includes/countrystatecity.js"></script>
+{% endblock scripts %}
+{% endblock content %}

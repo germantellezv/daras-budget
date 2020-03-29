@@ -1,0 +1,57 @@
+{% extends "home/login-signup-base.html" %}
+{% load static %}
+{% block title %}
+  <title>
+      Iniciar sesión - DARAS
+  </title>
+{% endblock title %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <img src="{% static 'home/img/logo-daras.png' %}" height="70" alt="">
+    <h3 class="mb-1">Iniciar Sesión</h3>
+    {% if error %}
+      <div class="alert alert-danger">
+          {{error}}
+      </div>
+    {% endif %}
+    <!-- {% if form.errors %}
+        <ul>
+            {% for e in form.errors %}
+            <li>
+                {{e}}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %} -->
+    <!-- <span>No credit card required</span> -->
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <input 
+        type="email" 
+        name="username" 
+        placeholder="Correo electrónico" 
+        class="form-control">
+    </div>
+    
+    <div class="form-group">
+        <input 
+        type="password" 
+        name="password" 
+        placeholder="Repetir contraseña" 
+        class="form-control {% if form.password.errors %}is-invalid{% endif %}">
+        <div class="invalid-feedback">
+            {% for error in form.password.errors  %}
+            {{error}}
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button class="btn-block btn btn-primary" type="submit">Iniciar sesión</button>
+    </div>
+    
+</form>
+{% endblock content %}

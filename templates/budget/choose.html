@@ -1,0 +1,40 @@
+{% extends "budget/base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Metalmecánica - DARAS</title>
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 p-1">
+            <h1>
+                Opciones
+            </h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card my-2">
+                <div class="card-body">
+                    <i class="fas fa-plus-circle" style="color: limegreen;"></i>
+                    <a href="{% url 'budget:create-client' %}" style="color: black;">
+                        <span class="card-title">CREAR CLIENTE</span>
+                    </a>
+                </div>
+            </div>
+            <div class="card my-2">
+                <div class="card-body">
+                    <i class="fas fa-plus-circle" style="color: limegreen;"></i>
+                    <a href="{% url 'budget:create' %}" style="color: black;">
+                        <span class="card-title">CREAR PRESUPUESTO</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

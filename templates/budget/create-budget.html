@@ -1,0 +1,126 @@
+{% extends "budget/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+<title>Crear presupuesto - DARAS</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-10 offset-1">
+
+            <div class="card">
+                <!-- <h5 class="card-header h5">Crear presupuesto</h5> -->
+                <div class="card-body">
+                    <h1 class="text-center">CREAR PRESUPUESTO</h1>
+                    <hr>
+                    <!-- <h5 class="card-title">Special title treatment</h5> -->
+                    <form action="" method="POST" id="budget-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <!-- <label for="">Cliente</label> -->
+                            {% render_field form.client class="custom-select " %}
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="">Tipo de servicio</label> -->
+                            {% render_field form.service class="custom-select " %}
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="subject">Objeto</label> -->
+                            <textarea name="subject" id="subject"  class="form-control" placeholder="Descripción del trabajo"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-around">
+                            <div class="form-group text-center">
+                                <label for="id_administration_percentage">Porcentaje de administración </label>
+                                {% render_field form.administration_percentage class="form-control text-center text-center w-50 m-auto" value="9" %}
+                            </div>
+                            <div class="form-group text-center">
+                                <label for="id_incidentals_percentaje">Porcentaje de imprevistos  </label>
+                                {% render_field form.incidentals_percentaje class="form-control text-center w-50 m-auto" value="6" %}
+                            </div>
+                            <div class="form-group text-center">
+                                <label for="id_utility_percentage">Porcentaje de utilidad </label>
+                                {% render_field form.utility_percentage class="form-control text-center w-50 m-auto" value="4" %}
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="id_iva_option">Calcular IVA con respecto a</label> -->
+                            {% render_field form.iva_option class="custom-select" %}
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="id_comment">Observaciones</label> -->
+                            <textarea name="comment" id="id_comment"  class="form-control" placeholder="Observaciones por parte de DARAS"></textarea>
+                        </div>
+
+                        <hr>
+
+                        <h3>MANO DE OBRA</h3>
+                        <a class="btn btn-primary">AGREGAR</a>
+                        <a class="btn btn-primary">BORRAR</a>
+
+                        <table id="workforce" class="table">
+                            <tr>
+                                <td>
+                                    <label for="">Mano de obra</label>
+                                    <input type="text" class="form-control w-50">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr>
+
+                        <h3>EQUIPO Y HERRAMIENTAS</h3>
+                        <a class="btn btn-primary">AGREGAR</a>
+                        <a class="btn btn-primary">BORRAR</a>
+
+                        <table id="workforce" class="table">
+                            <tr>
+                                <td>
+                                    <label for="">Mano de obra</label>
+                                    <input type="text" class="form-control w-50">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr>
+
+                        <h3>MATERIALES</h3>
+                        <a class="btn btn-primary">AGREGAR</a>
+                        <a class="btn btn-primary">BORRAR</a>
+
+                        <table id="workforce" class="table">
+                            <tr>
+                                <td>
+                                    <label for="">Mano de obra</label>
+                                    <input type="text" class="form-control w-50">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr>
+
+                        <h3>TRANSPORTE</h3>
+                        <a class="btn btn-primary">AGREGAR</a>
+                        <a class="btn btn-primary">BORRAR</a>
+
+                        <table id="workforce" class="table">
+                            <tr>
+                                <td>
+                                    <label for="">Mano de obra</label>
+                                    <input type="text" class="form-control w-50">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <button type="submit" form="budget-form" class="btn btn-primary btn-block">CREAR</a>
+                    </form>
+                    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
