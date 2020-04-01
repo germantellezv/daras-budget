@@ -7,42 +7,90 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-4 offset-lg-4 my-5">
-            <h1 class="text-center">Crear cliente</h1>
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <input class="form-control" type="text" name="nit" placeholder="NIT de la empresa">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="name" placeholder="Nombre de la empresa">
-                </div>
-                <div class="form-group">
-                    <select name="country" class="countries order-alpha form-control" id="countryId">
-                        <option value="">Pais</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select name="state" class="states order-alpha form-control" id="stateId">
-                        <option value="">Departamento</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select name="city" class="cities order-alpha form-control" id="cityId">
-                        <option value="">Ciudad</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="address" placeholder="Dirección">
-                </div>
-                <button type="submit" class="btn btn-block btn-primary">CREAR</button>
-            </form>
-        </div>
+<!-- Heading -->
+<div class="card mb-1 wow fadeIn">
+
+    <!--Card content-->
+    <div class="card-body d-sm-flex justify-content-between">
+        <h6 class="mb-2 mb-sm-0 pt-1">
+            <span class="text-muted">Dashboard</span>
+            <span class="text-muted">/</span>
+            <span class="text-muted">Clientes</span>
+            <span class="text-muted">/</span>
+            <span>Nuevo cliente</span>
+        </h6>
     </div>
 </div>
-{% block scripts %}
-    <script src="//geodata.solutions/includes/countrystatecity.js"></script>
-{% endblock scripts %}
+<!-- Heading -->
+
+<div class="row">
+    <div class="col-12 my-3">
+        <div class="card mb-4 wow fadeIn">
+            <div class="card-body">
+                <h4 class="card-title">Crear cliente </h4>
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="md-form">
+                        <input class="form-control" type="text" name="nit">
+                        <label for="form1">NIT Empresa</label>
+                    </div>
+                    <div class="md-form">
+                        <input class="form-control" type="text" name="name">
+                        <label for="form1">Nombre empresa</label>
+                    </div>
+
+                    <div class="form-group">
+                        <select name="country" class="countries custom-select order-alpha " id="countryId">
+                            <option value=""></option>
+                            <option value="" selected>Seleccione un país</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select name="state" class="custom-select states order-alpha " id="stateId">
+                            <option value="">Departamento</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select name="city" class="custom-select cities order-alpha " id="cityId">
+                            <option value="">Ciudad</option>
+                        </select>
+                    </div>
+
+                    <div class="md-form">
+                        <input class="form-control" type="text" name="address">
+                        <label for="form1">Dirección</label>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">CREAR</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block scripts %}
+{{block.super}}
+<script src="//geodata.solutions/includes/countrystatecity.js"></script>
+<!-- Initializations -->
+
+<script>
+    $(document).ready(function () {
+        /* Initialize Select elements */
+        $('.mdb-select').materialSelect();
+        /* Initialize Select elements */
+
+        /* Highlight current sidebar item */
+        $('#sidebar .list-group-item').removeClass('active');
+        var $this = $('#btnSidebarClients');
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+        /* Highlight current sidebar item */
+    });
+</script>
+{% endblock scripts %}

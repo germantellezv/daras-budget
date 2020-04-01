@@ -23,10 +23,10 @@ from . import views
 
 app_name = 'budget'
 urlpatterns = [
-    path('', views.home, name='main' ),
-    path('panel/', views.budgetPanel, name='choose' ),
-    path('panel/crear/presupuesto/', views.createBudge, name='create' ),
-    path('panel/crear/cliente/', views.createClient, name='create-client' ),
+    path('panel/', views.panel, name='panel' ),
+    path('panel/crear/cliente/', views.createClient, name='create-client'),
+    path('panel/crear/presupuesto/', views.createBudge, name='create-budget' ),
+    path('panel/completar/presupuesto/<slug:slug>', views.completeBudge, name='complete-budget' ),
 ]
 
 

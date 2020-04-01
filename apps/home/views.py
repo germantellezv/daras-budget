@@ -32,7 +32,7 @@ def login(request):
        if user:
            LoginUser(request, user)
            print(username + ' y ' + password)
-           return redirect('budget:choose')
+           return redirect('budget:panel')
        else:
            return render(request, 'home/login.html', {"error": "Verifique sus datos de acceso"})
 

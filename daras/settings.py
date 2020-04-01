@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # My Apps
+    'rest_framework', # Django Rest Framework
+    'apps.api_rest',
     'apps.home',
     'apps.budget.apps.BudgetConfig',
     # Third party apps
     'widget_tweaks',
+    'material',
 
 ]
 

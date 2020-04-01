@@ -7,120 +7,201 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container">
-    <div class="row mt-3">
-        <div class="col-10 offset-1">
 
-            <div class="card">
-                <!-- <h5 class="card-header h5">Crear presupuesto</h5> -->
-                <div class="card-body">
-                    <h1 class="text-center">CREAR PRESUPUESTO</h1>
-                    <hr>
-                    <!-- <h5 class="card-title">Special title treatment</h5> -->
-                    <form action="" method="POST" id="budget-form">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <!-- <label for="">Cliente</label> -->
-                            {% render_field form.client class="custom-select " %}
+<!-- Heading -->
+<div class="card mb-1 wow fadeIn">
+
+    <!--Card content-->
+    <div class="card-body d-sm-flex justify-content-between">
+
+        <h6 class="mb-2 mb-sm-0 pt-1">
+            <span class="text-muted">Dashboard</span>
+            <span class="text-muted">/</span>
+            <span class="text-muted">Presupuesto</span>
+            <span class="text-muted">/</span>
+            <span>Nuevo presupuesto</span>
+        </h6>
+
+    </div>
+
+</div>
+<!-- Heading -->
+
+<div class="row mt-3">
+    <div class="col-12">
+
+        <div class="card p-5 wow fadeIn">
+            <!-- <h5 class="card-header h5">Crear presupuesto</h5> -->
+            <div class="card-body">
+                <h1 class="text-left">Nuevo presupuesto</h1>
+                <hr style="margin-bottom: 50px;">
+                <!-- <h5 class="card-title">Special title treatment</h5> -->
+                
+                <h2 class="card-title">Datos generales</h2>
+                <form action="" method="POST" id="budget-form">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <small>Las tarifas de este presupuesto serán por </small>
+                        <div class="w-100 mb-3 nx-auto btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-primary form-check-label active">
+                                <input class="form-check-input" type="radio" value="1" name="time" id="option1"
+                                    autocomplete="off" >
+                                Hora
+                            </label>
+                            <label class="btn btn-primary form-check-label">
+                                <input class="form-check-input" type="radio" value="2" name="time" id="option2"
+                                    autocomplete="off" checked>
+                                Día
+                            </label>
+                            <label class="btn btn-primary form-check-label">
+                                <input class="form-check-input" type="radio" value="3" name="time" id="option3"
+                                    autocomplete="off">
+                                Mes
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <!-- <label for="">Tipo de servicio</label> -->
-                            {% render_field form.service class="custom-select " %}
+                    </div>
+
+                    <div class="d-flex justify-content-around">
+                        <div class="md-form">
+                            {% render_field form.administration_percentage class="form-control text-center text-center  m-auto" value="9" %}
+                            <label for="id_administration_percentage">Porcentaje de admon </label>
                         </div>
-                        <div class="form-group">
-                            <!-- <label for="subject">Objeto</label> -->
-                            <textarea name="subject" id="subject"  class="form-control" placeholder="Descripción del trabajo"></textarea>
+                        <div class="md-form text-center">
+                            {% render_field form.incidentals_percentaje class="form-control text-center  m-auto" value="6" %}
+                            <label for="id_incidentals_percentaje">Porcentaje de imprevistos </label>
                         </div>
-                        <div class="d-flex justify-content-around">
-                            <div class="form-group text-center">
-                                <label for="id_administration_percentage">Porcentaje de administración </label>
-                                {% render_field form.administration_percentage class="form-control text-center text-center w-50 m-auto" value="9" %}
-                            </div>
-                            <div class="form-group text-center">
-                                <label for="id_incidentals_percentaje">Porcentaje de imprevistos  </label>
-                                {% render_field form.incidentals_percentaje class="form-control text-center w-50 m-auto" value="6" %}
-                            </div>
-                            <div class="form-group text-center">
-                                <label for="id_utility_percentage">Porcentaje de utilidad </label>
-                                {% render_field form.utility_percentage class="form-control text-center w-50 m-auto" value="4" %}
-                            </div>
-
+                        <div class="md-form text-center">
+                            {% render_field form.utility_percentage class="form-control text-center  m-auto" value="4" %}
+                            <label for="id_utility_percentage">Porcentaje de utilidad </label>
                         </div>
-                        <div class="form-group">
-                            <!-- <label for="id_iva_option">Calcular IVA con respecto a</label> -->
-                            {% render_field form.iva_option class="custom-select" %}
-                        </div>
-                        <div class="form-group">
-                            <!-- <label for="id_comment">Observaciones</label> -->
-                            <textarea name="comment" id="id_comment"  class="form-control" placeholder="Observaciones por parte de DARAS"></textarea>
-                        </div>
+                    </div>
 
-                        <hr>
+                    <div class="md-form">
+                        <i class="fas fa-pencil-alt prefix"></i>
+                        <textarea id="id_descripcion_trabajo" name="subject" class="md-textarea form-control" rows="3"></textarea>
+                        <label for="id_descripcion_trabajo">Descripción del trabajo</label>
+                    </div>
 
-                        <h3>MANO DE OBRA</h3>
-                        <a class="btn btn-primary">AGREGAR</a>
-                        <a class="btn btn-primary">BORRAR</a>
+                    <div class="form-group">
+                        {% render_field form.client class="mdb-select md-form" required="true" %}
+                    </div>
+                    <div class="form-group">
+                        {% render_field form.risk class="mdb-select md-form" required="true" %}
+                    </div>
+                    <div class="form-group">
+                        {% render_field form.service class="mdb-select md-form" required="true" %}
+                    </div>
+                    <div class="form-group">
+                        {% render_field form.iva_option class="mdb-select md-form" required="true" %}
+                    </div>
 
-                        <table id="workforce" class="table">
-                            <tr>
-                                <td>
-                                    <label for="">Mano de obra</label>
-                                    <input type="text" class="form-control w-50">
-                                </td>
-                            </tr>
-                        </table>
+                    <!-- <div class="md-form">
+                        <i class="fas fa-pencil-alt prefix"></i>
+                        <textarea name="comment" id="id_comment" class="md-textarea form-control"></textarea>
+                        <label for="id_comment">Observaciones</label>
+                    </div> 
+                    <hr> -->
 
-                        <hr>
 
-                        <h3>EQUIPO Y HERRAMIENTAS</h3>
-                        <a class="btn btn-primary">AGREGAR</a>
-                        <a class="btn btn-primary">BORRAR</a>
+                    <!-- <h3>MANO DE OBRA</h3>
+                    <div id="workforce" class="table">
 
-                        <table id="workforce" class="table">
-                            <tr>
-                                <td>
-                                    <label for="">Mano de obra</label>
-                                    <input type="text" class="form-control w-50">
-                                </td>
-                            </tr>
-                        </table>
+                    </div>
+                    <a id="addItemWorkforce" class="btn btn-primary">AGREGAR</a>
+                    <a id="removeItemWorkforce" class="btn btn-primary">BORRAR</a> -->
 
-                        <hr>
+                    <!-- <hr> -->
 
-                        <h3>MATERIALES</h3>
-                        <a class="btn btn-primary">AGREGAR</a>
-                        <a class="btn btn-primary">BORRAR</a>
-
-                        <table id="workforce" class="table">
-                            <tr>
-                                <td>
-                                    <label for="">Mano de obra</label>
-                                    <input type="text" class="form-control w-50">
-                                </td>
-                            </tr>
-                        </table>
-
-                        <hr>
-
-                        <h3>TRANSPORTE</h3>
-                        <a class="btn btn-primary">AGREGAR</a>
-                        <a class="btn btn-primary">BORRAR</a>
-
-                        <table id="workforce" class="table">
-                            <tr>
-                                <td>
-                                    <label for="">Mano de obra</label>
-                                    <input type="text" class="form-control w-50">
-                                </td>
-                            </tr>
-                        </table>
-
-                        <button type="submit" form="budget-form" class="btn btn-primary btn-block">CREAR</a>
-                    </form>
-                    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                </div>
+                    <button type="submit" form="budget-form" class="btn btn-primary btn-block">CREAR</a>
+                </form>
+                <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
             </div>
         </div>
+
     </div>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        
+        $('.mdb-select').materialSelect();
+
+
+        /* Highlight current sidebar item */
+        $('#sidebar .list-group-item').removeClass('active');
+        var $this = $('#btnSidebarBudget');
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+        /* end of Highlight current sidebar item */
+
+
+        /* Workforce */
+        // Reset workforce inputs if service change
+        $("#id_service").change(function () {
+            document.getElementById('workforce').innerHTML = '';
+        })
+        
+        // Add item to Workforce area
+        $("#addItemWorkforce").click(function () {
+            var selectedService = $("#id_service").children("option:selected").val();
+            if (selectedService != '') {
+                var url = `/api/workforce/service/${selectedService}`
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log(data);
+                        var aux = ''
+                        var aux = `<option value=""  selected>Mano de obra</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+                         
+                        var container = document.createElement('div')
+                        container.classList.add("form-group")
+                        container.classList.add("form-inline")
+                        container.classList.add("justify-content-left")
+                        var select = document.createElement('select')
+                        select.classList.add("custom-select")
+                        select.classList.add("mr-3")
+                        select.classList.add("my-2")
+                        select.setAttribute("name","workforce-id")
+                        select.setAttribute("required","true")
+                        select.innerHTML = aux;
+                        
+                        var input = document.createElement('input')
+                        input.setAttribute('type','number')
+                        input.setAttribute('required','true')
+                        input.setAttribute('name','workforce-amount')
+                        input.setAttribute('placeholder','Cantidad')
+                        input.classList.add("form-control")
+                        input.classList.add("text-center")
+
+                        container.appendChild(select)
+                        container.appendChild(input)
+
+                        document.getElementById('workforce').appendChild(container)
+                    })
+                    .catch(error => console.error(error))
+            }
+        })
+
+        // Remove last item from Workforce area
+        $("#removeItemWorkforce").click(function () {
+            var x = $("#workforce").children().length
+            if (x != 0) {
+                $("#workforce").children().last().remove()
+            }
+        })
+        /* end of Workforce */
+
+
+        
+    });
+</script>
+
+{% endblock scripts %}

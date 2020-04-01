@@ -5,12 +5,12 @@ from .models import *
 
 # Register your models here.
 
-@admin.register(Clients)
+@admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = "Clientes"
 
-@admin.register(Services)
+@admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     readonly_fields = ('slug',)
     class Meta:
@@ -18,5 +18,18 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
+    list_display = ('slug', 'client', 'service', 'subject')
     class Meta:
         verbose_name = "Presupuesto"
+
+@admin.register(Workforce)
+class WorkforceAdmin(admin.ModelAdmin):
+    list_display = ('name','service','experience_time','daily_salary','created')
+    list_editable = ('experience_time',)
+    class Meta:
+        verbose_name = "Mano de obra"
+
+@admin.register(Risk)
+class RiskAdmin(admin.ModelAdmin):
+    class Meta:
+        verbose_name = "Tipo de riesgo"
