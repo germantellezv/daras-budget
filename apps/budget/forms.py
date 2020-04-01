@@ -9,6 +9,7 @@ class CreateClientForm(forms.ModelForm):
         fields = ('nit','name','country','state','city','address')
 
 class CreateBudgetForm(forms.ModelForm):
+    """ Create budget form """
     def __init__(self, *args, **kwargs):
         super(CreateBudgetForm, self).__init__(*args, **kwargs)
         self.fields['client'].empty_label = "Selecciona un cliente"
@@ -28,3 +29,13 @@ class CreateBudgetForm(forms.ModelForm):
         'incidentals_percentaje',
         'administration_percentage',
         )
+
+class BudgetItemForm(forms.ModelForm):
+    """ Budget items form"""
+    def __init__(self, *args, **kwargs):
+        super(BudgetItemForm, self).__init__(*args, **kwargs)
+        self.fields['unit'].empty_label = "Unidades"
+        
+    class Meta:
+        model = BudgetItem
+        fields = ('title','unit','amount')

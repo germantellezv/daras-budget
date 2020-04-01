@@ -20,13 +20,13 @@ from django.urls import path
 # Views
 from . import views
 
-
 app_name = 'budget'
 urlpatterns = [
     path('panel/', views.panel, name='panel' ),
     path('panel/crear/cliente/', views.createClient, name='create-client'),
     path('panel/crear/presupuesto/', views.createBudge, name='create-budget' ),
-    path('panel/completar/presupuesto/<slug:slug>', views.completeBudge, name='complete-budget' ),
+    path('panel/presupuesto/<slug:slug>/detalle', views.budgetDetail, name='budget-detail' ),
+    path('panel/presupuesto/<slug:slug>/item/<slug:code>', views.editBudgetItem, name='edit-item' ),
 ]
 
 

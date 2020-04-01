@@ -3,12 +3,26 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import generics
 
+# Decorators
+from rest_framework.decorators import action
 
 # Serializers
-from .serializers import WorkforceSerializer
+from .serializers import *
 
 # Models
-from apps.budget.models import Workforce
+from apps.budget.models import *
+
+
+
+class UnitViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users choose units
+    """
+    
+    queryset = Unit.objects.all()
+    serializer_class = UnitSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 
 class WorkforceViewSet(viewsets.ModelViewSet):
     """
@@ -17,7 +31,6 @@ class WorkforceViewSet(viewsets.ModelViewSet):
     queryset = Workforce.objects.all()
     serializer_class = WorkforceSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
 class WorkforceList(generics.ListAPIView):
     """ 

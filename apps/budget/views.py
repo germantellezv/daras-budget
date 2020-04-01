@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
 
 
 # Decorators
 from django.contrib.auth.decorators import login_required
 
 # Forms
-from .forms import CreateClientForm, CreateBudgetForm
+from .forms import *
 
 # Models
 from .models import *
@@ -42,11 +43,16 @@ def createClient(request):
 
 @login_required
 def createBudge(request):
-    """ Create budget with general information """
-    form = CreateBudgetForm()
+    """ Create budget with general/basic information """
 
+    form = CreateBudgetForm()
+    # form2 is imported only for render purposes ('units' select) in frontend
+    form2= BudgetItemForm()
+    
     if request.method == 'POST':
         form = CreateBudgetForm(request.POST)
+        
+
         if form.is_valid():
             data = form.cleaned_data
 
@@ -63,27 +69,56 @@ def createBudge(request):
             B.comment = data['comment']
             B.save()
 
-            slug = B.slug
+            titles = request.POST.getlist('title')
+            units = request.POST.getlist('unit')
+            amounts = request.POST.getlist('amount')
 
-            return redirect('budget:complete-budget', slug=slug)
+            if titles and units and amounts:
+                for i,j,k in zip(titles,units,amounts):
+                    I = BudgetItem()
+                    I.budget = B
+                    I.title = i
+                    I.unit = Unit.objects.get(id=j)
+                    I.amount = k
+                    I.save()
+                    aux = '{}{}'.format(B.client.nit, I.id)
+                    I.slug=slugify(aux)
+                    I.save()
+            
+            slug = B.slug
+            return redirect('budget:budget-detail', slug=slug)
 
     return render(
         request=request, 
         template_name='budget/create-budget.html',
         context={
             'form':form,
+            'form2':form2,
         })
 
-def completeBudge(request, slug):
-
+def budgetDetail(request, slug):
+    """ Budget summary before edit items """
     budget = Budget.objects.get(slug=slug)
-    
+    items = BudgetItem.objects.filter(budget=budget)
     return render(
         request=request,
-        template_name='budget/complete-budget.html',
+        template_name='budget/budget-detail.html',
         context={
-            'budget':budget
+            'budget':budget,
+            'items':items,
         }
         )
 
+def editBudgetItem(request, slug, code):
+    """ Edit budget item """
+    budget = get_object_or_404(Budget, slug=slug)
+    item = get_object_or_404(BudgetItem, slug=code)
 
+    return render(
+        request=request,
+        template_name = 'budget/edit-item.html',
+        context={
+            'item':item,
+            'budget':budget,
+        }
+    )

@@ -14,3 +14,8 @@ class WorkforceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Workforce
         fields = ['id','service','name','experience_time','daily_salary']
+
+class UnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Unit
+        fields = ['id','acronym', 'name']

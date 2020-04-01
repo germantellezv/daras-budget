@@ -1,0 +1,179 @@
+{% extends "budget/base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Completar presupuesto - DARAS</title>
+{% endblock title %}
+
+{% block content %}
+
+<!-- Heading -->
+<div class="card mb-1 wow fadeIn">
+
+    <!--Card content-->
+    <div class="card-body d-sm-flex justify-content-between">
+
+        <h6 class="mb-2 mb-sm-0 pt-1">
+            <span class="text-muted">Dashboard</span>
+            <span class="text-muted">/</span>
+            <span class="text-muted">Presupuesto</span>
+            <span class="text-muted">/</span>
+            <span>Completar presupuesto</span>
+            
+        </h6>
+
+    </div>
+
+</div>
+<!-- Heading -->
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card p-5 wow fadeIn">
+            
+            <div class="card-body">
+                <h1 class="text-left">
+                    Resumen
+                </h1>
+                <hr style="margin-bottom: 20px;">
+                
+                <!-- Budget summary -->
+                <table>
+                    <tr>
+                        <td>
+                            Cliente
+                        </td>
+                        <td>
+                            {{budget.client.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Riesgo
+                        </td>
+                        <td>
+                            {{budget.risk}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Objeto
+                        </td>
+                        <td>
+                            {{budget.subject}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Tipo de cobro
+                        </td>
+                        <td>
+                            {{budget.get_time_display}}
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            Tipo de servicio
+                        </td>
+                        <td>
+                            {{budget.service}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Calcular IVA en base a
+                        </td>
+                        <td>
+                            {{budget.get_iva_option_display}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            % de administración
+                        </td>
+                        <td>
+                            {{budget.administration_percentage}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            % de imprevistos
+                        </td>
+                        <td>
+                            {{budget.incidentals_percentaje}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            % de utilidad
+                        </td>
+                        <td>
+                            {{budget.utility_percentage}}
+                        </td>
+                    </tr>
+                    {% if budget.comment %}
+                    <tr>
+                        <td>
+                            <strong>
+                                Observaciones
+                            </strong>
+                        </td>
+                        <td>
+                            {{budget.comment}}
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+                
+                <hr class="my-3">
+
+                <!-- Budget items -->
+                <table class="table">
+                    <thead class="text-center">
+                        <th>
+                            Item
+                        </th>
+                        <th>
+                            Descripción
+                        </th>
+                        <th>
+                            Unidad
+                        </th>
+                        <th>
+                            Cantidad
+                        </th>
+                        <th>
+                            Opciones
+                        </th>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for i in items %}
+                        <tr>
+                            <td>
+                                {{forloop.counter}}
+                            </td>
+                            <td>
+                                {{i.title}}
+                            </td>
+                            <td>
+                                {{i.unit.acronym}}
+                            </td>
+                            <td>
+                                {{i.amount}}
+                            </td>
+                            <td>
+                                <a href="{% url 'budget:edit-item' budget.slug i.slug %}" style="color: #212529;">
+                                    <i class="far fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>    
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

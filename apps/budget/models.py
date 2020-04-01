@@ -90,6 +90,17 @@ class Risk(models.Model):
         verbose_name = "tipo de riesgo"
         verbose_name_plural = "tipos de riesgo"
 
+class Unit(models.Model):
+    """ Units for budget APU """
+    acronym = models.CharField(unique=True, max_length=10)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return '{} - {}'.format(self.acronym, self.name)
+
+    class Meta:
+        verbose_name = 'unidad'
+        verbose_name_plural = 'unidades'
 
 class Budget(models.Model):
     """ Budget model """
@@ -97,7 +108,7 @@ class Budget(models.Model):
     OPTIONS_IVA = [
         (None, 'Calcular IVA con respecto a'),
         ('1', 'Subtotal'),
-        ('2', 'XXXXXXXX')
+        ('2', 'Utilidad')
     ]
     OPTIONS_PERIOD = [
         (None, 'Periodo de tiempo'),
@@ -145,3 +156,20 @@ class Budget(models.Model):
     class Meta:
         verbose_name = "presupuesto"
         verbose_name_plural = "presupuestos"
+
+class BudgetItem(models.Model):
+    """ Budget item """
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    amount = models.PositiveSmallIntegerField(blank=True, null=True)
+    unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    total_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    slug = models.SlugField(blank=True, null=True)
+    
+    def __str__(self):
+        return 'Item  del presupuesto {}'.format(self.budget.slug)
+    
+    class Meta:
+        verbose_name = 'Item de presupuesto'
+        verbose_name_plural = 'Items de presupuesto'

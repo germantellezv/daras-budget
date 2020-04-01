@@ -33,3 +33,13 @@ class WorkforceAdmin(admin.ModelAdmin):
 class RiskAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = "Tipo de riesgo"
+
+@admin.register(Unit)
+class UnitAdmin(admin.ModelAdmin):
+    class Meta:
+        verbose_name = "Unidades"
+
+@admin.register(BudgetItem)
+class BudgetItemAdmin(admin.ModelAdmin):
+    class Meta:
+        verbose_name = "Item de presupuesto"

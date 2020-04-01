@@ -96,26 +96,45 @@
                         {% render_field form.iva_option class="mdb-select md-form" required="true" %}
                     </div>
 
-                    <!-- <div class="md-form">
-                        <i class="fas fa-pencil-alt prefix"></i>
-                        <textarea name="comment" id="id_comment" class="md-textarea form-control"></textarea>
-                        <label for="id_comment">Observaciones</label>
-                    </div> 
-                    <hr> -->
+                    <h2 class="card-title">
+                        Items
+                    </h2>
 
+                    <table class="table">
+                        <thead class="text-center">
+                            <tr>
+                                <th class="text-center">
+                                    ITEM
+                                </th>
+                                <th class="text-center">
+                                    DESCRIPCIÓN
+                                </th>
+                                <th class="text-center">
+                                    UNIDAD
+                                </th>
+                                <th class="text-center">
+                                    CANTIDAD
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTable" class="text-center">
+                        </tbody>
+                        <tr>
+                            <td colspan="3">
 
-                    <!-- <h3>MANO DE OBRA</h3>
-                    <div id="workforce" class="table">
+                            </td>
+                            
+                            <td class="text-right">
+                                <a id="addItemButton" class="btn btn-success">AGREGAR</a>
+                                <a id="removeItemButton" class="btn btn-danger">BORRAR</a>
+                            </td>
+                        </tr>
+                    </table>
 
-                    </div>
-                    <a id="addItemWorkforce" class="btn btn-primary">AGREGAR</a>
-                    <a id="removeItemWorkforce" class="btn btn-primary">BORRAR</a> -->
-
-                    <!-- <hr> -->
-
+                    
+                    <hr>
                     <button type="submit" form="budget-form" class="btn btn-primary btn-block">CREAR</a>
                 </form>
-                <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
             </div>
         </div>
 
@@ -199,7 +218,64 @@
         })
         /* end of Workforce */
 
+        /* Add elements to items table */
+        var counter = 1;
+        $("#addItemButton").click(function(){
+            
+            var itemUnit = document.createElement('td')
+            itemUnit.classList.add('text-center')
+            var HTMLString = 
+            `
+            <div class="form-group">
+                {% render_field form2.unit name="unit" class="custom-select" required="true" %}
+            </div>
+            `
+            itemUnit.innerHTML = HTMLString;
+            
+            var HTMLString2 = `
+            <div class="form-group">
+                <input type="text" name="title" class="form-control text-center" placeholder="Descripción" required="true">
+            </div>
+            `
+            var row = document.createElement('tr');
+            var itemNumber = document.createElement('td')
+            itemNumber.classList.add('text-center')
+            itemNumber.innerHTML = counter
+            
+            var itemTitle = document.createElement('td')
+            itemTitle.classList.add('text-center')
+            itemTitle.innerHTML = HTMLString2
+            
+            var HTMLString3 = 
+            `
+            <div class="form-group text-center">
+                <input type="number" name="amount" class="form-control text-center" placeholder="Cantidad" required="true">
+            </div>
+            `
+            var itemAmount = document.createElement('td')
+            itemAmount.classList.add('text-center')
+            itemAmount.innerHTML = HTMLString3;
 
+            row.appendChild(itemNumber)
+            row.appendChild(itemTitle)
+            row.appendChild(itemUnit)
+            console.log(itemUnit);
+            row.appendChild(itemAmount)
+            counter = counter + 1 
+            document.getElementById('itemsTable').appendChild(row)
+            console.log(row);
+        })
+        /* end of Add elements to items table */
+
+        /* Remove last element of items table */
+        $("#removeItemButton").click(function () {
+            var x = $("#itemsTable").children().length
+            if (x != 0) {
+                $("#itemsTable").children().last().remove()
+            }
+            counter = counter - 1
+        })
+        /* Remove last element of items table */
         
     });
 </script>
