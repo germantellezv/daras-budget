@@ -25,7 +25,6 @@ class Client(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.nit, self.name)
 
-
 class Service(models.Model):
     """ Type of service Model """
     name = models.CharField(max_length=100)
@@ -42,7 +41,6 @@ class Service(models.Model):
     class Meta:
         verbose_name = "tipo de servicio"
         verbose_name_plural = "tipos de servicio"
-
 
 class Workforce(models.Model):
     """ Workforce model """
@@ -76,7 +74,6 @@ class Workforce(models.Model):
         verbose_name = "mano de obra"
         verbose_name_plural = "manos de obra"
 
-
 class Risk(models.Model):
     """ Risk type model """
     name = models.CharField(max_length=20, verbose_name="Nombre")
@@ -93,7 +90,7 @@ class Risk(models.Model):
 class Unit(models.Model):
     """ Units for budget APU """
     acronym = models.CharField(unique=True, max_length=10)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return '{} - {}'.format(self.acronym, self.name)
@@ -101,6 +98,93 @@ class Unit(models.Model):
     class Meta:
         verbose_name = 'unidad'
         verbose_name_plural = 'unidades'
+
+class Material(models.Model):
+    """ Materials model """
+
+    name = models.CharField(max_length=100)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True, default=1)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=1)
+    daily_price = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    slug = models.SlugField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        slug = '{0}-{1}'.format(self.name, now().strftime("%Y%m%d%H%M%S"))
+        self.slug = slugify(slug)
+        super(Material, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.unit, self.name)
+
+    class Meta:
+        verbose_name = 'material'
+        verbose_name_plural = 'materiales'
+
+class Equipment(models.Model):
+    """ Equipments and tools model """
+
+    name = models.CharField(max_length=100)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=1)
+    daily_price = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    slug = models.SlugField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        slug = '{0}-{1}'.format(self.name, now().strftime("%Y%m%d%H%M%S"))
+        self.slug = slugify(slug)
+        super(Equipment, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+    class Meta:
+        verbose_name = 'equipo/herramienta'
+        verbose_name_plural = 'equipos/herramientas'
+
+class Transport(models.Model):
+    """ Transport model """
+
+    name = models.CharField(max_length=100)
+    daily_price = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    slug = models.SlugField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        slug = '{0}-{1}'.format(self.name, now().strftime("%Y%m%d%H%M%S"))
+        self.slug = slugify(slug)
+        super(Transport, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+    class Meta:
+        verbose_name = 'transporte'
+        verbose_name_plural = 'transportes'
+
+class Secure(models.Model):
+    """ Secure and others model """
+
+    name = models.CharField(max_length=100)
+    daily_price = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    slug = models.SlugField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        slug = '{0}-{1}'.format(self.name, now().strftime("%Y%m%d%H%M%S"))
+        self.slug = slugify(slug)
+        super(Secure, self).save(*args, **kwargs)
+
+    def __str__(self):
+        pass
+
+    class Meta:
+        verbose_name = 'seguro/otro'
+        verbose_name_plural = 'seguros/otros'
 
 class Budget(models.Model):
     """ Budget model """
@@ -173,3 +257,5 @@ class BudgetItem(models.Model):
     class Meta:
         verbose_name = 'Item de presupuesto'
         verbose_name_plural = 'Items de presupuesto'
+ 
+ 

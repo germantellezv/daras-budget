@@ -44,7 +44,7 @@
                     <!--Accordion wrapper-->
                     <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
 
-                        <!-- Accordion card -->
+                        <!-- Workforce Accordion card -->
                         <div class="card">
 
                             <!-- Card header -->
@@ -65,7 +65,7 @@
                                         <thead>
                                             <tr class="text-center">
                                                 <th>
-                                                    Trabajador
+                                                    Mano de obra
                                                 </th>
                                                 <th>
                                                     Cantidad
@@ -82,24 +82,24 @@
                                             </tr>
                                         </thead>
                                         <tbody id="workforceInputs">
-                                            
+
                                         </tbody>
                                         <tfoot>
                                             <tr class="text-center grey lighten-5">
                                                 <td colspan="3"></td>
-                                                
+
                                                 <td class="text-right">Subtotal</td>
                                                 <td class="text-left">$ 0.00</td>
-                                                
+
                                             </tr>
                                             <tr>
                                                 <td colspan="3"></td>
-                                                
+
                                                 <td class="text-right" colspan="2">
-                                                    <a id="addItemButton" class="btn btn-success">AGREGAR</a>
-                                                    <a id="removeItemButton" class="btn btn-danger">BORRAR</a>
+                                                    <a id="addWorkforceItemButton" class="btn btn-success">AGREGAR</a>
+                                                    <a id="removeWorkforceItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
-                                                
+
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -107,9 +107,9 @@
                             </div>
 
                         </div>
-                        <!-- Accordion card -->
+                        <!-- Workforce Accordion card -->
 
-                        <!-- Accordion card -->
+                        <!-- Material Accordion card -->
                         <div class="card">
 
                             <!-- Card header -->
@@ -126,33 +126,55 @@
                             <div id="collapseTwo21" class="collapse" role="tabpanel" aria-labelledby="headingTwo21"
                                 data-parent="#accordionEx1">
                                 <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                    richardson ad squid. 3
-                                    wolf
-                                    moon
-                                    officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                                    laborum eiusmod.
-                                    Brunch
-                                    3
-                                    wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-                                    assumenda
-                                    shoreditch
-                                    et.
-                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                                    ea proident.
-                                    Ad
-                                    vegan
-                                    excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                                    aesthetic synth
-                                    nesciunt
-                                    you probably haven't heard of them accusamus labore sustainable VHS.
+                                    <table id="materialTable" class="table table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>
+                                                    Material
+                                                </th>
+                                                <th>
+                                                    Unidad
+                                                </th>
+                                                <th>
+                                                    Precio unitario
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    Valor
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="materialInputs">
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="text-center grey lighten-5">
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right">Subtotal</td>
+                                                <td class="text-left">$ 0.00</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right" colspan="2">
+                                                    <a id="addMaterialItemButton" class="btn btn-success">AGREGAR</a>
+                                                    <a id="removeMaterialItemButton" class="btn btn-danger">BORRAR</a>
+                                                </td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
 
                         </div>
-                        <!-- Accordion card -->
+                        <!-- Material Accordion card -->
 
-                        <!-- Accordion card -->
+                        <!-- Equipments and tools Accordion card -->
                         <div class="card">
 
                             <!-- Card header -->
@@ -169,33 +191,55 @@
                             <div id="collapseThree31" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
                                 data-parent="#accordionEx1">
                                 <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                    richardson ad squid. 3
-                                    wolf
-                                    moon
-                                    officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                                    laborum eiusmod.
-                                    Brunch
-                                    3
-                                    wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-                                    assumenda
-                                    shoreditch
-                                    et.
-                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                                    ea proident.
-                                    Ad
-                                    vegan
-                                    excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                                    aesthetic synth
-                                    nesciunt
-                                    you probably haven't heard of them accusamus labore sustainable VHS.
+                                    <table id="equipmentTable" class="table table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>
+                                                    Equipo/Herramienta
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    Valor por día
+                                                </th>
+                                                <th>
+                                                    Rendimiento
+                                                </th>
+                                                <th>
+                                                    Valor
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="equipmentInputs">
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="text-center grey lighten-5">
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right">Subtotal</td>
+                                                <td class="text-left">$ 0.00</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right" colspan="2">
+                                                    <a id="addEquipmentItemButton" class="btn btn-success">AGREGAR</a>
+                                                    <a id="removeEquipmentItemButton" class="btn btn-danger">BORRAR</a>
+                                                </td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
 
                         </div>
                         <!-- Accordion card -->
 
-                        <!-- Accordion card -->
+                        <!-- Transport Accordion card -->
                         <div class="card">
 
                             <!-- Card header -->
@@ -212,35 +256,56 @@
                             <div id="collapseThree41" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
                                 data-parent="#accordionEx1">
                                 <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                    richardson ad squid. 3
-                                    wolf
-                                    moon
-                                    officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                                    laborum eiusmod.
-                                    Brunch
-                                    3
-                                    wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-                                    assumenda
-                                    shoreditch
-                                    et.
-                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                                    ea proident.
-                                    Ad
-                                    vegan
-                                    excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                                    aesthetic synth
-                                    nesciunt
-                                    you probably haven't heard of them accusamus labore sustainable VHS.
+                                    <table id="transportTable" class="table table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>
+                                                    Transporte
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    Tarifa por día
+                                                </th>
+                                                <th>
+                                                    Rendimiento
+                                                </th>
+                                                <th>
+                                                    Valor
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="transportInputs">
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="text-center grey lighten-5">
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right">Subtotal</td>
+                                                <td class="text-left">$ 0.00</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right" colspan="2">
+                                                    <a id="addTransportItemButton" class="btn btn-success">AGREGAR</a>
+                                                    <a id="removeTransportItemButton" class="btn btn-danger">BORRAR</a>
+                                                </td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
 
                         </div>
                         <!-- Accordion card -->
 
-                        <!-- Accordion card -->
+                        <!-- Secure and Others Accordion card -->
                         <div class="card">
-
                             <!-- Card header -->
                             <div class="card-header" role="tab" id="headingThree31">
                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1"
@@ -255,26 +320,48 @@
                             <div id="collapseThree51" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
                                 data-parent="#accordionEx1">
                                 <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                    richardson ad squid. 3
-                                    wolf
-                                    moon
-                                    officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                                    laborum eiusmod.
-                                    Brunch
-                                    3
-                                    wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-                                    assumenda
-                                    shoreditch
-                                    et.
-                                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                                    ea proident.
-                                    Ad
-                                    vegan
-                                    excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                                    aesthetic synth
-                                    nesciunt
-                                    you probably haven't heard of them accusamus labore sustainable VHS.
+                                    <table id="secureAndOthersTable" class="table table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>
+                                                    Seguro / otro
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    Tarifa por día
+                                                </th>
+                                                <th>
+                                                    Días
+                                                </th>
+                                                <th>
+                                                    Valor
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="secureInputs">
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="text-center grey lighten-5">
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right">Subtotal</td>
+                                                <td class="text-left">$ 0.00</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+
+                                                <td class="text-right" colspan="2">
+                                                    <a id="addSecureItemButton" class="btn btn-success">AGREGAR</a>
+                                                    <a id="removeSecureItemButton" class="btn btn-danger">BORRAR</a>
+                                                </td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
 
@@ -283,20 +370,458 @@
 
                     </div>
                     <!-- Accordion wrapper -->
+                    
+                    <button type="submit" class="btn btn-block btn-primary mt-5">GUARDAR</button>
                 </form>
             </div>
         </div>
-
-
     </div>
 </div>
-
-
-
 
 {% endblock content %}
 
 {% block scripts %}
-    {{block.super}}
+{{block.super}}
+<!-- When Document is ready -->
+<script>
+    $(document).ready(function () {
+        /* Highlight current sidebar item */
+        $('#sidebar .list-group-item').removeClass('active');
+        var $this = $('#btnSidebarBudget');
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+        /* Highlight current sidebar item */
 
+        
+        /* Workforce */
+        // Add item to Workforce area
+        $("#addWorkforceItemButton").click(function () {
+            var selectedService = '{{budget.service.id}}'
+            if (selectedService != '') {
+                var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        var aux = ''
+                        var aux = `<option value="" selected>Mano de obra</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+
+                        var row = document.createElement('tr')
+
+                        var first_cell = document.createElement('td')
+                        var workforceSelect = document.createElement('select')
+                        workforceSelect.classList.add("custom-select")
+                        workforceSelect.classList.add("custom-select-sm")
+                        workforceSelect.classList.add("text-center")
+                        workforceSelect.setAttribute("name", "workforce-subitem")
+                        workforceSelect.setAttribute("required", "true")
+                        workforceSelect.innerHTML = aux;
+                        first_cell.appendChild(workforceSelect)
+                        row.appendChild(first_cell)
+                        
+                        var second_cell = document.createElement('td')
+                        var workforceAmountInput = document.createElement('input')
+                        workforceAmountInput.classList.add("form-control")
+                        workforceAmountInput.classList.add("text-center")
+                        workforceAmountInput.setAttribute('name', 'workforce-amount')
+                        workforceAmountInput.setAttribute('required', 'true')
+                        workforceAmountInput.setAttribute('placeholder', 'Cantidad')
+                        workforceAmountInput.setAttribute('type', 'number')
+                        second_cell.appendChild(workforceAmountInput)
+                        row.appendChild(second_cell)
+                        
+                        var third_cell = document.createElement('td')
+                        var dailyPriceInput = document.createElement('input')
+                        dailyPriceInput.classList.add("form-control")
+                        dailyPriceInput.classList.add("text-center")
+                        dailyPriceInput.setAttribute('name', 'workforce-price')
+                        dailyPriceInput.setAttribute('type', 'number')
+                        dailyPriceInput.setAttribute('placeholder', 'Salario diario')
+                        third_cell.appendChild(dailyPriceInput)
+                        row.appendChild(third_cell)
+
+                        var fourth_cell = document.createElement('td')
+                        var performanceInput = document.createElement('input')
+                        performanceInput.classList.add("form-control")
+                        performanceInput.classList.add("text-center")
+                        performanceInput.setAttribute('name', 'workforce-performance')
+                        performanceInput.setAttribute('type', 'number')
+                        performanceInput.setAttribute('placeholder', 'Rendimiento')
+                        fourth_cell.appendChild(performanceInput)
+                        row.appendChild(fourth_cell)
+
+                        var fifth_cell = document.createElement('td')
+                        var valueInput = document.createElement('input')
+                        valueInput.classList.add("form-control")
+                        valueInput.classList.add("text-center")
+                        valueInput.setAttribute('name', 'workforce-value')
+                        valueInput.setAttribute('type', 'number')
+                        valueInput.setAttribute('placeholder', 'Valor')
+                        fifth_cell.appendChild(valueInput)
+                        row.appendChild(fifth_cell)
+                        
+                        document.getElementById('workforceInputs').appendChild(row)
+                    })
+                    .catch(error => console.error(error))
+            }
+        })
+        // Remove last item from Workforce area
+        $("#removeWorkforceItemButton").click(function () {
+            var x = $("#workforceInputs").children().length
+            if (x != 0) {
+                $("#workforceInputs").children().last().remove()
+            }
+        })
+        /* end of Workforce */
+
+        /* Material */
+        // Add item to Material area
+        $("#addMaterialItemButton").click(function () {
+            var selectedService = '{{budget.service.id}}'
+            if (selectedService != '') {
+                var url = "{% url 'api_rest:material-service' budget.service.id %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log(data);
+                        var aux = ''
+                        var aux = `<option value=""  selected>Materiales</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+
+                        var row = document.createElement('tr')
+
+                        var first_cell = document.createElement('td')
+                        var materialSelect = document.createElement('select')
+                        materialSelect.classList.add("custom-select")
+                        materialSelect.classList.add("custom-select-sm")
+                        materialSelect.classList.add("text-center")
+                        materialSelect.setAttribute("name", "material-subitem")
+                        materialSelect.setAttribute("required", "true")
+                        materialSelect.innerHTML = aux;
+                        first_cell.appendChild(materialSelect)
+                        row.appendChild(first_cell)
+                        
+                        var second_cell = document.createElement('td')
+                        var materialAmountInput = document.createElement('input')
+                        materialAmountInput.classList.add("form-control")
+                        materialAmountInput.classList.add("text-center")
+                        materialAmountInput.setAttribute('name', 'material-amount')
+                        materialAmountInput.setAttribute('required', 'true')
+                        materialAmountInput.setAttribute('placeholder', 'Cantidad')
+                        materialAmountInput.setAttribute('type', 'number')
+                        second_cell.appendChild(materialAmountInput)
+                        row.appendChild(second_cell)
+                        
+                        var third_cell = document.createElement('td')
+                        var materialDailyPriceInput = document.createElement('input')
+                        materialDailyPriceInput.classList.add("form-control")
+                        materialDailyPriceInput.classList.add("text-center")
+                        materialDailyPriceInput.setAttribute('name', 'material-price')
+                        materialDailyPriceInput.setAttribute('type', 'number')
+                        materialDailyPriceInput.setAttribute('placeholder', 'Salario diario')
+                        third_cell.appendChild(materialDailyPriceInput)
+                        row.appendChild(third_cell)
+
+                        var fourth_cell = document.createElement('td')
+                        var materialPerformanceInput = document.createElement('input')
+                        materialPerformanceInput.classList.add("form-control")
+                        materialPerformanceInput.classList.add("text-center")
+                        materialPerformanceInput.setAttribute('name', 'material-performance')
+                        materialPerformanceInput.setAttribute('type', 'number')
+                        materialPerformanceInput.setAttribute('placeholder', 'Rendimiento')
+                        fourth_cell.appendChild(materialPerformanceInput)
+                        row.appendChild(fourth_cell)
+
+                        var fifth_cell = document.createElement('td')
+                        var materialValueInput = document.createElement('input')
+                        materialValueInput.classList.add("form-control")
+                        materialValueInput.classList.add("text-center")
+                        materialValueInput.setAttribute('name', 'material-value')
+                        materialValueInput.setAttribute('type', 'number')
+                        materialValueInput.setAttribute('placeholder', 'Valor')
+                        fifth_cell.appendChild(materialValueInput)
+                        row.appendChild(fifth_cell)
+                        
+                        document.getElementById('materialInputs').appendChild(row)
+                    })
+                    .catch(error => console.error(error))
+            }
+        })
+        // Remove last item from Material area
+        $("#removeMaterialItemButton").click(function () {
+            var x = $("#materialInputs").children().length
+            if (x != 0) {
+                $("#materialInputs").children().last().remove()
+            }
+        })
+        /* end of Material */
+
+        /* Equipment and tools */
+        // Add item to Equipment area
+        $("#addEquipmentItemButton").click(function () {
+            var selectedService = '{{budget.service.id}}'
+            if (selectedService != '') {
+                var url = "{% url 'api_rest:equipment-service' budget.service.id %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        var aux = ''
+                        var aux = `<option value=""  selected>Equipo</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+
+                        var row = document.createElement('tr')
+
+                        var first_cell = document.createElement('td')
+                        var equipmentSelect = document.createElement('select')
+                        equipmentSelect.classList.add("custom-select")
+                        equipmentSelect.classList.add("custom-select-sm")
+                        equipmentSelect.classList.add("text-center")
+                        equipmentSelect.setAttribute("name", "equipment-subitem")
+                        equipmentSelect.setAttribute("required", "true")
+                        equipmentSelect.innerHTML = aux;
+                        first_cell.appendChild(equipmentSelect)
+                        row.appendChild(first_cell)
+                        
+                        var second_cell = document.createElement('td')
+                        var equipmentAmountInput = document.createElement('input')
+                        equipmentAmountInput.classList.add("form-control")
+                        equipmentAmountInput.classList.add("text-center")
+                        equipmentAmountInput.setAttribute('name', 'equipment-amount')
+                        equipmentAmountInput.setAttribute('required', 'true')
+                        equipmentAmountInput.setAttribute('placeholder', 'Cantidad')
+                        equipmentAmountInput.setAttribute('type', 'number')
+                        second_cell.appendChild(equipmentAmountInput)
+                        row.appendChild(second_cell)
+                        
+                        var third_cell = document.createElement('td')
+                        var equipmentDailyPriceInput = document.createElement('input')
+                        equipmentDailyPriceInput.classList.add("form-control")
+                        equipmentDailyPriceInput.classList.add("text-center")
+                        equipmentDailyPriceInput.setAttribute('name', 'equipment-price')
+                        equipmentDailyPriceInput.setAttribute('type', 'number')
+                        equipmentDailyPriceInput.setAttribute('placeholder', 'Valor diario')
+                        third_cell.appendChild(equipmentDailyPriceInput)
+                        row.appendChild(third_cell)
+
+                        var fourth_cell = document.createElement('td')
+                        var performanceInput = document.createElement('input')
+                        performanceInput.classList.add("form-control")
+                        performanceInput.classList.add("text-center")
+                        performanceInput.setAttribute('name', 'equipment-performance')
+                        performanceInput.setAttribute('type', 'number')
+                        performanceInput.setAttribute('placeholder', 'Rendimiento')
+                        fourth_cell.appendChild(performanceInput)
+                        row.appendChild(fourth_cell)
+
+                        var fifth_cell = document.createElement('td')
+                        var valueInput = document.createElement('input')
+                        valueInput.classList.add("form-control")
+                        valueInput.classList.add("text-center")
+                        valueInput.setAttribute('name', 'equipment-value')
+                        valueInput.setAttribute('type', 'number')
+                        valueInput.setAttribute('placeholder', 'Valor')
+                        fifth_cell.appendChild(valueInput)
+                        row.appendChild(fifth_cell)
+                        
+                        document.getElementById('equipmentInputs').appendChild(row)
+                    })
+                    .catch(error => console.log(error))
+            }
+        })
+
+        // Remove last item from Equipment area
+        $("#removeEquipmentItemButton").click(function () {
+            var x = $("#equipmentInputs").children().length
+            if (x != 0) {
+                $("#equipmentInputs").children().last().remove()
+            }
+        })
+        /* end of Equipment and tools */
+
+        /* Transport */
+        // Add item to Transport area
+        $("#addTransportItemButton").click(function () {
+            var selectedService = '{{budget.service.id}}'
+            if (selectedService != '') {
+                var url = "{% url 'api_rest:transports-list' %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        var aux = ''
+                        var aux = `<option value=""  selected>Transporte</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+
+                        var row = document.createElement('tr')
+
+                        var first_cell = document.createElement('td')
+                        var transportSelect = document.createElement('select')
+                        transportSelect.classList.add("custom-select")
+                        transportSelect.classList.add("custom-select-sm")
+                        transportSelect.classList.add("text-center")
+                        transportSelect.setAttribute("name", "transport-subitem")
+                        transportSelect.setAttribute("required", "true")
+                        transportSelect.innerHTML = aux;
+                        first_cell.appendChild(transportSelect)
+                        row.appendChild(first_cell)
+                        
+                        var second_cell = document.createElement('td')
+                        var transportAmountInput = document.createElement('input')
+                        transportAmountInput.classList.add("form-control")
+                        transportAmountInput.classList.add("text-center")
+                        transportAmountInput.setAttribute('name', 'transport-amount')
+                        transportAmountInput.setAttribute('required', 'true')
+                        transportAmountInput.setAttribute('placeholder', 'Cantidad')
+                        transportAmountInput.setAttribute('type', 'number')
+                        second_cell.appendChild(transportAmountInput)
+                        row.appendChild(second_cell)
+                        
+                        var third_cell = document.createElement('td')
+                        var transportDailyPriceInput = document.createElement('input')
+                        transportDailyPriceInput.classList.add("form-control")
+                        transportDailyPriceInput.classList.add("text-center")
+                        transportDailyPriceInput.setAttribute('name', 'equipment-price')
+                        transportDailyPriceInput.setAttribute('type', 'number')
+                        transportDailyPriceInput.setAttribute('placeholder', 'Tarifa diaria')
+                        third_cell.appendChild(transportDailyPriceInput)
+                        row.appendChild(third_cell)
+
+                        var fourth_cell = document.createElement('td')
+                        var transportPerformanceInput = document.createElement('input')
+                        transportPerformanceInput.classList.add("form-control")
+                        transportPerformanceInput.classList.add("text-center")
+                        transportPerformanceInput.setAttribute('name', 'transport-performance')
+                        transportPerformanceInput.setAttribute('type', 'number')
+                        transportPerformanceInput.setAttribute('placeholder', 'Rendimiento')
+                        fourth_cell.appendChild(transportPerformanceInput)
+                        row.appendChild(fourth_cell)
+
+                        var fifth_cell = document.createElement('td')
+                        var transportValueInput = document.createElement('input')
+                        transportValueInput.classList.add("form-control")
+                        transportValueInput.classList.add("text-center")
+                        transportValueInput.setAttribute('name', 'transport-value')
+                        transportValueInput.setAttribute('type', 'number')
+                        transportValueInput.setAttribute('placeholder', 'Valor')
+                        fifth_cell.appendChild(transportValueInput)
+                        row.appendChild(fifth_cell)
+                        
+                        document.getElementById('transportInputs').appendChild(row)
+                    })
+                    .catch(error => console.log(error))
+            }
+        })
+
+        // Remove last item from Transport area
+        $("#removeTransportItemButton").click(function () {
+            var x = $("#transportInputs").children().length
+            if (x != 0) {
+                $("#transportInputs").children().last().remove()
+            }
+        })
+        /* end of Transport */
+
+        /* Secure and Others */
+        // Add item to Secure and Others area
+        $("#addSecureItemButton").click(function () {
+            var selectedService = '{{budget.service.id}}'
+            if (selectedService != '') {
+                var url = "{% url 'api_rest:secures-list' %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        var aux = ''
+                        var aux = `<option value=""  selected>Seguros y Otros</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+
+                        var row = document.createElement('tr')
+
+                        var first_cell = document.createElement('td')
+                        var secureSelect = document.createElement('select')
+                        secureSelect.classList.add("custom-select")
+                        secureSelect.classList.add("custom-select-sm")
+                        secureSelect.classList.add("text-center")
+                        secureSelect.setAttribute("name", "secure-subitem")
+                        secureSelect.setAttribute("required", "true")
+                        secureSelect.innerHTML = aux;
+                        first_cell.appendChild(secureSelect)
+                        row.appendChild(first_cell)
+                        
+                        var second_cell = document.createElement('td')
+                        var secureAmountInput = document.createElement('input')
+                        secureAmountInput.classList.add("form-control")
+                        secureAmountInput.classList.add("text-center")
+                        secureAmountInput.setAttribute('name', 'secure-amount')
+                        secureAmountInput.setAttribute('required', 'true')
+                        secureAmountInput.setAttribute('placeholder', 'Cantidad')
+                        secureAmountInput.setAttribute('type', 'number')
+                        second_cell.appendChild(secureAmountInput)
+                        row.appendChild(second_cell)
+                        
+                        var third_cell = document.createElement('td')
+                        var secureDailyPriceInput = document.createElement('input')
+                        secureDailyPriceInput.classList.add("form-control")
+                        secureDailyPriceInput.classList.add("text-center")
+                        secureDailyPriceInput.setAttribute('name', 'secure-price')
+                        secureDailyPriceInput.setAttribute('type', 'number')
+                        secureDailyPriceInput.setAttribute('placeholder', 'Tarifa diaria')
+                        third_cell.appendChild(secureDailyPriceInput)
+                        row.appendChild(third_cell)
+
+                        var fourth_cell = document.createElement('td')
+                        var securePerformanceInput = document.createElement('input')
+                        securePerformanceInput.classList.add("form-control")
+                        securePerformanceInput.classList.add("text-center")
+                        securePerformanceInput.setAttribute('name', 'secure-performance')
+                        securePerformanceInput.setAttribute('type', 'number')
+                        securePerformanceInput.setAttribute('placeholder', 'Rendimiento')
+                        fourth_cell.appendChild(securePerformanceInput)
+                        row.appendChild(fourth_cell)
+
+                        var fifth_cell = document.createElement('td')
+                        var secureValueInput = document.createElement('input')
+                        secureValueInput.classList.add("form-control")
+                        secureValueInput.classList.add("text-center")
+                        secureValueInput.setAttribute('name', 'secure-value')
+                        secureValueInput.setAttribute('type', 'number')
+                        secureValueInput.setAttribute('placeholder', 'Valor')
+                        fifth_cell.appendChild(secureValueInput)
+                        row.appendChild(fifth_cell)
+                        
+                        document.getElementById('secureInputs').appendChild(row)
+                    })
+                    .catch(error => console.log(error))
+            }
+        })
+
+        // Remove last item from Secure and Others area
+        $("#removeSecureItemButton").click(function () {
+            var x = $("#secureInputs").children().length
+            if (x != 0) {
+                $("#secureInputs").children().last().remove()
+            }
+        })
+        /* end of Secure and Others */
+
+
+    });
+
+
+
+
+</script>
 {% endblock scripts %}

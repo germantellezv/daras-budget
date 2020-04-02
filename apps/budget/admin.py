@@ -43,3 +43,27 @@ class UnitAdmin(admin.ModelAdmin):
 class BudgetItemAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = "Item de presupuesto"
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ('name','unit','service','daily_price','created','modified')
+    # list_editable = ('unit','daily_price')
+    readonly_fields = ('slug',)
+    class Meta:
+        verbose_name = "Materiales"
+
+@admin.register(Equipment)
+class EquipmentAdmin(admin.ModelAdmin):
+    list_display = ('name','service','daily_price','created','modified')
+    # list_editable = ('unit','daily_price')
+    readonly_fields = ('slug',)
+    class Meta:
+        verbose_name = "Equipos y herramientas"
+
+@admin.register(Transport)
+class TransportAdmin(admin.ModelAdmin):
+    list_display = ('name','daily_price','created','modified')
+    # list_editable = ('unit','daily_price')
+    readonly_fields = ('slug',)
+    class Meta:
+        verbose_name = "Transportes"

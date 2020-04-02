@@ -12,6 +12,7 @@ from .forms import *
 from .models import *
 
 # Create your views here.
+@login_required
 def panel(request):
     """ Panel view """
     return render(request, 'budget/index.html')
@@ -96,6 +97,7 @@ def createBudge(request):
             'form2':form2,
         })
 
+@login_required
 def budgetDetail(request, slug):
     """ Budget summary before edit items """
     budget = Budget.objects.get(slug=slug)
@@ -109,6 +111,7 @@ def budgetDetail(request, slug):
         }
         )
 
+@login_required
 def editBudgetItem(request, slug, code):
     """ Edit budget item """
     budget = get_object_or_404(Budget, slug=slug)

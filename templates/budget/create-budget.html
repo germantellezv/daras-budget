@@ -158,66 +158,6 @@
         }
         /* end of Highlight current sidebar item */
 
-
-        /* Workforce */
-        // Reset workforce inputs if service change
-        $("#id_service").change(function () {
-            document.getElementById('workforce').innerHTML = '';
-        })
-        
-        // Add item to Workforce area
-        $("#addItemWorkforce").click(function () {
-            var selectedService = $("#id_service").children("option:selected").val();
-            if (selectedService != '') {
-                var url = `/api/workforce/service/${selectedService}`
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        // console.log(data);
-                        var aux = ''
-                        var aux = `<option value=""  selected>Mano de obra</option>`;
-                        for (let i = 0; i < data.length; i++) {
-                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
-                        }
-                         
-                        var container = document.createElement('div')
-                        container.classList.add("form-group")
-                        container.classList.add("form-inline")
-                        container.classList.add("justify-content-left")
-                        var select = document.createElement('select')
-                        select.classList.add("custom-select")
-                        select.classList.add("mr-3")
-                        select.classList.add("my-2")
-                        select.setAttribute("name","workforce-id")
-                        select.setAttribute("required","true")
-                        select.innerHTML = aux;
-                        
-                        var input = document.createElement('input')
-                        input.setAttribute('type','number')
-                        input.setAttribute('required','true')
-                        input.setAttribute('name','workforce-amount')
-                        input.setAttribute('placeholder','Cantidad')
-                        input.classList.add("form-control")
-                        input.classList.add("text-center")
-
-                        container.appendChild(select)
-                        container.appendChild(input)
-
-                        document.getElementById('workforce').appendChild(container)
-                    })
-                    .catch(error => console.error(error))
-            }
-        })
-
-        // Remove last item from Workforce area
-        $("#removeItemWorkforce").click(function () {
-            var x = $("#workforce").children().length
-            if (x != 0) {
-                $("#workforce").children().last().remove()
-            }
-        })
-        /* end of Workforce */
-
         /* Add elements to items table */
         var counter = 1;
         $("#addItemButton").click(function(){

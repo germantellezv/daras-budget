@@ -19,3 +19,39 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = ['id','acronym', 'name']
+
+class TransportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transport
+        fields = ['id', 'name','daily_price']
+
+class SecureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Secure
+        fields = ['id', 'name','daily_price']
+
+class MaterialSerializer(serializers.ModelSerializer):
+    service = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    unit = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    class Meta:
+        model = Material
+        fields = ['id','name', 'unit','service','daily_price','slug','created','modified']
+
+class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
+    """ Equipment serializer """
+    service = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    class Meta:
+        model = Equipment
+        fields = ['id','service','name','daily_price','slug','created','modified']
