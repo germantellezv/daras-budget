@@ -130,48 +130,57 @@
                 <hr class="my-3">
 
                 <!-- Budget items -->
-                <h5>Actividades</h5>
-                <table id="itemsTable" class="table">
-                    <thead class="text-center">
-                        <th>
-                            Item
-                        </th>
-                        <th>
-                            Descripción
-                        </th>
-                        <th>
-                            Duración
-                        </th>
-                        <th>
-                            Opciones
-                        </th>
-                    </thead>
-                    <tbody id="items" class="text-center">
-                        {% for i in items %}
-                        <tr>
-                            <td class="text-center">
-                                {{forloop.counter}}
-                            </td>
-                            <td>
-                                <p data-slug="{{i.slug}}">
-                                    {{i.description}}
-                                </p>
-                            </td>
-                            <td>
-                                <p data-slug="{{i.slug}}">
-                                    {{i.duration}}
-                                </p>
-                            </td>
-                            
-                            <td>
-                                <a href="{% url 'budget:edit-item' budget.slug i.slug %}" style="color: #212529;">
-                                    <i class="far fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
+                {% if items %}
+                    <h5>Actividades</h5>
+                    <table id="itemsTable" class="table table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Descripción
+                                </th>
+                                <th>
+                                    Unidad
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr style="background-color: rgba(0,0,0,.075);">
+                                <td class="text-center">
+                                    {{forloop.counter}}
+                                </td>
+                                <td colspan="3">
+                                    {{item.description}}
+                                </td>
+                            </tr>
+                            {% if item.subitems %}
+                                {% for i in item.subitems.all %}
+                                    <tr class="text-center">
+                                        <td class="text-right">
+                                            {{forloop.parentloop.counter}}.{{forloop.counter}}
+                                        </td>
+                                        <td class="text-left">
+                                            {{i.description}}
+                                        </td>
+                                        <td>
+                                            {{i.unit.name}}
+                                        </td>
+                                        <td>
+                                            {{i.amount}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                         {% endfor %}
-                    </tbody>
-                </table> 
+                        </tbody>
+                    </table>
+                {% endif %}
 
                 <hr class="my-5">
             </div>

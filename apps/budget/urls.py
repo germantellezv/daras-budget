@@ -27,7 +27,7 @@ urlpatterns = [
     path('panel/ver/presupuestos/', views.listBudgets, name='list-budgets' ),
     path('panel/crear/presupuesto/', views.createBudget, name='create-budget' ),
     path('panel/completar/presupuesto/<int:pk>', views.fillBudget, name='fill-budget'),
-    path('panel/presupuesto/<slug:slug>/detalle', views.budgetDetail, name='budget-detail' ),
+    path('panel/presupuesto/<int:budget_pk>/detalle', views.budgetDetail, name='budget-detail' ),
     path('panel/presupuesto/<slug:slug>/item/<slug:slug_item>/', views.editBudgetItem, name='edit-item' ),
     path('panel/presupuesto/<slug:slug>/item/<slug:slug_item>/subitem/<slug:slug_subitem>', views.editBudgetSubItem, name='edit-subitem'),
 ]

@@ -69,7 +69,7 @@
                     <tbody>
                         {% for b in budgets %}
                         <tr class="text-center" style="cursor: pointer;"
-                            data-href="{% url 'budget:budget-detail' b.slug %}"
+                            data-href="{% url 'budget:budget-detail' b.id %}"
                             onclick="window.document.location = $(this).data('href')">
                             <td>
                                 {{forloop.counter}}

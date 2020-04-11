@@ -97,10 +97,10 @@ def fillBudget(request, pk):
     )
 
 @login_required
-def budgetDetail(request, slug):
+def budgetDetail(request, budget_pk):
     """ Budget summary before edit items """
 
-    budget = Budget.objects.get(slug=slug)
+    budget = Budget.objects.get(id=budget_pk)
     items = BudgetItem.objects.filter(budget=budget)
     return render(
         request=request,
