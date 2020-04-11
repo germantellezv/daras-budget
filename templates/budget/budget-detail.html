@@ -38,6 +38,7 @@
                 <hr style="margin-bottom: 20px;">
 
                 <!-- Budget summary -->
+                <h5>Información general</h5>
                 <table>
                     <tr>
                         <td>
@@ -129,7 +130,8 @@
                 <hr class="my-3">
 
                 <!-- Budget items -->
-                <table class="table">
+                <h5>Actividades</h5>
+                <table id="itemsTable" class="table">
                     <thead class="text-center">
                         <th>
                             Item
@@ -138,30 +140,29 @@
                             Descripción
                         </th>
                         <th>
-                            Unidad
-                        </th>
-                        <th>
-                            Cantidad
+                            Duración
                         </th>
                         <th>
                             Opciones
                         </th>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody id="items" class="text-center">
                         {% for i in items %}
                         <tr>
-                            <td>
+                            <td class="text-center">
                                 {{forloop.counter}}
                             </td>
                             <td>
-                                {{i.title}}
+                                <p data-slug="{{i.slug}}">
+                                    {{i.description}}
+                                </p>
                             </td>
                             <td>
-                                {{i.unit.acronym}}
+                                <p data-slug="{{i.slug}}">
+                                    {{i.duration}}
+                                </p>
                             </td>
-                            <td>
-                                {{i.amount}}
-                            </td>
+                            
                             <td>
                                 <a href="{% url 'budget:edit-item' budget.slug i.slug %}" style="color: #212529;">
                                     <i class="far fa-edit"></i>
@@ -170,8 +171,9 @@
                         </tr>
                         {% endfor %}
                     </tbody>
-                </table>
+                </table> 
 
+                <hr class="my-5">
             </div>
         </div>
     </div>

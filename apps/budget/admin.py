@@ -41,8 +41,17 @@ class UnitAdmin(admin.ModelAdmin):
 
 @admin.register(BudgetItem)
 class BudgetItemAdmin(admin.ModelAdmin):
+    list_display = ('description','slug','created','modified')
     class Meta:
         verbose_name = "Item de presupuesto"
+
+@admin.register(BudgetSubItem)
+class BudgetSubItemAdmin(admin.ModelAdmin):
+    list_display = ('description','unit','slug')
+    class Meta:
+        verbose_name = "Subitem de presupuesto"
+
+
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):

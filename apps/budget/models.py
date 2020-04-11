@@ -4,6 +4,9 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.timezone import now
 
+# Signals
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -201,23 +204,23 @@ class Budget(models.Model):
         ('3', 'Mensual')
     ]
 
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True, null=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.CharField(max_length=300, blank=True, null=True)
-    risk = models.ForeignKey(Risk, on_delete=models.CASCADE)
-    time = models.CharField(choices=OPTIONS_PERIOD, max_length=20)
+    risk = models.ForeignKey(Risk, on_delete=models.CASCADE, blank=True, null=True)
+    time = models.CharField(choices=OPTIONS_PERIOD, max_length=20, blank=True, null=True)
     total_direct_cost = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
-    administration_percentage = models.SmallIntegerField(verbose_name="Porcentaje de administración")
+    administration_percentage = models.SmallIntegerField(verbose_name="Porcentaje de administración", blank=True, null=True)
     administration = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
-    incidentals_percentaje = models.SmallIntegerField(verbose_name="Porcentaje de imprevistos")
+    incidentals_percentaje = models.SmallIntegerField(verbose_name="Porcentaje de imprevistos", blank=True, null=True)
     incidentals = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
-    utility_percentage = models.SmallIntegerField(verbose_name="Porcentaje de utilidad")
+    utility_percentage = models.SmallIntegerField(verbose_name="Porcentaje de utilidad", blank=True, null=True)
     utility = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
 
-    iva_option = models.CharField(choices=OPTIONS_IVA, max_length=50, verbose_name="Calcular IVA sobre")
+    iva_option = models.CharField(choices=OPTIONS_IVA, max_length=50, verbose_name="Calcular IVA sobre", blank=True, null=True)
     iva = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
 
     comment = models.TextField(blank=True, null=True)
@@ -232,19 +235,14 @@ class Budget(models.Model):
     def __str__(self):
         return '{} - {} - {}'.format(self.client, self.service, self.subject)
 
-    def save(self, *args, **kwargs):
-        slug = '{0}{1}'.format(self.client.nit, now().strftime("%Y%m%d%H%M%S"))
-        self.slug = slugify(slug)
-        super(Budget, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name = "presupuesto"
         verbose_name_plural = "presupuestos"
 
-class BudgetItem(models.Model):
-    """ Budget item """
-    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
+class BudgetSubItem(models.Model):
+    """ Budget subitem model """
+    
+    description = models.CharField(max_length=200)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
@@ -252,10 +250,39 @@ class BudgetItem(models.Model):
     slug = models.SlugField(blank=True, null=True)
     
     def __str__(self):
-        return 'Item  del presupuesto {}'.format(self.budget.slug)
-    
+        return '(subitem) - {}'.format(self.description)
+
     class Meta:
-        verbose_name = 'Item de presupuesto'
-        verbose_name_plural = 'Items de presupuesto'
+        verbose_name = 'subitem de presupuesto'
+        verbose_name_plural = 'subitems de presupuesto'
+
+class BudgetItem(models.Model):
+    """ Budget section """
+
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
+    description = models.CharField(max_length=200)
+    duration = models.SmallIntegerField(verbose_name="Duración(días)")
+    subitems = models.ManyToManyField(BudgetSubItem)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(blank=True, null=True)
+
+    def __str__(self):
+        return 'Actividad del presupuesto {}'.format(self.budget.subject)
+
+    class Meta:
+        verbose_name = 'item de presupuesto'
+        verbose_name_plural = 'items de presupuesto'
+
+
+
+# @receiver(post_save, sender=BudgetSubItem)
+# def update_stock(sender, instance, **kwargs):
+#     """ Add BudgetSubitem ID at the end of its slug """
+#     if not instance.slug:
+#         slug = '{0}{1}'.format(instance.item.slug, instance.id)
+#         instance.slug = slugify(slug)
+#         instance.save()
  
- 
+  
+   

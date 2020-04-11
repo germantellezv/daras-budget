@@ -18,6 +18,9 @@
     <link href="{% static 'dashboard/css/mdb.min.css' %}" rel="stylesheet">
     <!-- Your custom styles (optional) -->
     <link href="{% static 'dashboard/css/style.min.css' %}" rel="stylesheet">
+
+
+
 </head>
 
 <body class="grey lighten-3">
@@ -42,22 +45,24 @@
     <!--/.Footer-->
 
     {% block scripts %}
-        <!-- SCRIPTS -->
-        <!-- JQuery -->
-        <script type="text/javascript" src="{% static 'dashboard/js/jquery-3.4.1.min.js' %}"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="{% static 'dashboard/js/popper.min.js' %}"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="{% static 'dashboard/js/mdb.min.js' %}"></script>
-        
-        <!-- Initializations -->
-        <script type="text/javascript">
-            // Animations initialization
-            new WOW().init();
-        </script>
-        <!-- scripts from other templates -->
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <!-- <script type="text/javascript" src="{% static 'dashboard/js/jquery-3.4.1.min.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{% static 'dashboard/js/popper.min.js' %}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="{% static 'dashboard/js/mdb.min.js' %}"></script>
+
+    <!-- Initializations -->
+    <script type="text/javascript">
+        // Animations initialization
+        new WOW().init();
+    </script>
+    <!-- scripts from other templates -->
     {% endblock scripts %}
 
 </body>

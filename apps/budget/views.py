@@ -1,6 +1,4 @@
-from django.shortcuts import render, redirect
-from django.shortcuts import get_object_or_404
-
+from django.shortcuts import get_object_or_404, render, redirect
 
 # Decorators
 from django.contrib.auth.decorators import login_required
@@ -15,7 +13,10 @@ from .models import *
 @login_required
 def panel(request):
     """ Panel view """
-    return render(request, 'budget/index.html')
+    return render(
+        request=request,
+        template_name='budget/index.html'
+        )
 
 @login_required
 def createClient(request):
@@ -36,92 +37,130 @@ def createClient(request):
             return redirect('budget:panel')
 
     return render(
-        request=request, 
+        request=request,
         template_name='budget/create-client.html',
         context={
-            'form':form
+            'form': form
         })
 
 @login_required
-def createBudge(request):
-    """ Create budget with general/basic information """
+def listBudgets(request):
 
+    # render form
     form = CreateBudgetForm()
-    # form2 is imported only for render purposes ('units' select) in frontend
-    form2= BudgetItemForm()
-    
+
+    budgets = Budget.objects.all().order_by('-created')
+    return render(
+        request=request,
+        template_name='budget/list-budgets.html',
+        context={
+            'budgets':budgets,
+            'form':form
+        }
+        )
+
+@login_required
+def createBudget(request):
+    """ Basic creation of budget """
+
     if request.method == 'POST':
         form = CreateBudgetForm(request.POST)
-        
-
         if form.is_valid():
             data = form.cleaned_data
-
-            B = Budget()
-            B.client = data['client']
-            B.subject = data['subject']
-            B.risk = data['risk']
-            B.time = data['time']
-            B.service = data['service']
-            B.iva_option = data['iva_option']
-            B.utility_percentage = data['utility_percentage']
-            B.incidentals_percentaje = data['incidentals_percentaje']
-            B.administration_percentage = data['administration_percentage']
-            B.comment = data['comment']
-            B.save()
-
-            titles = request.POST.getlist('title')
-            units = request.POST.getlist('unit')
-            amounts = request.POST.getlist('amount')
-
-            if titles and units and amounts:
-                for i,j,k in zip(titles,units,amounts):
-                    I = BudgetItem()
-                    I.budget = B
-                    I.title = i
-                    I.unit = Unit.objects.get(id=j)
-                    I.amount = k
-                    I.save()
-                    aux = '{}{}'.format(B.client.nit, I.id)
-                    I.slug=slugify(aux)
-                    I.save()
+            b = Budget()
+            b.client = data['client']
+            b.save()
             
-            slug = B.slug
-            return redirect('budget:budget-detail', slug=slug)
+            pk = b.id
+            return redirect('budget:fill-budget', pk=pk)
+    request
 
+@login_required
+def fillBudget(request, pk):
+    """ Fill Budget """
+
+    budget = Budget.objects.get(id=pk)
+    items = BudgetItem.objects.filter(budget=budget)
+    clients = Client.objects.all()
+    units = Unit.objects.all()
+    form = EditBudgetForm()
     return render(
-        request=request, 
-        template_name='budget/create-budget.html',
+        request=request,
+        template_name='budget/fill-budget.html',
         context={
-            'form':form,
-            'form2':form2,
-        })
+            'clients':clients,
+            'units':units,
+            'budget':budget,
+            'items':items,
+            'form': form,
+        }
+    )
 
 @login_required
 def budgetDetail(request, slug):
     """ Budget summary before edit items """
+
     budget = Budget.objects.get(slug=slug)
     items = BudgetItem.objects.filter(budget=budget)
     return render(
         request=request,
         template_name='budget/budget-detail.html',
         context={
-            'budget':budget,
-            'items':items,
+            'budget': budget,
+            'items': items,
         }
-        )
+    )
 
 @login_required
-def editBudgetItem(request, slug, code):
-    """ Edit budget item """
+def editBudgetItem(request, slug, slug_item):
+    """ Add specific activites to each activity """
+
     budget = get_object_or_404(Budget, slug=slug)
-    item = get_object_or_404(BudgetItem, slug=code)
+    item = get_object_or_404(BudgetItem, slug=slug_item)
+    subitems = BudgetSubItem.objects.filter(budget=budget, item=item)
+
+    if request.method == 'POST':
+
+        descriptions = request.POST.getlist('description')
+        units = request.POST.getlist('unit')
+        amounts = request.POST.getlist('amount')
+        unit_value = request.POST.getlist('value')
+
+        if descriptions and units and amounts:
+            for d, u, a, v in zip(descriptions, units, amounts, unit_value):
+                S = BudgetSubItem()
+                S.budget = budget
+                S.item = item
+                S.description = d
+                aux = get_object_or_404(Unit, id=u)
+                S.unit = aux
+                S.amount = a
+                # S.unit_value = v
+                S.save()
+            return redirect('budget:budget-detail', slug=slug)
 
     return render(
         request=request,
-        template_name = 'budget/edit-item.html',
+        template_name='budget/edit-item.html',
         context={
-            'item':item,
-            'budget':budget,
+            'budget': budget,
+            'item': item,
+            'subitems':subitems,
+        }
+    )
+
+@login_required
+def editBudgetSubItem(request, slug, slug_item, slug_subitem):
+    """ Create APU for specific activity """
+    budget = get_object_or_404(Budget, slug=slug)
+    item = get_object_or_404(BudgetItem, slug=slug_item)
+    subitem = get_object_or_404(BudgetSubItem, slug=slug_subitem, budget=budget, item=item)
+    return render(
+        request=request,
+        template_name='budget/edit-subitem.html',
+        context={
+            'item': item,
+            'budget': budget,
+            'subitem': subitem,
         }
     )

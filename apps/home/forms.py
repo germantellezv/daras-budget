@@ -5,12 +5,12 @@ from django.contrib.auth.forms import UserCreationForm
 # Models
 from django.contrib.auth.models import User
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(UserCreationForm, forms.ModelForm):
     username = forms.EmailField(max_length=50, required=True)
 
     class Meta:
         model = User
-        fields = ('username','password1','password2')
+        fields = ('username','first_name','last_name','password1','password2')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")

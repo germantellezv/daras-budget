@@ -15,6 +15,7 @@ class WorkforceSerializer(serializers.HyperlinkedModelSerializer):
         model = Workforce
         fields = ['id','service','name','experience_time','daily_salary']
 
+
 class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
@@ -29,6 +30,8 @@ class SecureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Secure
         fields = ['id', 'name','daily_price']
+
+
 
 class MaterialSerializer(serializers.ModelSerializer):
     service = serializers.SlugRelatedField(
@@ -55,3 +58,31 @@ class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Equipment
         fields = ['id','service','name','daily_price','slug','created','modified']
+
+class BudgetItemSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = BudgetItem
+        fields = ['id','budget', 'description','duration']
+
+class BudgetSubItemSerializer(serializers.HyperlinkedModelSerializer):
+    """ BudgetSubItem serializer """
+    budget = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    item = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    unit = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    class Meta:
+        model = BudgetSubItem
+        fields = ['id','budget','item','description','unit','amount','unit_value','total_value','slug']
+

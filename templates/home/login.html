@@ -1,9 +1,9 @@
 {% extends "home/login-signup-base.html" %}
 {% load static %}
 {% block title %}
-  <title>
-      Iniciar sesión - DARAS
-  </title>
+<title>
+    Iniciar sesión - DARAS
+</title>
 {% endblock title %}
 
 {% block content %}
@@ -11,9 +11,9 @@
     <img src="{% static 'home/img/logo-daras.png' %}" height="70" alt="">
     <h3 class="mb-1">Iniciar Sesión</h3>
     {% if error %}
-      <div class="alert alert-danger">
-          {{error}}
-      </div>
+    <div class="alert alert-danger">
+        {{error}}
+    </div>
     {% endif %}
     <!-- {% if form.errors %}
         <ul>
@@ -29,29 +29,44 @@
 <form action="" method="post">
     {% csrf_token %}
     <div class="form-group">
-        <input 
-        type="email" 
-        name="username" 
-        placeholder="Correo electrónico" 
-        class="form-control">
+        <input type="email" name="username" placeholder="Correo electrónico" class="form-control">
     </div>
-    
+
     <div class="form-group">
-        <input 
-        type="password" 
-        name="password" 
-        placeholder="Contraseña" 
-        class="form-control {% if form.password.errors %}is-invalid{% endif %}">
+        <input type="password" name="password" placeholder="Contraseña"
+            class="form-control {% if form.password.errors %}is-invalid{% endif %}">
         <div class="invalid-feedback">
             {% for error in form.password.errors  %}
             {{error}}
             {% endfor %}
         </div>
     </div>
-    
-    <div class="form-group">
+
+    <div class="form-group text-center">
         <button class="btn-block btn btn-primary" type="submit">Iniciar sesión</button>
+        <small>
+            ¿Aún no tienes una cuenta?
+            <a href="{% url 'home:signup' %}">Registrarme</a>
+        </small>
     </div>
-    
+
 </form>
+
 {% endblock content %}
+{% block scripts %}
+{{block.super}}
+<!-- Toastr -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    
+    $(document).ready(function () {
+        /* Messages Notifications */
+        "{% if messages %}"
+        "{% for m in messages %}"
+        toastr.success('{{ m }}');
+        "{% endfor %}"
+        "{% endif %}"
+        /* end of Messages Notifications */
+    })
+</script>
+{% endblock scripts %}

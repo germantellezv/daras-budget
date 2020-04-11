@@ -1,0 +1,409 @@
+{% extends "budget/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+<title>Crear presupuesto - DARAS</title>
+{% endblock title %}
+
+{% block content %}
+<!-- Heading -->
+<div class="card mb-1 wow fadeIn">
+
+    <!--Card content-->
+    <div class="card-body d-sm-flex justify-content-between">
+
+        <h6 class="mb-2 mb-sm-0 pt-1">
+            <span class="text-muted">Dashboard</span>
+            <span class="text-muted">/</span>
+            <span class="text-muted">Presupuesto</span>
+            <span class="text-muted">/</span>
+            <span>Nuevo presupuesto</span>
+        </h6>
+
+    </div>
+
+</div>
+<!-- Heading -->
+
+<!-- Card -->
+<div class="card">
+    <!-- Card content -->
+    <div class="card-body">
+        <!-- Title -->
+        <h4 class="card-title"><a>Nuevo presupuesto</a></h4>
+
+        <!-- Main content -->
+        <form action="" method="post">
+            {% csrf_token %}
+            <!-- First row -->
+            <div class="row">
+                <!-- First column -->
+                <div class="col-6 border p-2 rounded">
+                    <!-- Consecutive -->
+                    <div class="form-group m-0">
+                        <label for="id_client">
+                            <small>Consecutivo</small>
+                            <input type="text" name="" class="form-control" placeholder="PS5-12">
+                        </label>
+                    </div>
+                    <!-- Client -->
+                    <div class="form-group m-0">
+                        <label for="id_client">
+                            <small>Cliente</small>
+                            <!-- {% render_field form.client class="form-control" required="true" %} -->
+                            <select name="client" class="form-control">
+                                {% for client in clients %}
+                                <option value="{{client.id}}" {% if client.id == budget.client.id %} selected
+                                    {% endif %}>
+                                    {{client.name|lower|capfirst}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    <!-- Description -->
+                    <div class="form-group m-0">
+                        <label for="id_description">
+                            <small for="id_description">Descripción del proyecto</small>
+                        </label>
+                        <input type="text" name="description" id="id_description" class="form-control">
+                    </div>
+                </div>
+                <!-- Second column -->
+                <div class="col-6 border p-2 rounded d-flex justify-content-center align-items-center">
+                    <img src="{% static 'home/img/logo-daras.png' %}" alt="" height="80">
+                </div>
+            </div>
+            <!-- Second row -->
+            <div class="row">
+                <!-- First column -->
+                <div class="col-sm-12 border rounded">
+                    <!-- Table for products/items -->
+                    <table id="BudgetElements" class="table m-0">
+                        <thead>
+                            <tr class="text-center">
+                                <th class="font-weight-bold">Descripción</th>
+                                <th class="font-weight-bold">Unidad</th>
+                                <th class="font-weight-bold">Cantidad</th>
+                            </tr>
+                        </thead>
+                        {% if items %}
+                        {% for item in items %}
+                        <tbody>
+                            <tr class="orange lighten-4" data-type="section" data-sectionid="{{item.id}}"
+                                data-budgetCode="{{budget.id}}">
+                                <td colspan="3" class="p-2">
+                                    <p class="m-0">
+                                        <strong>
+                                            {{item.description}}
+                                        </strong>
+                                    </p>
+                                </td>
+                            </tr>
+                            {% if item.subitems %}
+                            {% for i in item.subitems.all %}
+                            <tr class="grey lighten-3" data-type="product" data-id="{{i.id}}"
+                                data-budgetCode="{{budget.id}}">
+                                <td class="p-2">
+                                    <p class="m-0">
+                                        {{i.description}}
+                                    </p>
+                                </td>
+                                <td class="text-center p-2">
+                                    <p class="m-0">
+                                        {{i.unit.name}}
+                                    </p>
+                                </td>
+                                <td class="text-center p-2">
+                                    <p class="m-0">
+                                        {{i.amount}}
+                                    </p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+                    <table class="w-100 m-0 p-0">
+                        <tr class="text-center green lighten-5">
+                            <td colspan="3">
+                                <a href="#" class="btn btn-success" data-toggle="modal"
+                                    data-target="#sectionModal">Agregar sección</a>
+                                <a href="#" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#productModal">Agregar producto</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- Button -->
+            <a href="#" class="btn btn-primary">Guardar</a>
+        </form>
+
+
+
+        <!-- Modal to add section -->
+        <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+
+            <!-- Change class .modal-sm to change the size of the modal -->
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <!-- Modal header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100" id="myModalLabel">Agregar sección</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="sectionBody" class="modal-body">
+                        <!-- Form -->
+                        <form id="sectionForm" action="" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="">
+                                    <small>Título</small>
+                                </label>
+                                <input id="sectionName" type="text" name="description" class="form-control"
+                                    required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="">
+                                    <small>Duración (días)</small>
+                                </label>
+                                <input id="sectionDuration" type="number" name="duration" class="form-control"
+                                    required="true">
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                        <button id="addSection" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal to add section -->
+
+        <!-- Modal to add producto -->
+        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+
+            <!-- Change class .modal-sm to change the size of the modal -->
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <!-- Modal header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100" id="myModalLabel">Agregar producto</h4>
+                        <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <!-- Form -->
+                        <form id="productForm" action="" method="POST">
+                            {% csrf_token %}
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label for="">
+                                    <small>Descripción del producto</small>
+                                </label>
+                                <input id="productDescription" type="text" name="description" class="form-control"
+                                    required>
+                            </div>
+                            <!-- Unit -->
+                            <div class="form-group">
+                                <label for="">
+                                    <small>Unidad</small>
+                                </label>
+                                <select class="form-control" name="unit" id="">
+                                    <option selected></option>
+                                    {% for u in units %}
+                                    <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Amount -->
+                            <div class="form-group">
+                                <label for="">
+                                    <small>Cantidad</small>
+                                </label>
+                                <input id="productAmount" type="number" name="amount" class="form-control" required>
+                            </div>
+
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                        <button id="addProduct" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal to add producto -->
+    </div>
+</div>
+<!-- Card -->
+
+{% endblock content %}
+
+{% block scripts %}
+{{block.super}}
+
+<script>
+    $(document).ready(function () {
+        /* Highlight current sidebar item */
+        $('#sidebar .list-group-item').removeClass('active');
+        var $this = $('#btnSidebarBudget');
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+
+        /* Activate select input from MD Bootstrap 4 */
+        $('.mdb-select').materialSelect();
+
+        /* Validate element data-type of the last element of table */
+        function validateLastElement() {
+            var type = $("#BudgetElements tr:last").data("type")
+            // Type can return 'section' or 'product'
+            return type;
+        }
+
+        /* Add section element */
+        $("#addSection").click(function () {
+
+            var v = validateLastElement();
+
+            if (v != 'section') {
+                var form = document.getElementById("sectionForm");
+                const data = new FormData(form);
+                var url = "{% url 'api_rest:create-item' budget.id %}";
+                fetch(url, {
+                    method: 'POST',
+                    body: data
+                }).then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                }).then(function (data) {
+
+                    console.log("Texto: ", data);
+
+                    var HTMLString =
+                        `
+                    <tbody>
+                        <tr class="orange lighten-4" data-type="section" data-sectionid="${data.id}" data-budgetCode="{{budget.id}}">
+                            <td colspan="3" class="p-2">
+                                <strong>
+                                    <p class="m-0">${data.description}</p>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                    `
+                    element = document.createElement("tbody");
+                    element.innerHTML = HTMLString;
+                    document.getElementById('BudgetElements').appendChild(element)
+                    $("#sectionModal").modal('toggle')
+                    $("#sectionName").val('')
+                    $("#sectionDuration").val('')
+
+                })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            }
+            else {
+                console.log("No se puede agregar otra sección. No tiene sentido.");
+
+                var alert = document.createElement('div')
+                alert.classList.add("alert")
+                alert.classList.add("small")
+                alert.classList.add("alert-danger")
+                alert.classList.add("text-center")
+                alert.setAttribute("role", "alert")
+                alert.innerHTML = "No se puede agregar una sección a otra sección.<br>Intenta agregar un producto."
+                document.getElementById('sectionBody').appendChild(alert)
+
+
+
+
+            }
+        })
+
+        /* Add product to table */
+        $("#addProduct").click(function () {
+            var lastSectionID = parseInt($("tr[data-type='section']:last").data('sectionid'))
+            var form = document.getElementById("productForm");
+            const data = new FormData(form);
+            /* Sadly I have to write the URL in this way and not with the Django tag URL */
+            var url = `/api/budget/add-subitem/${lastSectionID}`;
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(function (response) {
+                if (response.ok) {
+                    return response.json()
+                }
+                else {
+                    throw "Error en la llamada ajax";
+                }
+            }).then(function (data) {
+
+                console.log("Texto: ", data);
+                var lastSection = $("#BudgetElements tbody:last")
+                var HTMLString =
+                    `
+                        <td class="p-2">
+                            <p class="m-0">${data.description}</p>
+                        </td>
+                        <td class="text-center p-2">
+                            <p class="m-0">
+                                ${data.unit}
+                            </p>
+                        </td>
+                        <td class="text-center p-2">
+                            <p class="m-0">
+                                ${data.amount}
+                            </p>
+                        </td>
+                    `
+
+                element = document.createElement("tr");
+                element.classList.add("grey")
+                element.classList.add("lighten-3")
+                element.setAttribute("data-type", "product")
+                element.setAttribute("data-productid", `${data.id}`)
+                element.setAttribute("data-budgetCode", "{{budget.id}}")
+                element.innerHTML = HTMLString;
+
+                $(element).appendTo(lastSection)
+
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+            $("#productModal").modal('toggle')
+            $("#productDescription").val('')
+            $("#productAmount").val('')
+
+            
+        })
+
+
+
+    });
+</script>
+{% endblock scripts %}
