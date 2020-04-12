@@ -1,7 +1,11 @@
 asgiref==3.2.7
+autopep8==1.5
 Django==3.0.4
+django-material==1.6.3
 django-widget-tweaks==1.4.8
+djangorestframework==3.11.0
 Pillow==7.0.0
 pycodestyle==2.5.0
 pytz==2019.3
+six==1.14.0
 sqlparse==0.3.1
