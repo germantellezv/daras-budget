@@ -313,8 +313,14 @@
                                             <tr class="text-center grey lighten-5">
                                                 <td colspan="3"></td>
 
-                                                <td class="text-right">Subtotal</td>
-                                                <td class="text-left">$ 0.00</td>
+                                                <td class="text-right">
+                                                    <strong>
+                                                        Subtotal
+                                                    </strong>
+                                                </td>
+                                                <td id="transpsubtotal" class="text-left">
+                                                    $ 0.00
+                                                </td>
 
                                             </tr>
                                             <tr>
@@ -377,8 +383,14 @@
                                             <tr class="text-center grey lighten-5">
                                                 <td colspan="3"></td>
 
-                                                <td class="text-right">Subtotal</td>
-                                                <td class="text-left">$ 0.00</td>
+                                                <td class="text-right">
+                                                    <strong>
+                                                        Subtotal
+                                                    </strong>
+                                                </td>
+                                                <td id="securesubtotal" class="text-left">
+                                                    $ 0.00
+                                                </td>
 
                                             </tr>
                                             <tr>
@@ -719,11 +731,11 @@
         })
         /* end of Material */
 
+        
+        
         /* Equipment and tools */
-
-
-        // Update 'value' and 'subtotal' in material table
-        function updateMaterialValue(element) {
+        // Update 'value' and 'subtotal' in table
+        function updateEquipmentValue(element) {
             /* The parameter 'element' is just for position and abstraction purposes */
             var amount = $(element).parent().parent().find(".equipamount")[0].value;
             var munitprice = $(element).parent().parent().find(".equipdailyprice")[0].value;
@@ -740,7 +752,6 @@
             var subtotal = numeral(aux).format('0,0.00');
             $("#equipsubtotal").text(`$ ${subtotal}`);
         }
-        
         // Add item to Equipment area
         $("#addEquipmentItemButton").click(function () {
             var selectedService = '{{budget.service.id}}'
@@ -855,24 +866,36 @@
                     console.log(error);
                 })
         })
-        // Insert 'value' for each Material row 
+        // Insert 'value' for each row 
         $("#equipmentInputs").delegate(".equipamount", "keyup", function (e) {
-            updateMaterialValue(this);
+            updateEquipmentValue(this);
         });
         $("#equipmentInputs").on("change", "tr td .equipamount", function (e) {
-            updateMaterialValue(this)
+            updateEquipmentValue(this)
         })
-        
-        
-        
         /* end of Equipment and tools */
 
 
-
-
-
-
         /* Transport */
+
+        // Update 'value' and 'subtotal' in table
+        function updateTransportValue(element) {
+            /* The parameter 'element' is just for position and abstraction purposes */
+            var amount = $(element).parent().parent().find(".transpamount")[0].value;
+            var munitprice = $(element).parent().parent().find(".transpdailyvalue")[0].value;
+            var value = (amount * munitprice);
+            // Insert result in 'value' input
+            $(element).parent().parent().find(".transpvalue")[0].value = value;
+
+            // Update 'Subtotal' label
+            var values = $(element).parent().parent().parent().find(".transpvalue");
+            var aux = 0;
+            for (let i = 0; i < values.length; i++) {
+                aux += parseFloat(values[i].value);
+            }
+            var subtotal = numeral(aux).format('0,0.00');
+            $("#transpsubtotal").text(`$ ${subtotal}`);
+        }
         // Add item to Transport area
         $("#addTransportItemButton").click(function () {
             var selectedService = '{{budget.service.id}}'
@@ -892,6 +915,7 @@
 
                         var first_cell = document.createElement('td')
                         var transportSelect = document.createElement('select')
+                        transportSelect.classList.add("transpselect")
                         transportSelect.classList.add("custom-select")
                         transportSelect.classList.add("custom-select-sm")
                         transportSelect.classList.add("text-center")
@@ -903,6 +927,7 @@
 
                         var second_cell = document.createElement('td')
                         var transportAmountInput = document.createElement('input')
+                        transportAmountInput.classList.add("transpamount")
                         transportAmountInput.classList.add("form-control")
                         transportAmountInput.classList.add("form-control-sm")
                         transportAmountInput.classList.add("text-center")
@@ -915,6 +940,7 @@
 
                         var third_cell = document.createElement('td')
                         var transportDailyPriceInput = document.createElement('input')
+                        transportDailyPriceInput.classList.add("transpdailyvalue")
                         transportDailyPriceInput.classList.add("form-control")
                         transportDailyPriceInput.classList.add("form-control-sm")
                         transportDailyPriceInput.classList.add("text-center")
@@ -926,6 +952,7 @@
 
                         var fourth_cell = document.createElement('td')
                         var transportPerformanceInput = document.createElement('input')
+                        transportPerformanceInput.classList.add("transperform")
                         transportPerformanceInput.classList.add("form-control")
                         transportPerformanceInput.classList.add("form-control-sm")
                         transportPerformanceInput.classList.add("text-center")
@@ -937,6 +964,7 @@
 
                         var fifth_cell = document.createElement('td')
                         var transportValueInput = document.createElement('input')
+                        transportValueInput.classList.add("transpvalue")
                         transportValueInput.classList.add("form-control")
                         transportValueInput.classList.add("form-control-sm")
                         transportValueInput.classList.add("text-center")
@@ -951,7 +979,6 @@
                     .catch(error => console.log(error))
             }
         })
-
         // Remove last item from Transport area
         $("#removeTransportItemButton").click(function () {
             var x = $("#transportInputs").children().length
@@ -959,9 +986,60 @@
                 $("#transportInputs").children().last().remove()
             }
         })
+        // Insert 'unit' and 'performance' when click option from select input
+        $("#transportInputs").on("click", "tr td .transpselect", function (e) {
+            // Value selected in transport select
+            var option = $(this).children("option:selected").val()
+            // API url
+            var url = "{% url 'api_rest:transports-list' %}"
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Element in API query result that matches with the option value selected
+                    var element = data.find(element => element.id == option)
+                    // Insert in the daily price input of the same row the daily price value of the option selected
+                    $(this).parent().parent().find(".transpdailyvalue")[0].value = element.daily_price;
+                    
+                    // Insert performance value in the input '.equiperform' of the same row
+                    var subitemAmount = '{{subitem.amount}}';
+                    var itemDuration = '{{item.duration}}';
+                    var performance = subitemAmount / itemDuration;
+                    $(this).parent().parent().find(".transperform")[0].value = performance;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        })
+        // Insert 'value' for each row 
+        $("#transportInputs").delegate(".transpamount", "keyup", function (e) {
+            updateTransportValue(this);
+        });
+        $("#transportInputs").on("change", "tr td .transpamount", function (e) {
+            updateTransportValue(this)
+        })
+        
         /* end of Transport */
 
         /* Secure and Others */
+
+        // Update 'value' and 'subtotal' in table
+        function updateTransportValue(element) {
+            /* The parameter 'element' is just for position and abstraction purposes */
+            var amount = $(element).parent().parent().find(".secureamount")[0].value;
+            var munitprice = $(element).parent().parent().find(".securedailyvalue")[0].value;
+            var value = (amount * munitprice);
+            // Insert result in 'value' input
+            $(element).parent().parent().find(".securevalue")[0].value = value;
+
+            // Update 'Subtotal' label
+            var values = $(element).parent().parent().parent().find(".securevalue");
+            var aux = 0;
+            for (let i = 0; i < values.length; i++) {
+                aux += parseFloat(values[i].value);
+            }
+            var subtotal = numeral(aux).format('0,0.00');
+            $("#securesubtotal").text(`$ ${subtotal}`);
+        }
         // Add item to Secure and Others area
         $("#addSecureItemButton").click(function () {
             var selectedService = '{{budget.service.id}}'
@@ -981,6 +1059,7 @@
 
                         var first_cell = document.createElement('td')
                         var secureSelect = document.createElement('select')
+                        secureSelect.classList.add("secureselect")
                         secureSelect.classList.add("custom-select")
                         secureSelect.classList.add("custom-select-sm")
                         secureSelect.classList.add("text-center")
@@ -992,6 +1071,7 @@
 
                         var second_cell = document.createElement('td')
                         var secureAmountInput = document.createElement('input')
+                        secureAmountInput.classList.add("secureamount")
                         secureAmountInput.classList.add("form-control")
                         secureAmountInput.classList.add("form-control-sm")
                         secureAmountInput.classList.add("text-center")
@@ -1004,6 +1084,7 @@
 
                         var third_cell = document.createElement('td')
                         var secureDailyPriceInput = document.createElement('input')
+                        secureDailyPriceInput.classList.add("securedailyvalue")
                         secureDailyPriceInput.classList.add("form-control")
                         secureDailyPriceInput.classList.add("form-control-sm")
                         secureDailyPriceInput.classList.add("text-center")
@@ -1015,6 +1096,7 @@
 
                         var fourth_cell = document.createElement('td')
                         var securePerformanceInput = document.createElement('input')
+                        securePerformanceInput.classList.add("secureperformance")
                         securePerformanceInput.classList.add("form-control")
                         securePerformanceInput.classList.add("form-control-sm")
                         securePerformanceInput.classList.add("text-center")
@@ -1026,6 +1108,7 @@
 
                         var fifth_cell = document.createElement('td')
                         var secureValueInput = document.createElement('input')
+                        secureValueInput.classList.add("securevalue")
                         secureValueInput.classList.add("form-control")
                         secureValueInput.classList.add("form-control-sm")
                         secureValueInput.classList.add("text-center")
@@ -1040,7 +1123,6 @@
                     .catch(error => console.log(error))
             }
         })
-
         // Remove last item from Secure and Others area
         $("#removeSecureItemButton").click(function () {
             var x = $("#secureInputs").children().length
@@ -1048,6 +1130,39 @@
                 $("#secureInputs").children().last().remove()
             }
         })
+        // Insert 'unit' and 'performance' when click option from select input
+        $("#secureInputs").on("click", "tr td .secureselect", function (e) {
+            // Value selected in transport select
+            var option = $(this).children("option:selected").val()
+            // API url
+            var url = "{% url 'api_rest:secures-list' %}"
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Element in API query result that matches with the option value selected
+                    var element = data.find(element => element.id == option)
+                    // Insert in the daily price input of the same row the daily price value of the option selected
+                    $(this).parent().parent().find(".securedailyvalue")[0].value = element.daily_price;
+                    
+                    // Insert performance value in the input '.equiperform' of the same row
+                    var subitemAmount = '{{subitem.amount}}';
+                    var itemDuration = '{{item.duration}}';
+                    var performance = subitemAmount / itemDuration;
+                    $(this).parent().parent().find(".secureperformance")[0].value = performance;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        })
+        // Insert 'value' for each row 
+        $("#secureInputs").delegate(".secureamount", "keyup", function (e) {
+            updateTransportValue(this);
+        });
+        $("#secureInputs").on("change", "tr td .secureamount", function (e) {
+            updateTransportValue(this)
+        })
+        
+        
         /* end of Secure and Others */
 
     });
