@@ -147,6 +147,9 @@
                                 <th>
                                     Cantidad
                                 </th>
+                                <th>
+                                    Opciones
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,7 +158,7 @@
                                 <td class="text-center">
                                     {{forloop.counter}}
                                 </td>
-                                <td colspan="3">
+                                <td colspan="4">
                                     {{item.description}}
                                 </td>
                             </tr>
@@ -174,6 +177,11 @@
                                         <td>
                                             {{i.amount}}
                                         </td>
+                                        <td>
+                                            <a href="{% url 'budget:edit-subitem' budget.id item.id i.id %}">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
@@ -183,6 +191,7 @@
                 {% endif %}
 
                 <hr class="my-5">
+                <a href="{% url 'budget:fill-budget' budget.id %}" class="btn btn-primary">Editar</a>
             </div>
         </div>
     </div>

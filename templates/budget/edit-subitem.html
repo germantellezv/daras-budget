@@ -17,7 +17,7 @@
             <span class="text-muted">Dashboard</span>
             <span class="text-muted">/</span>
             <span>
-                <a class="text-muted" href="{% url 'budget:budget-detail' budget.slug %}">
+                <a class="text-muted" href="{% url 'budget:budget-detail' budget.id %}">
                     Presupuesto
                 </a>
             </span>
@@ -41,13 +41,13 @@
                     Análisis de precios unitarios (APU)
                 </h1>
                 <p>
-                    <strong>Información de la actividad</strong> <br>
+                    <strong>Información de la sección:</strong> <br>
                     Descripción: {{item.description}} <br>
                     Duración: {{item.duration}} día{{item.duration|pluralize}} <br>
 
                 </p>
                 <p>
-                    <strong>Información de la subactividad: </strong> <br>
+                    <strong>Información de la actividad: </strong> <br>
                     Descripción: {{subitem.description}} <br>
                     Cantidad: {{subitem.amount}} <br>
                 </p>
@@ -167,7 +167,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="materialInputs">
-
+                                            <!-- space left in blank intentionally -->
                                         </tbody>
                                         <tfoot>
                                             <tr class="text-center grey lighten-5">
@@ -178,9 +178,7 @@
 
                                             </tr>
                                             <tr>
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right" colspan="2">
+                                                <td class="text-right" colspan="5">
                                                     <a id="addMaterialItemButton" class="btn btn-success">AGREGAR</a>
                                                     <a id="removeMaterialItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
@@ -416,7 +414,9 @@
         }
         /* Highlight current sidebar item */
 
-        /* Update workforce table */
+
+        /* Workforce */
+        // Update 'value' and 'subtotal' in workforce table
         function updateWorkforceValue(element) {
             /* The parameter 'element' is just for position and abstraction purposes */
             var amount = $(element).parent().parent().find(".wfamount")[0].value;
@@ -435,9 +435,6 @@
             var subtotal = numeral(aux).format('0,0.00');
             $("#wfsubtotal").text(`$ ${subtotal}`);
         }
-        /* Update workforce table */
-
-        /* Workforce */
         // Add item to Workforce area
         $("#addWorkforceItemButton").click(function () {
             var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
@@ -472,6 +469,7 @@
                     var workforceAmountInput = document.createElement('input')
                     workforceAmountInput.classList.add("wfamount")
                     workforceAmountInput.classList.add("form-control")
+                    workforceAmountInput.classList.add("form-control-sm")
                     workforceAmountInput.classList.add("text-center")
                     workforceAmountInput.setAttribute('name', 'workforce-amount')
                     workforceAmountInput.setAttribute('required', 'true')
@@ -485,6 +483,7 @@
                     var dailyPriceInput = document.createElement('input')
                     dailyPriceInput.classList.add("wfsalary")
                     dailyPriceInput.classList.add("form-control")
+                    dailyPriceInput.classList.add("form-control-sm")
                     dailyPriceInput.classList.add("text-center")
                     dailyPriceInput.setAttribute('name', 'workforce-price')
                     dailyPriceInput.setAttribute('type', 'number')
@@ -497,6 +496,7 @@
                     var performanceInput = document.createElement('input')
                     performanceInput.classList.add("wfperformance")
                     performanceInput.classList.add("form-control")
+                    performanceInput.classList.add("form-control-sm")
                     performanceInput.classList.add("text-center")
                     performanceInput.setAttribute('name', 'workforce-performance')
                     performanceInput.setAttribute('type', 'number')
@@ -509,6 +509,7 @@
                     var valueInput = document.createElement('input')
                     valueInput.classList.add("wfvalue")
                     valueInput.classList.add("form-control")
+                    valueInput.classList.add("form-control-sm")
                     valueInput.classList.add("text-center")
                     valueInput.setAttribute('name', 'workforce-value')
                     valueInput.setAttribute('type', 'number')
@@ -559,25 +560,9 @@
                 })
         })
 
-
-
         // Insert 'value' for each forkworce row 
         $("#workforceInputs").delegate(".wfamount", "keyup", function (e) {
-            // console.log(e.which);
             updateWorkforceValue(this);
-            // var amount = this.value;
-            // var salary = $(this).parent().parent().find(".wfsalary")[0].value;
-            // var performance = $(this).parent().parent().find(".wfperformance")[0].value;
-            // var result = (amount * salary)/performance;
-            // // Insert result in 'value' input
-            // $(this).parent().parent().find(".wfvalue")[0].value = result
-
-            // // Update 'Subtotal' label
-            // aux += result;
-            // console.log(aux);
-            // var subtotal = numeral(aux).format('0,0.00');
-            // $("#wfsubtotal").text(`$ ${subtotal}`)
-
         });
         $("#workforceInputs").on("change", "tr td .wfamount", function (e) {
             updateWorkforceValue(this)
@@ -604,6 +589,7 @@
 
                         var first_cell = document.createElement('td')
                         var materialSelect = document.createElement('select')
+                        materialSelect.classList.add("mselect")
                         materialSelect.classList.add("custom-select")
                         materialSelect.classList.add("custom-select-sm")
                         materialSelect.classList.add("text-center")
@@ -615,7 +601,8 @@
 
                         var second_cell = document.createElement('td')
                         var materialAmountInput = document.createElement('input')
-                        materialAmountInput.classList.add("form-control")
+                        materialAmountInput.classList.add("form-control")                    
+                        materialAmountInput.classList.add("form-control-sm")
                         materialAmountInput.classList.add("text-center")
                         materialAmountInput.setAttribute('name', 'material-amount')
                         materialAmountInput.setAttribute('required', 'true')
@@ -626,7 +613,8 @@
 
                         var third_cell = document.createElement('td')
                         var materialDailyPriceInput = document.createElement('input')
-                        materialDailyPriceInput.classList.add("form-control")
+                        materialDailyPriceInput.classList.add("form-control")                    
+                        materialDailyPriceInput.classList.add("form-control-sm")
                         materialDailyPriceInput.classList.add("text-center")
                         materialDailyPriceInput.setAttribute('name', 'material-price')
                         materialDailyPriceInput.setAttribute('type', 'number')
@@ -636,7 +624,8 @@
 
                         var fourth_cell = document.createElement('td')
                         var materialPerformanceInput = document.createElement('input')
-                        materialPerformanceInput.classList.add("form-control")
+                        materialPerformanceInput.classList.add("form-control")                    
+                        materialPerformanceInput.classList.add("form-control-sm")
                         materialPerformanceInput.classList.add("text-center")
                         materialPerformanceInput.setAttribute('name', 'material-performance')
                         materialPerformanceInput.setAttribute('type', 'number')
@@ -646,7 +635,8 @@
 
                         var fifth_cell = document.createElement('td')
                         var materialValueInput = document.createElement('input')
-                        materialValueInput.classList.add("form-control")
+                        materialValueInput.classList.add("form-control")                    
+                        materialValueInput.classList.add("form-control-sm")
                         materialValueInput.classList.add("text-center")
                         materialValueInput.setAttribute('name', 'material-value')
                         materialValueInput.setAttribute('type', 'number')
@@ -666,6 +656,33 @@
                 $("#materialInputs").children().last().remove()
             }
         })
+        // Insert salary and performance value
+        $("#workforceInputs").on("click", "tr td .wfselect", function (e) {
+            // Value selected in workforce select
+            var option = $(this).children("option:selected").val()
+            // API url
+            var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Element in API query result that match with the option value selected
+                    var element = data.find(element => element.id == option)
+                    // Insert in the salary input of the same row the salary of the option selected
+                    $(this).parent().parent().find(".wfsalary")[0].value = element.daily_salary;
+
+                    /* ....... */
+
+                    // Insert performance value in the input '.wfperformance' of the same row
+                    var subitemAmount = '{{subitem.amount}}';
+                    var itemDuration = '{{item.duration}}';
+                    var performance = subitemAmount / itemDuration;
+                    $(this).parent().parent().find(".wfperformance")[0].value = performance;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        })
+
         /* end of Material */
 
         /* Equipment and tools */
@@ -700,6 +717,7 @@
                         var second_cell = document.createElement('td')
                         var equipmentAmountInput = document.createElement('input')
                         equipmentAmountInput.classList.add("form-control")
+                        equipmentAmountInput.classList.add("form-control-sm")
                         equipmentAmountInput.classList.add("text-center")
                         equipmentAmountInput.setAttribute('name', 'equipment-amount')
                         equipmentAmountInput.setAttribute('required', 'true')
@@ -711,6 +729,7 @@
                         var third_cell = document.createElement('td')
                         var equipmentDailyPriceInput = document.createElement('input')
                         equipmentDailyPriceInput.classList.add("form-control")
+                        equipmentDailyPriceInput.classList.add("form-control-sm")
                         equipmentDailyPriceInput.classList.add("text-center")
                         equipmentDailyPriceInput.setAttribute('name', 'equipment-price')
                         equipmentDailyPriceInput.setAttribute('type', 'number')
@@ -721,6 +740,7 @@
                         var fourth_cell = document.createElement('td')
                         var performanceInput = document.createElement('input')
                         performanceInput.classList.add("form-control")
+                        performanceInput.classList.add("form-control-sm")
                         performanceInput.classList.add("text-center")
                         performanceInput.setAttribute('name', 'equipment-performance')
                         performanceInput.setAttribute('type', 'number')
@@ -731,6 +751,7 @@
                         var fifth_cell = document.createElement('td')
                         var valueInput = document.createElement('input')
                         valueInput.classList.add("form-control")
+                        valueInput.classList.add("form-control-sm")
                         valueInput.classList.add("text-center")
                         valueInput.setAttribute('name', 'equipment-value')
                         valueInput.setAttribute('type', 'number')
@@ -785,6 +806,7 @@
                         var second_cell = document.createElement('td')
                         var transportAmountInput = document.createElement('input')
                         transportAmountInput.classList.add("form-control")
+                        transportAmountInput.classList.add("form-control-sm")
                         transportAmountInput.classList.add("text-center")
                         transportAmountInput.setAttribute('name', 'transport-amount')
                         transportAmountInput.setAttribute('required', 'true')
@@ -796,6 +818,7 @@
                         var third_cell = document.createElement('td')
                         var transportDailyPriceInput = document.createElement('input')
                         transportDailyPriceInput.classList.add("form-control")
+                        transportDailyPriceInput.classList.add("form-control-sm")
                         transportDailyPriceInput.classList.add("text-center")
                         transportDailyPriceInput.setAttribute('name', 'equipment-price')
                         transportDailyPriceInput.setAttribute('type', 'number')
@@ -806,6 +829,7 @@
                         var fourth_cell = document.createElement('td')
                         var transportPerformanceInput = document.createElement('input')
                         transportPerformanceInput.classList.add("form-control")
+                        transportPerformanceInput.classList.add("form-control-sm")
                         transportPerformanceInput.classList.add("text-center")
                         transportPerformanceInput.setAttribute('name', 'transport-performance')
                         transportPerformanceInput.setAttribute('type', 'number')
@@ -816,6 +840,7 @@
                         var fifth_cell = document.createElement('td')
                         var transportValueInput = document.createElement('input')
                         transportValueInput.classList.add("form-control")
+                        transportValueInput.classList.add("form-control-sm")
                         transportValueInput.classList.add("text-center")
                         transportValueInput.setAttribute('name', 'transport-value')
                         transportValueInput.setAttribute('type', 'number')
@@ -870,6 +895,7 @@
                         var second_cell = document.createElement('td')
                         var secureAmountInput = document.createElement('input')
                         secureAmountInput.classList.add("form-control")
+                        secureAmountInput.classList.add("form-control-sm")
                         secureAmountInput.classList.add("text-center")
                         secureAmountInput.setAttribute('name', 'secure-amount')
                         secureAmountInput.setAttribute('required', 'true')
@@ -881,6 +907,7 @@
                         var third_cell = document.createElement('td')
                         var secureDailyPriceInput = document.createElement('input')
                         secureDailyPriceInput.classList.add("form-control")
+                        secureDailyPriceInput.classList.add("form-control-sm")
                         secureDailyPriceInput.classList.add("text-center")
                         secureDailyPriceInput.setAttribute('name', 'secure-price')
                         secureDailyPriceInput.setAttribute('type', 'number')
@@ -891,6 +918,7 @@
                         var fourth_cell = document.createElement('td')
                         var securePerformanceInput = document.createElement('input')
                         securePerformanceInput.classList.add("form-control")
+                        securePerformanceInput.classList.add("form-control-sm")
                         securePerformanceInput.classList.add("text-center")
                         securePerformanceInput.setAttribute('name', 'secure-performance')
                         securePerformanceInput.setAttribute('type', 'number')
@@ -901,6 +929,7 @@
                         var fifth_cell = document.createElement('td')
                         var secureValueInput = document.createElement('input')
                         secureValueInput.classList.add("form-control")
+                        secureValueInput.classList.add("form-control-sm")
                         secureValueInput.classList.add("text-center")
                         secureValueInput.setAttribute('name', 'secure-value')
                         secureValueInput.setAttribute('type', 'number')
@@ -922,7 +951,6 @@
             }
         })
         /* end of Secure and Others */
-
 
     });
 

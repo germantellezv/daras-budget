@@ -102,40 +102,63 @@
 <!-- Modal to create Budget -->
 <div class="modal fade" id="budgetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
 aria-hidden="true">
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h4 class="modal-title w-100" id="myModalLabel">Crear presupuesto</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <!-- Form -->
+                <form id="budgetForm" action="{% url 'budget:create-budget' %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="">
+                            <small>¿Para quién es el presupuesto?</small>
+                        </label>
+                        {% render_field form.client class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="">
+                            <small>¿De qué tipo de servicio es el proyecto?</small>
+                        </label>
+                        {% render_field form.service class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="">
+                            <small>¿Que tan riesgoso es el proyecto?</small>
+                        </label>
+                        {% render_field form.risk class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="">
+                            <small>¿Qué tipo de tarifas deseas utilizar?</small>
+                        </label>
+                        {% render_field form.time class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="">
+                            <small>Calcular IVA con respecto a</small>
+                        </label>
+                        {% render_field form.iva_option class="form-control" %}
+                    </div>
+                </form>
 
-<!-- Change class .modal-sm to change the size of the modal -->
-<div class="modal-dialog modal-dialog-centered modal-md" role="document">
-    <div class="modal-content">
-        <!-- Modal header -->
-        <div class="modal-header">
-            <h4 class="modal-title w-100" id="myModalLabel">Crear presupuesto</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-            <!-- Form -->
-            <form id="budgetForm" action="{% url 'budget:create-budget' %}" method="POST">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <label for="">
-                        <small>¿Para quién es el presupuesto?</small>
-                    </label>
-                    {% render_field form.client class="form-control" %}
-                </div>
-            </form>
-
-        </div>
-        <!-- Modal footer -->
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary btn-sm"
-                data-dismiss="modal">Cancelar</button>
-            <button type="submit" form="budgetForm" class="btn btn-primary btn-sm">Crear</button>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm"
+                    data-dismiss="modal">Cancelar</button>
+                <button type="submit" form="budgetForm" class="btn btn-primary btn-sm">Crear</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <!-- Modal to create Budget -->
 

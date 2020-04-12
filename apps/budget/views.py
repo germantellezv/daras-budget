@@ -46,7 +46,7 @@ def createClient(request):
 @login_required
 def listBudgets(request):
 
-    # render form
+    # Only render purposes
     form = CreateBudgetForm()
 
     budgets = Budget.objects.all().order_by('-created')
@@ -62,18 +62,21 @@ def listBudgets(request):
 @login_required
 def createBudget(request):
     """ Basic creation of budget """
-
+    
     if request.method == 'POST':
         form = CreateBudgetForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             b = Budget()
             b.client = data['client']
+            b.service = data['service']
+            b.risk = data['risk']
+            b.time = data['time']
+            b.iva_option = data['iva_option']
             b.save()
-            
             pk = b.id
             return redirect('budget:fill-budget', pk=pk)
-    request
+    
 
 @login_required
 def fillBudget(request, pk):
@@ -83,7 +86,25 @@ def fillBudget(request, pk):
     items = BudgetItem.objects.filter(budget=budget)
     clients = Client.objects.all()
     units = Unit.objects.all()
-    form = EditBudgetForm()
+    form = FillBudgetForm()
+
+    if request.method == "POST":
+        form = FillBudgetForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+
+            b = budget
+            b.consecutive = data['consecutive']
+            b.client = data['client']
+            b.subject = data['subject']
+            b.comment = data['comment']
+            b.utility_percentage = data['utility_percentage']
+            b.incidentals_percentaje = data['incidentals_percentaje']
+            b.administration_percentage = data['administration_percentage']
+            b.save()
+
+            return redirect('budget:budget-detail', budget_pk=pk)
+
     return render(
         request=request,
         template_name='budget/fill-budget.html',
@@ -150,17 +171,17 @@ def editBudgetItem(request, slug, slug_item):
     )
 
 @login_required
-def editBudgetSubItem(request, slug, slug_item, slug_subitem):
+def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
     """ Create APU for specific activity """
-    budget = get_object_or_404(Budget, slug=slug)
-    item = get_object_or_404(BudgetItem, slug=slug_item)
-    subitem = get_object_or_404(BudgetSubItem, slug=slug_subitem, budget=budget, item=item)
+    budget = get_object_or_404(Budget, id=budget_pk)
+    item = get_object_or_404(BudgetItem, id=item_pk)
+    subitem = get_object_or_404(BudgetSubItem, id=subitem_pk)
     return render(
         request=request,
         template_name='budget/edit-subitem.html',
         context={
-            'item': item,
             'budget': budget,
+            'item': item,
             'subitem': subitem,
         }
     )

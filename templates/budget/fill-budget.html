@@ -34,7 +34,7 @@
         <h4 class="card-title"><a>Nuevo presupuesto</a></h4>
 
         <!-- Main content -->
-        <form action="" method="post">
+        <form action="" method="POST">
             {% csrf_token %}
             <!-- First row -->
             <div class="row">
@@ -44,7 +44,7 @@
                     <div class="form-group m-0">
                         <label for="id_client">
                             <small>Consecutivo</small>
-                            <input type="text" name="" class="form-control" placeholder="PS5-12">
+                            <input type="text" name="" class="form-control" placeholder="PS5-12" {% if budget.consecutive %}value="{{budget.consecutive}}"{% endif %}>
                         </label>
                     </div>
                     <!-- Client -->
@@ -67,7 +67,8 @@
                         <label for="id_description">
                             <small for="id_description">Descripción del proyecto</small>
                         </label>
-                        <input type="text" name="description" id="id_description" class="form-control">
+                        <input type="text" name="subject" id="id_description" class="form-control" {% if budget.subject %}value="{{budget.subject}}"{% endif %}>
+                        {{budget.description}}
                     </div>
                 </div>
                 <!-- Second column -->
@@ -137,10 +138,36 @@
                             </td>
                         </tr>
                     </table>
+
                 </div>
             </div>
+            <!-- Third row -->
+            <div class="row pt-3">
+                <div class="col-sm-9 m-auto">
+                    <!--Textarea with icon prefix-->
+                    <div class="md-form">
+                        <i class="fas fa-pencil-alt prefix"></i>
+                        <textarea id="form10" name="comment" class="md-textarea form-control" rows="5" >{% if budget.comment %}{{budget.comment}}{% endif %}</textarea>
+                        <label for="form10">Observaciones</label>
+                    </div>
+                    
+                </div>
+                <div class="col-sm-3">
+                    <h5>Costos indirectos</h5>
+                    <div class="form-group">
+                        {% render_field form.administration_percentage class="form-control" placeholder="% de administración" value=budget.administration_percentage %}
+                    </div>
+                    <div class="form-group">
+                        {% render_field form.incidentals_percentaje class="form-control" placeholder="% de imprevistos" value=budget.incidentals_percentaje %}
+                    </div>
+                    <div class="form-group">
+                        {% render_field form.utility_percentage class="form-control" placeholder="% de utilidad" value=budget.utility_percentage%}
+                    </div>
+                </div>
+            </div>
+            
             <!-- Button -->
-            <a href="#" class="btn btn-primary">Guardar</a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
 
 
@@ -191,7 +218,7 @@
         </div>
         <!-- Modal to add section -->
 
-        <!-- Modal to add producto -->
+        <!-- Modal to add product -->
         <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
 
@@ -249,7 +276,7 @@
                 </div>
             </div>
         </div>
-        <!-- Modal to add producto -->
+        <!-- Modal to add product -->
     </div>
 </div>
 <!-- Card -->

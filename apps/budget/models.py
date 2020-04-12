@@ -193,17 +193,17 @@ class Budget(models.Model):
     """ Budget model """
 
     OPTIONS_IVA = [
-        (None, 'Calcular IVA con respecto a'),
+        # (None, 'Calcular IVA con respecto a'),
         ('1', 'Subtotal'),
         ('2', 'Utilidad')
     ]
     OPTIONS_PERIOD = [
-        (None, 'Periodo de tiempo'),
+        # (None, 'Periodo de tiempo'),
         ('1', 'Por hora'),
         ('2', 'Por día'),
         ('3', 'Mensual')
     ]
-
+    consecutive = models.CharField(max_length=10, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.CharField(max_length=300, blank=True, null=True)

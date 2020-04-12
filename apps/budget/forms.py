@@ -3,47 +3,50 @@ from django import forms
 # Models
 from .models import *
 
+
 class CreateClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = ('nit','name','country','state','city','address')
+        fields = ('nit', 'name', 'country', 'state', 'city', 'address')
+
 
 class CreateBudgetForm(forms.ModelForm):
     """ Create Budget form """
 
     class Meta:
         model = Budget
-        fields = ('client',)
+        fields = (
+            'client',
+            'risk',
+            'time',
+            'service',
+            'iva_option',
+        )
 
 
-class EditBudgetForm(forms.ModelForm):
-    """ Edit budget form """
-    def __init__(self, *args, **kwargs):
-        super(EditBudgetForm, self).__init__(*args, **kwargs)
-        self.fields['client'].empty_label = "Selecciona un cliente"
-        self.fields['service'].empty_label = "Selecciona un tipo de servicio"
-        self.fields['risk'].empty_label = "Selecciona un tipo de riesgo"
-    
+class FillBudgetForm(forms.ModelForm):
+    """ Fill budget form """
+
     class Meta:
         model = Budget
-        fields = ('client',
-        'risk',
-        'time',
-        'comment',
-        'service',
-        'subject',
-        'iva_option',
-        'utility_percentage',
-        'incidentals_percentaje',
-        'administration_percentage',
+        fields = (
+            'consecutive',
+            'client',
+            'subject',
+            'comment',
+            'utility_percentage',
+            'incidentals_percentaje',
+            'administration_percentage',
         )
+
 
 class BudgetSubItemForm(forms.ModelForm):
     """ Budget items form"""
+
     def __init__(self, *args, **kwargs):
         super(BudgetSubItemForm, self).__init__(*args, **kwargs)
         self.fields['unit'].empty_label = "Unidades"
-        
+
     class Meta:
         model = BudgetSubItem
-        fields = ('description','unit','amount')
+        fields = ('description', 'unit', 'amount')
