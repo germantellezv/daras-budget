@@ -40,7 +40,7 @@ class MaterialSerializer(serializers.ModelSerializer):
         read_only=True
     )
     unit = serializers.SlugRelatedField(
-        slug_field='id',
+        slug_field='acronym',
         many=False,
         read_only=True
     )

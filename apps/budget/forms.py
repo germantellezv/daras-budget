@@ -50,3 +50,4 @@ class BudgetSubItemForm(forms.ModelForm):
     class Meta:
         model = BudgetSubItem
         fields = ('description', 'unit', 'amount')
+

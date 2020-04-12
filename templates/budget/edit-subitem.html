@@ -153,13 +153,13 @@
                                                     Material
                                                 </th>
                                                 <th>
-                                                    Unidad
+                                                    Cantidad
                                                 </th>
                                                 <th>
                                                     Precio unitario
                                                 </th>
                                                 <th>
-                                                    Cantidad
+                                                    Unidad
                                                 </th>
                                                 <th>
                                                     Valor
@@ -173,8 +173,14 @@
                                             <tr class="text-center grey lighten-5">
                                                 <td colspan="3"></td>
 
-                                                <td class="text-right">Subtotal</td>
-                                                <td class="text-left">$ 0.00</td>
+                                                <td class="text-right">
+                                                    <strong>
+                                                        Subtotal
+                                                    </strong>
+                                                </td>
+                                                <td id="msubtotal" class="text-left">
+                                                    $ 0.00
+                                                </td>
 
                                             </tr>
                                             <tr>
@@ -236,8 +242,14 @@
                                             <tr class="text-center grey lighten-5">
                                                 <td colspan="3"></td>
 
-                                                <td class="text-right">Subtotal</td>
-                                                <td class="text-left">$ 0.00</td>
+                                                <td class="text-right">
+                                                    <strong>
+                                                        Subtotal
+                                                    </strong>
+                                                </td>
+                                                <td id="equipsubtotal" class="text-left">
+                                                    $ 0.00
+                                                </td>
 
                                             </tr>
                                             <tr>
@@ -532,7 +544,6 @@
             }
 
         })
-
         // Insert salary and performance value
         $("#workforceInputs").on("click", "tr td .wfselect", function (e) {
             // Value selected in workforce select
@@ -559,7 +570,6 @@
                     console.log(error);
                 })
         })
-
         // Insert 'value' for each forkworce row 
         $("#workforceInputs").delegate(".wfamount", "keyup", function (e) {
             updateWorkforceValue(this);
@@ -570,6 +580,24 @@
         /* end of Workforce */
 
         /* Material */
+        // Update 'value' and 'subtotal' in material table
+        function updateMaterialValue(element) {
+            /* The parameter 'element' is just for position and abstraction purposes */
+            var amount = $(element).parent().parent().find(".mamount")[0].value;
+            var munitprice = $(element).parent().parent().find(".munitprice")[0].value;
+            var value = (amount * munitprice);
+            // Insert result in 'value' input
+            $(element).parent().parent().find(".mvalue")[0].value = value;
+
+            // Update 'Subtotal' label
+            var values = $(element).parent().parent().parent().find(".mvalue");
+            var aux = 0;
+            for (let i = 0; i < values.length; i++) {
+                aux += parseFloat(values[i].value);
+            }
+            var subtotal = numeral(aux).format('0,0.00');
+            $("#msubtotal").text(`$ ${subtotal}`);
+        }
         // Add item to Material area
         $("#addMaterialItemButton").click(function () {
             var selectedService = '{{budget.service.id}}'
@@ -589,11 +617,11 @@
 
                         var first_cell = document.createElement('td')
                         var materialSelect = document.createElement('select')
-                        materialSelect.classList.add("mselect")
+                        materialSelect.classList.add("equipselect")
                         materialSelect.classList.add("custom-select")
                         materialSelect.classList.add("custom-select-sm")
                         materialSelect.classList.add("text-center")
-                        materialSelect.setAttribute("name", "material-subitem")
+                        materialSelect.setAttribute("name", "material")
                         materialSelect.setAttribute("required", "true")
                         materialSelect.innerHTML = aux;
                         first_cell.appendChild(materialSelect)
@@ -601,10 +629,11 @@
 
                         var second_cell = document.createElement('td')
                         var materialAmountInput = document.createElement('input')
-                        materialAmountInput.classList.add("form-control")                    
+                        materialAmountInput.classList.add("mamount")
+                        materialAmountInput.classList.add("form-control")
                         materialAmountInput.classList.add("form-control-sm")
                         materialAmountInput.classList.add("text-center")
-                        materialAmountInput.setAttribute('name', 'material-amount')
+                        materialAmountInput.setAttribute('name', 'material_amount')
                         materialAmountInput.setAttribute('required', 'true')
                         materialAmountInput.setAttribute('placeholder', 'Cantidad')
                         materialAmountInput.setAttribute('type', 'number')
@@ -613,32 +642,37 @@
 
                         var third_cell = document.createElement('td')
                         var materialDailyPriceInput = document.createElement('input')
-                        materialDailyPriceInput.classList.add("form-control")                    
+                        materialDailyPriceInput.classList.add("munitprice")
+                        materialDailyPriceInput.classList.add("form-control")
                         materialDailyPriceInput.classList.add("form-control-sm")
                         materialDailyPriceInput.classList.add("text-center")
-                        materialDailyPriceInput.setAttribute('name', 'material-price')
+                        materialDailyPriceInput.setAttribute('name', 'material_unit_price')
                         materialDailyPriceInput.setAttribute('type', 'number')
-                        materialDailyPriceInput.setAttribute('placeholder', 'Salario diario')
+                        materialDailyPriceInput.setAttribute('step', '0.01')
+                        materialDailyPriceInput.setAttribute('placeholder', 'Precio unitario')
                         third_cell.appendChild(materialDailyPriceInput)
                         row.appendChild(third_cell)
 
                         var fourth_cell = document.createElement('td')
                         var materialPerformanceInput = document.createElement('input')
-                        materialPerformanceInput.classList.add("form-control")                    
+                        materialPerformanceInput.classList.add("munit")
+                        materialPerformanceInput.classList.add("form-control")
                         materialPerformanceInput.classList.add("form-control-sm")
                         materialPerformanceInput.classList.add("text-center")
-                        materialPerformanceInput.setAttribute('name', 'material-performance')
-                        materialPerformanceInput.setAttribute('type', 'number')
-                        materialPerformanceInput.setAttribute('placeholder', 'Rendimiento')
+                        materialPerformanceInput.setAttribute('name', 'material_unit')
+                        materialPerformanceInput.setAttribute('type', 'text')
+                        materialPerformanceInput.setAttribute('readonly', 'true')
+                        materialPerformanceInput.setAttribute('placeholder', 'Unidad')
                         fourth_cell.appendChild(materialPerformanceInput)
                         row.appendChild(fourth_cell)
 
                         var fifth_cell = document.createElement('td')
                         var materialValueInput = document.createElement('input')
-                        materialValueInput.classList.add("form-control")                    
+                        materialValueInput.classList.add("mvalue")
+                        materialValueInput.classList.add("form-control")
                         materialValueInput.classList.add("form-control-sm")
                         materialValueInput.classList.add("text-center")
-                        materialValueInput.setAttribute('name', 'material-value')
+                        materialValueInput.setAttribute('name', 'material_value')
                         materialValueInput.setAttribute('type', 'number')
                         materialValueInput.setAttribute('placeholder', 'Valor')
                         fifth_cell.appendChild(materialValueInput)
@@ -656,36 +690,57 @@
                 $("#materialInputs").children().last().remove()
             }
         })
-        // Insert salary and performance value
-        $("#workforceInputs").on("click", "tr td .wfselect", function (e) {
+        // Insert 'unit' and 'unit value' when click option from select input
+        $("#materialInputs").on("click", "tr td .mselect", function (e) {
             // Value selected in workforce select
             var option = $(this).children("option:selected").val()
             // API url
-            var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
+            var url = "{% url 'api_rest:material-service' budget.service.id %}"
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // Element in API query result that match with the option value selected
+                    // Element in API query result that matches with the option value selected
                     var element = data.find(element => element.id == option)
-                    // Insert in the salary input of the same row the salary of the option selected
-                    $(this).parent().parent().find(".wfsalary")[0].value = element.daily_salary;
-
-                    /* ....... */
-
-                    // Insert performance value in the input '.wfperformance' of the same row
-                    var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{item.duration}}';
-                    var performance = subitemAmount / itemDuration;
-                    $(this).parent().parent().find(".wfperformance")[0].value = performance;
+                    // Insert in the unit value input of the same row the unit value of the option selected
+                    $(this).parent().parent().find(".munitprice")[0].value = element.daily_price;
+                    // Insert 'unit' name in the input of the same row
+                    $(this).parent().parent().find(".munit")[0].value = element.unit;
                 })
                 .catch(error => {
                     console.log(error);
                 })
         })
-
+        // Insert 'value' for each Material row 
+        $("#materialInputs").delegate(".mamount", "keyup", function (e) {
+            updateMaterialValue(this);
+        });
+        $("#materialInputs").on("change", "tr td .mamount", function (e) {
+            updateMaterialValue(this)
+        })
         /* end of Material */
 
         /* Equipment and tools */
+
+
+        // Update 'value' and 'subtotal' in material table
+        function updateMaterialValue(element) {
+            /* The parameter 'element' is just for position and abstraction purposes */
+            var amount = $(element).parent().parent().find(".equipamount")[0].value;
+            var munitprice = $(element).parent().parent().find(".equipdailyprice")[0].value;
+            var value = (amount * munitprice);
+            // Insert result in 'value' input
+            $(element).parent().parent().find(".equipvalue")[0].value = value;
+
+            // Update 'Subtotal' label
+            var values = $(element).parent().parent().parent().find(".equipvalue");
+            var aux = 0;
+            for (let i = 0; i < values.length; i++) {
+                aux += parseFloat(values[i].value);
+            }
+            var subtotal = numeral(aux).format('0,0.00');
+            $("#equipsubtotal").text(`$ ${subtotal}`);
+        }
+        
         // Add item to Equipment area
         $("#addEquipmentItemButton").click(function () {
             var selectedService = '{{budget.service.id}}'
@@ -705,6 +760,7 @@
 
                         var first_cell = document.createElement('td')
                         var equipmentSelect = document.createElement('select')
+                        equipmentSelect.classList.add("equipselect")
                         equipmentSelect.classList.add("custom-select")
                         equipmentSelect.classList.add("custom-select-sm")
                         equipmentSelect.classList.add("text-center")
@@ -716,6 +772,7 @@
 
                         var second_cell = document.createElement('td')
                         var equipmentAmountInput = document.createElement('input')
+                        equipmentAmountInput.classList.add("equipamount")
                         equipmentAmountInput.classList.add("form-control")
                         equipmentAmountInput.classList.add("form-control-sm")
                         equipmentAmountInput.classList.add("text-center")
@@ -728,6 +785,7 @@
 
                         var third_cell = document.createElement('td')
                         var equipmentDailyPriceInput = document.createElement('input')
+                        equipmentDailyPriceInput.classList.add("equipdailyprice")
                         equipmentDailyPriceInput.classList.add("form-control")
                         equipmentDailyPriceInput.classList.add("form-control-sm")
                         equipmentDailyPriceInput.classList.add("text-center")
@@ -739,6 +797,7 @@
 
                         var fourth_cell = document.createElement('td')
                         var performanceInput = document.createElement('input')
+                        performanceInput.classList.add("equiperform")
                         performanceInput.classList.add("form-control")
                         performanceInput.classList.add("form-control-sm")
                         performanceInput.classList.add("text-center")
@@ -750,6 +809,7 @@
 
                         var fifth_cell = document.createElement('td')
                         var valueInput = document.createElement('input')
+                        valueInput.classList.add("equipvalue")
                         valueInput.classList.add("form-control")
                         valueInput.classList.add("form-control-sm")
                         valueInput.classList.add("text-center")
@@ -764,7 +824,6 @@
                     .catch(error => console.log(error))
             }
         })
-
         // Remove last item from Equipment area
         $("#removeEquipmentItemButton").click(function () {
             var x = $("#equipmentInputs").children().length
@@ -772,7 +831,46 @@
                 $("#equipmentInputs").children().last().remove()
             }
         })
+        // Insert 'unit' and 'unit value' when click option from select input
+        $("#equipmentInputs").on("click", "tr td .equipselect", function (e) {
+            // Value selected in workforce select
+            var option = $(this).children("option:selected").val()
+            // API url
+            var url = "{% url 'api_rest:equipment-service' budget.service.id %}"
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Element in API query result that matches with the option value selected
+                    var element = data.find(element => element.id == option)
+                    // Insert in the daily price input of the same row the daily price value of the option selected
+                    $(this).parent().parent().find(".equipdailyprice")[0].value = element.daily_price;
+                    
+                    // Insert performance value in the input '.equiperform' of the same row
+                    var subitemAmount = '{{subitem.amount}}';
+                    var itemDuration = '{{item.duration}}';
+                    var performance = subitemAmount / itemDuration;
+                    $(this).parent().parent().find(".equiperform")[0].value = performance;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        })
+        // Insert 'value' for each Material row 
+        $("#equipmentInputs").delegate(".equipamount", "keyup", function (e) {
+            updateMaterialValue(this);
+        });
+        $("#equipmentInputs").on("change", "tr td .equipamount", function (e) {
+            updateMaterialValue(this)
+        })
+        
+        
+        
         /* end of Equipment and tools */
+
+
+
+
+
 
         /* Transport */
         // Add item to Transport area
@@ -953,9 +1051,6 @@
         /* end of Secure and Others */
 
     });
-
-
-
 
 </script>
 {% endblock scripts %}
