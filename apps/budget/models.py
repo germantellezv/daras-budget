@@ -1,4 +1,6 @@
+# Models
 from django.db import models
+from ..home.models import Profile
 
 # Utilities
 from django.utils.text import slugify
@@ -183,7 +185,7 @@ class Secure(models.Model):
         super(Secure, self).save(*args, **kwargs)
 
     def __str__(self):
-        pass
+        return '{}'.format(self.name)
 
     class Meta:
         verbose_name = 'seguro/otro'
@@ -229,6 +231,8 @@ class Budget(models.Model):
     subtotal = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
+    created_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(blank=True, null=True)
 
@@ -241,12 +245,16 @@ class Budget(models.Model):
 
 class BudgetSubItem(models.Model):
     """ Budget subitem model """
-    
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
+    
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    
+    apu_exists = models.BooleanField(default=False)
+
     slug = models.SlugField(blank=True, null=True)
     
     def __str__(self):
@@ -257,8 +265,7 @@ class BudgetSubItem(models.Model):
         verbose_name_plural = 'subitems de presupuesto'
 
 class BudgetItem(models.Model):
-    """ Budget section """
-
+    """ Budget section, this is only the subtitle """
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     duration = models.SmallIntegerField(verbose_name="Duración(días)")
@@ -274,15 +281,89 @@ class BudgetItem(models.Model):
         verbose_name = 'item de presupuesto'
         verbose_name_plural = 'items de presupuesto'
 
+class WorkforceAPU(models.Model):
+    """ Workforce APU items structure """
+    subitem = models.ForeignKey(BudgetSubItem, on_delete=models.CASCADE)
+    workforce = models.ForeignKey(Workforce, on_delete=models.CASCADE)
+    amount= models.PositiveSmallIntegerField()
+    daily_price= models.DecimalField(max_digits=15, decimal_places=2)
+    performance= models.DecimalField(max_digits=3,decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
+    def __str__(self):
+        return '{}'.format(self.subitem.description)
 
+    class Meta:
+        verbose_name = 'APU Mano de obra'
 
-# @receiver(post_save, sender=BudgetSubItem)
-# def update_stock(sender, instance, **kwargs):
-#     """ Add BudgetSubitem ID at the end of its slug """
-#     if not instance.slug:
-#         slug = '{0}{1}'.format(instance.item.slug, instance.id)
-#         instance.slug = slugify(slug)
-#         instance.save()
- 
-  
-   
+class MaterialAPU(models.Model):
+    """ Material APU items structure """
+    subitem = models.ForeignKey(BudgetSubItem, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    amount= models.PositiveSmallIntegerField()
+    daily_price= models.DecimalField(max_digits=15, decimal_places=2)
+    unit= models.CharField(max_length=10)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
+    def __str__(self):
+        return '{}'.format(self.subitem.description)
+
+    class Meta:
+        verbose_name = 'APU Materiales'
+
+class EquipmentAPU(models.Model):
+    """ Equipment APU items structure """
+    subitem = models.ForeignKey(BudgetSubItem, on_delete=models.CASCADE)
+    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    amount= models.PositiveSmallIntegerField()
+    daily_price= models.DecimalField(max_digits=15, decimal_places=2)
+    performance= models.DecimalField(max_digits=3,decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
+    def __str__(self):
+        return '{}'.format(self.subitem.description)
+
+    class Meta:
+        verbose_name = 'APU Equipos y herramientas'
+
+class TransportAPU(models.Model):
+    """ Transport APU items structure """
+    subitem = models.ForeignKey(BudgetSubItem, on_delete=models.CASCADE)
+    transport = models.ForeignKey(Transport, on_delete=models.CASCADE)
+    amount= models.PositiveSmallIntegerField()
+    daily_price= models.DecimalField(max_digits=15, decimal_places=2)
+    performance= models.DecimalField(max_digits=3,decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
+    def __str__(self):
+        return '{}'.format(self.subitem.description)
+
+    class Meta:
+        verbose_name = 'APU Transporte'
+
+class SecureAPU(models.Model):
+    """ 'Secure and Others' APU items structure """
+    subitem = models.ForeignKey(BudgetSubItem, on_delete=models.CASCADE)
+    secure = models.ForeignKey(Secure, on_delete=models.CASCADE)
+    amount= models.PositiveSmallIntegerField()
+    daily_price= models.DecimalField(max_digits=15, decimal_places=2)
+    performance= models.DecimalField(max_digits=3,decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
+    def __str__(self):
+        return '{}'.format(self.subitem.description)
+
+    class Meta:
+        verbose_name = 'APU Seguros y otros'
+
+class SubtotalAPU(models.Model):
+    """ Subtotal of every APU section """
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
+    subitem = models.ForeignKey(BudgetSubItem, on_delete=models.CASCADE)
+    workforce = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    material = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    equipment = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    transport = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    secure = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    total  = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+
+    def __str__(self):
+        return 'General APU of {}'.format(self.subitem.description)
+    
+    class Meta:
+        verbose_name = "General APU data"

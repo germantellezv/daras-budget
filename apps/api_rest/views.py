@@ -152,15 +152,17 @@ class BudgetSubItemList(generics.ListAPIView):
         return result
 
 @api_view(['GET','POST'])
-def addBudgetSubitem(request,budgetItem_id):
+def addBudgetSubitem(request, budget_pk, budgetItem_id):
+    budget = Budget.objects.get(id=budget_pk)
     item = BudgetItem.objects.get(id=budgetItem_id)
+
     if request.method == 'POST':
-        
         # Unit instance
         u = Unit.objects.get(id=request.data.get('unit'))
 
         # Create subitem to after add it to the item
         subitem = BudgetSubItem()
+        subitem.budget = budget
         subitem.description = request.data.get('description')
         subitem.unit = u
         subitem.amount = request.data.get('amount')

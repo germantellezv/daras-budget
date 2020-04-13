@@ -18,7 +18,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
-    list_display = ('slug', 'client', 'service', 'subject')
+    list_display = ('subject', 'client', 'service', 'subject','created_by')
     class Meta:
         verbose_name = "Presupuesto"
 
@@ -51,8 +51,6 @@ class BudgetSubItemAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = "Subitem de presupuesto"
 
-
-
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
     list_display = ('name','unit','service','daily_price','created','modified')
@@ -76,3 +74,25 @@ class TransportAdmin(admin.ModelAdmin):
     readonly_fields = ('slug',)
     class Meta:
         verbose_name = "Transportes"
+
+@admin.register(WorkforceAPU)
+class WorkforceAPUAdmin(admin.ModelAdmin):
+    list_display = ('subitem','workforce','amount','daily_price','performance','value')
+
+@admin.register(MaterialAPU)
+class MaterialAPUAdmin(admin.ModelAdmin):
+    list_display = ('subitem','material','amount','daily_price','unit','value')
+
+@admin.register(TransportAPU)
+class TransportAPUAdmin(admin.ModelAdmin):
+    list_display = ('subitem','transport','amount','daily_price','performance','value')
+
+@admin.register(EquipmentAPU)
+class EquipmentAPUAdmin(admin.ModelAdmin):
+    list_display = ('subitem','equipment','amount','daily_price','performance','value')
+
+@admin.register(SecureAPU)
+class SecureAPUAdmin(admin.ModelAdmin):
+    list_display = ('subitem','secure','amount','daily_price','performance','value')
+    
+

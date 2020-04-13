@@ -1,6 +1,6 @@
 {% extends "budget/base.html" %}
 {% load static %}
-
+{% load humanize %}
 {% block title %}
 <title>Completar presupuesto - DARAS</title>
 {% endblock title %}
@@ -148,6 +148,12 @@
                                     Cantidad
                                 </th>
                                 <th>
+                                    Valor unitario
+                                </th>
+                                <th>
+                                    Valor total
+                                </th>
+                                <th>
                                     Opciones
                                 </th>
                             </tr>
@@ -158,7 +164,7 @@
                                 <td class="text-center">
                                     {{forloop.counter}}
                                 </td>
-                                <td colspan="4">
+                                <td colspan="6">
                                     {{item.description}}
                                 </td>
                             </tr>
@@ -178,9 +184,21 @@
                                             {{i.amount}}
                                         </td>
                                         <td>
+                                            {{i.unit_value|default_if_none:'-'|intcomma}}
+                                        </td>
+                                        <td>
+                                            {{i.total_value|default_if_none:'-'|intcomma}}
+                                        </td>
+
+                                        <td class="d-flex justify-content-around">
                                             <a href="{% url 'budget:edit-subitem' budget.id item.id i.id %}">
                                                 <i class="far fa-edit"></i>
                                             </a>
+                                            {% if i.apu_exists %}
+                                                <a href="{% url 'budget:preview-apu' budget.id item.id i.id %}">
+                                                    <i class="far fa-eye"></i>
+                                                </a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

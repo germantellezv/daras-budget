@@ -22,9 +22,7 @@
                 </a>
             </span>
             <span class="text-muted">/</span>
-            <span class="text-muted">Actividad general</span>
-            <span class="text-muted">/</span>
-            <span>Actividad específica</span>
+            <span>APU</span>
 
         </h6>
 
@@ -55,6 +53,32 @@
                 <hr class="mb-4">
                 <form action="" method="post">
                     {% csrf_token %}
+
+                    <!-- ITEMS TO STORE SUBTOTAL -->
+                    <div class="form-group" hidden>
+                        <label for="wfsubtotal2"><small>Subtotal mano de obra</small></label>
+                        <input class="form-control" type="number" name="subtotal" id="wfsubtotal2" step="0.01">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="msubtotal2"><small>Subtotal materiales</small></label>
+                        <input class="form-control" type="number" name="subtotal" id="msubtotal2" step="0.01">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="equipsubtotal2"><small>Subtotal equipos y herramientas</small></label>
+                        <input class="form-control" type="number" name="subtotal" id="equipsubtotal2" step="0.01">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="transpsubtotal2"><small>Subtotal transportes</small></label>
+                        <input class="form-control" type="number" name="subtotal" id="transpsubtotal2" step="0.01">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="securesubtotal2"><small>Subtotal seguros y otros</small></label>
+                        <input class="form-control" type="number" name="subtotal" id="securesubtotal2" step="0.01">
+                    </div>
+                    <!-- ITEMS TO STORE SUBTOTAL -->
+                    <!-- ITEMS TO STORE SUBTOTAL -->
+
+
                     <!--Accordion wrapper-->
                     <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
 
@@ -113,9 +137,8 @@
 
                                             </tr>
                                             <tr>
-                                                <td colspan="3"></td>
 
-                                                <td class="text-right" colspan="2">
+                                                <td class="text-left" colspan="5">
                                                     <a id="addWorkforceItemButton" class="btn btn-success">AGREGAR</a>
                                                     <a id="removeWorkforceItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
@@ -184,7 +207,7 @@
 
                                             </tr>
                                             <tr>
-                                                <td class="text-right" colspan="5">
+                                                <td class="text-left" colspan="5">
                                                     <a id="addMaterialItemButton" class="btn btn-success">AGREGAR</a>
                                                     <a id="removeMaterialItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
@@ -253,9 +276,7 @@
 
                                             </tr>
                                             <tr>
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right" colspan="2">
+                                                <td class="text-left" colspan="5">
                                                     <a id="addEquipmentItemButton" class="btn btn-success">AGREGAR</a>
                                                     <a id="removeEquipmentItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
@@ -324,9 +345,7 @@
 
                                             </tr>
                                             <tr>
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right" colspan="2">
+                                                <td class="text-left" colspan="5">
                                                     <a id="addTransportItemButton" class="btn btn-success">AGREGAR</a>
                                                     <a id="removeTransportItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
@@ -363,13 +382,13 @@
                                                     Seguro / otro
                                                 </th>
                                                 <th>
-                                                    Cantidad
-                                                </th>
-                                                <th>
                                                     Tarifa por día
                                                 </th>
                                                 <th>
                                                     Días
+                                                </th>
+                                                <th>
+                                                    Cantidad
                                                 </th>
                                                 <th>
                                                     Valor
@@ -394,13 +413,10 @@
 
                                             </tr>
                                             <tr>
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right" colspan="2">
+                                                <td class="text-left" colspan="5">
                                                     <a id="addSecureItemButton" class="btn btn-success">AGREGAR</a>
                                                     <a id="removeSecureItemButton" class="btn btn-danger">BORRAR</a>
                                                 </td>
-
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -438,7 +454,55 @@
         }
         /* Highlight current sidebar item */
 
+        // Use 'round10' for performance value
+        (function () {
+            /**Info: https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Math/round
+             * Ajuste decimal de un número.
+             *
+             * @param {String}  tipo  El tipo de ajuste.
+             * @param {Number}  valor El numero.
+             * @param {Integer} exp   El exponente (el logaritmo 10 del ajuste base).
+             * @returns {Number} El valor ajustado.
+             */
+            function decimalAdjust(type, value, exp) {
+                // Si el exp no está definido o es cero...
+                if (typeof exp === 'undefined' || +exp === 0) {
+                    return Math[type](value);
+                }
+                value = +value;
+                exp = +exp;
+                // Si el valor no es un número o el exp no es un entero...
+                if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+                    return NaN;
+                }
+                // Shift
+                value = value.toString().split('e');
+                value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+                // Shift back
+                value = value.toString().split('e');
+                return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+            }
 
+            // Decimal round
+            if (!Math.round10) {
+                Math.round10 = function (value, exp) {
+                    return decimalAdjust('round', value, exp);
+                };
+            }
+            // Decimal floor
+            if (!Math.floor10) {
+                Math.floor10 = function (value, exp) {
+                    return decimalAdjust('floor', value, exp);
+                };
+            }
+            // Decimal ceil
+            if (!Math.ceil10) {
+                Math.ceil10 = function (value, exp) {
+                    return decimalAdjust('ceil', value, exp);
+                };
+            }
+        })();
+        
         /* Workforce */
         // Update 'value' and 'subtotal' in workforce table
         function updateWorkforceValue(element) {
@@ -448,7 +512,7 @@
             var performance = $(element).parent().parent().find(".wfperformance")[0].value;
             var result = (amount * salary) / performance;
             // Insert result in 'value' input
-            $(element).parent().parent().find(".wfvalue")[0].value = result;
+            $(element).parent().parent().find(".wfvalue")[0].value = result.toFixed(2);
 
             // Update 'Subtotal' label
             var values = $(element).parent().parent().parent().find(".wfvalue");
@@ -458,6 +522,7 @@
             }
             var subtotal = numeral(aux).format('0,0.00');
             $("#wfsubtotal").text(`$ ${subtotal}`);
+            $("#wfsubtotal2").val(aux)
         }
         // Add item to Workforce area
         $("#addWorkforceItemButton").click(function () {
@@ -482,7 +547,7 @@
                     workforceSelect.classList.add("custom-select")
                     workforceSelect.classList.add("custom-select-sm")
                     workforceSelect.classList.add("text-center")
-                    workforceSelect.setAttribute("name", "workforce-subitem")
+                    workforceSelect.setAttribute("name", "workforce")
                     workforceSelect.setAttribute("required", "true")
                     workforceSelect.innerHTML = aux;
                     first_cell.appendChild(workforceSelect)
@@ -495,7 +560,7 @@
                     workforceAmountInput.classList.add("form-control")
                     workforceAmountInput.classList.add("form-control-sm")
                     workforceAmountInput.classList.add("text-center")
-                    workforceAmountInput.setAttribute('name', 'workforce-amount')
+                    workforceAmountInput.setAttribute('name', 'wfamount')
                     workforceAmountInput.setAttribute('required', 'true')
                     workforceAmountInput.setAttribute('placeholder', 'Cantidad')
                     workforceAmountInput.setAttribute('type', 'number')
@@ -509,8 +574,9 @@
                     dailyPriceInput.classList.add("form-control")
                     dailyPriceInput.classList.add("form-control-sm")
                     dailyPriceInput.classList.add("text-center")
-                    dailyPriceInput.setAttribute('name', 'workforce-price')
+                    dailyPriceInput.setAttribute('name', 'wfprice')
                     dailyPriceInput.setAttribute('type', 'number')
+                    dailyPriceInput.setAttribute('step', '0.01')
                     dailyPriceInput.setAttribute('placeholder', 'Salario diario')
                     third_cell.appendChild(dailyPriceInput)
                     row.appendChild(third_cell)
@@ -522,8 +588,9 @@
                     performanceInput.classList.add("form-control")
                     performanceInput.classList.add("form-control-sm")
                     performanceInput.classList.add("text-center")
-                    performanceInput.setAttribute('name', 'workforce-performance')
+                    performanceInput.setAttribute('name', 'wfperformance')
                     performanceInput.setAttribute('type', 'number')
+                    performanceInput.setAttribute('step', '0.01')
                     performanceInput.setAttribute('placeholder', 'Rendimiento')
                     fourth_cell.appendChild(performanceInput)
                     row.appendChild(fourth_cell)
@@ -535,8 +602,9 @@
                     valueInput.classList.add("form-control")
                     valueInput.classList.add("form-control-sm")
                     valueInput.classList.add("text-center")
-                    valueInput.setAttribute('name', 'workforce-value')
+                    valueInput.setAttribute('name', 'wfvalue')
                     valueInput.setAttribute('type', 'number')
+                    valueInput.setAttribute('step', '0.01')
                     valueInput.setAttribute('placeholder', 'Valor')
                     fifth_cell.appendChild(valueInput)
                     row.appendChild(fifth_cell)
@@ -576,7 +644,8 @@
                     var subitemAmount = '{{subitem.amount}}';
                     var itemDuration = '{{item.duration}}';
                     var performance = subitemAmount / itemDuration;
-                    $(this).parent().parent().find(".wfperformance")[0].value = performance;
+
+                    $(this).parent().parent().find(".wfperformance")[0].value = Math.round10(performance, -1);
                 })
                 .catch(error => {
                     console.log(error);
@@ -599,7 +668,7 @@
             var munitprice = $(element).parent().parent().find(".munitprice")[0].value;
             var value = (amount * munitprice);
             // Insert result in 'value' input
-            $(element).parent().parent().find(".mvalue")[0].value = value;
+            $(element).parent().parent().find(".mvalue")[0].value = value.toFixed(2);
 
             // Update 'Subtotal' label
             var values = $(element).parent().parent().parent().find(".mvalue");
@@ -609,6 +678,7 @@
             }
             var subtotal = numeral(aux).format('0,0.00');
             $("#msubtotal").text(`$ ${subtotal}`);
+            $("#msubtotal2").val(aux)
         }
         // Add item to Material area
         $("#addMaterialItemButton").click(function () {
@@ -629,7 +699,7 @@
 
                         var first_cell = document.createElement('td')
                         var materialSelect = document.createElement('select')
-                        materialSelect.classList.add("equipselect")
+                        materialSelect.classList.add("mselect")
                         materialSelect.classList.add("custom-select")
                         materialSelect.classList.add("custom-select-sm")
                         materialSelect.classList.add("text-center")
@@ -645,7 +715,7 @@
                         materialAmountInput.classList.add("form-control")
                         materialAmountInput.classList.add("form-control-sm")
                         materialAmountInput.classList.add("text-center")
-                        materialAmountInput.setAttribute('name', 'material_amount')
+                        materialAmountInput.setAttribute('name', 'mamount')
                         materialAmountInput.setAttribute('required', 'true')
                         materialAmountInput.setAttribute('placeholder', 'Cantidad')
                         materialAmountInput.setAttribute('type', 'number')
@@ -658,7 +728,7 @@
                         materialDailyPriceInput.classList.add("form-control")
                         materialDailyPriceInput.classList.add("form-control-sm")
                         materialDailyPriceInput.classList.add("text-center")
-                        materialDailyPriceInput.setAttribute('name', 'material_unit_price')
+                        materialDailyPriceInput.setAttribute('name', 'mprice')
                         materialDailyPriceInput.setAttribute('type', 'number')
                         materialDailyPriceInput.setAttribute('step', '0.01')
                         materialDailyPriceInput.setAttribute('placeholder', 'Precio unitario')
@@ -671,7 +741,7 @@
                         materialPerformanceInput.classList.add("form-control")
                         materialPerformanceInput.classList.add("form-control-sm")
                         materialPerformanceInput.classList.add("text-center")
-                        materialPerformanceInput.setAttribute('name', 'material_unit')
+                        materialPerformanceInput.setAttribute('name', 'munit')
                         materialPerformanceInput.setAttribute('type', 'text')
                         materialPerformanceInput.setAttribute('readonly', 'true')
                         materialPerformanceInput.setAttribute('placeholder', 'Unidad')
@@ -684,7 +754,7 @@
                         materialValueInput.classList.add("form-control")
                         materialValueInput.classList.add("form-control-sm")
                         materialValueInput.classList.add("text-center")
-                        materialValueInput.setAttribute('name', 'material_value')
+                        materialValueInput.setAttribute('name', 'mvalue')
                         materialValueInput.setAttribute('type', 'number')
                         materialValueInput.setAttribute('placeholder', 'Valor')
                         fifth_cell.appendChild(materialValueInput)
@@ -731,8 +801,8 @@
         })
         /* end of Material */
 
-        
-        
+
+
         /* Equipment and tools */
         // Update 'value' and 'subtotal' in table
         function updateEquipmentValue(element) {
@@ -741,7 +811,7 @@
             var munitprice = $(element).parent().parent().find(".equipdailyprice")[0].value;
             var value = (amount * munitprice);
             // Insert result in 'value' input
-            $(element).parent().parent().find(".equipvalue")[0].value = value;
+            $(element).parent().parent().find(".equipvalue")[0].value = value.toFixed(2);
 
             // Update 'Subtotal' label
             var values = $(element).parent().parent().parent().find(".equipvalue");
@@ -749,8 +819,10 @@
             for (let i = 0; i < values.length; i++) {
                 aux += parseFloat(values[i].value);
             }
+            
             var subtotal = numeral(aux).format('0,0.00');
             $("#equipsubtotal").text(`$ ${subtotal}`);
+            $("#equipsubtotal2").val(aux)
         }
         // Add item to Equipment area
         $("#addEquipmentItemButton").click(function () {
@@ -775,7 +847,7 @@
                         equipmentSelect.classList.add("custom-select")
                         equipmentSelect.classList.add("custom-select-sm")
                         equipmentSelect.classList.add("text-center")
-                        equipmentSelect.setAttribute("name", "equipment-subitem")
+                        equipmentSelect.setAttribute("name", "equipment")
                         equipmentSelect.setAttribute("required", "true")
                         equipmentSelect.innerHTML = aux;
                         first_cell.appendChild(equipmentSelect)
@@ -787,7 +859,7 @@
                         equipmentAmountInput.classList.add("form-control")
                         equipmentAmountInput.classList.add("form-control-sm")
                         equipmentAmountInput.classList.add("text-center")
-                        equipmentAmountInput.setAttribute('name', 'equipment-amount')
+                        equipmentAmountInput.setAttribute('name', 'equipamount')
                         equipmentAmountInput.setAttribute('required', 'true')
                         equipmentAmountInput.setAttribute('placeholder', 'Cantidad')
                         equipmentAmountInput.setAttribute('type', 'number')
@@ -800,7 +872,7 @@
                         equipmentDailyPriceInput.classList.add("form-control")
                         equipmentDailyPriceInput.classList.add("form-control-sm")
                         equipmentDailyPriceInput.classList.add("text-center")
-                        equipmentDailyPriceInput.setAttribute('name', 'equipment-price')
+                        equipmentDailyPriceInput.setAttribute('name', 'equipprice')
                         equipmentDailyPriceInput.setAttribute('type', 'number')
                         equipmentDailyPriceInput.setAttribute('placeholder', 'Valor diario')
                         third_cell.appendChild(equipmentDailyPriceInput)
@@ -812,8 +884,9 @@
                         performanceInput.classList.add("form-control")
                         performanceInput.classList.add("form-control-sm")
                         performanceInput.classList.add("text-center")
-                        performanceInput.setAttribute('name', 'equipment-performance')
+                        performanceInput.setAttribute('name', 'equipperformance')
                         performanceInput.setAttribute('type', 'number')
+                        performanceInput.setAttribute('step', '0.01')
                         performanceInput.setAttribute('placeholder', 'Rendimiento')
                         fourth_cell.appendChild(performanceInput)
                         row.appendChild(fourth_cell)
@@ -824,7 +897,7 @@
                         valueInput.classList.add("form-control")
                         valueInput.classList.add("form-control-sm")
                         valueInput.classList.add("text-center")
-                        valueInput.setAttribute('name', 'equipment-value')
+                        valueInput.setAttribute('name', 'equipvalue')
                         valueInput.setAttribute('type', 'number')
                         valueInput.setAttribute('placeholder', 'Valor')
                         fifth_cell.appendChild(valueInput)
@@ -842,7 +915,7 @@
                 $("#equipmentInputs").children().last().remove()
             }
         })
-        // Insert 'unit' and 'unit value' when click option from select input
+        // Insert 'performance' and 'unit value' when click option from select input
         $("#equipmentInputs").on("click", "tr td .equipselect", function (e) {
             // Value selected in workforce select
             var option = $(this).children("option:selected").val()
@@ -855,12 +928,12 @@
                     var element = data.find(element => element.id == option)
                     // Insert in the daily price input of the same row the daily price value of the option selected
                     $(this).parent().parent().find(".equipdailyprice")[0].value = element.daily_price;
-                    
+
                     // Insert performance value in the input '.equiperform' of the same row
                     var subitemAmount = '{{subitem.amount}}';
                     var itemDuration = '{{item.duration}}';
                     var performance = subitemAmount / itemDuration;
-                    $(this).parent().parent().find(".equiperform")[0].value = performance;
+                    $(this).parent().parent().find(".equiperform")[0].value = Math.round10(performance, -1);
                 })
                 .catch(error => {
                     console.log(error);
@@ -885,7 +958,7 @@
             var munitprice = $(element).parent().parent().find(".transpdailyvalue")[0].value;
             var value = (amount * munitprice);
             // Insert result in 'value' input
-            $(element).parent().parent().find(".transpvalue")[0].value = value;
+            $(element).parent().parent().find(".transpvalue")[0].value = value.toFixed(2);
 
             // Update 'Subtotal' label
             var values = $(element).parent().parent().parent().find(".transpvalue");
@@ -895,6 +968,7 @@
             }
             var subtotal = numeral(aux).format('0,0.00');
             $("#transpsubtotal").text(`$ ${subtotal}`);
+            $("#transpsubtotal2").val(aux)
         }
         // Add item to Transport area
         $("#addTransportItemButton").click(function () {
@@ -919,7 +993,7 @@
                         transportSelect.classList.add("custom-select")
                         transportSelect.classList.add("custom-select-sm")
                         transportSelect.classList.add("text-center")
-                        transportSelect.setAttribute("name", "transport-subitem")
+                        transportSelect.setAttribute("name", "transport")
                         transportSelect.setAttribute("required", "true")
                         transportSelect.innerHTML = aux;
                         first_cell.appendChild(transportSelect)
@@ -931,7 +1005,7 @@
                         transportAmountInput.classList.add("form-control")
                         transportAmountInput.classList.add("form-control-sm")
                         transportAmountInput.classList.add("text-center")
-                        transportAmountInput.setAttribute('name', 'transport-amount')
+                        transportAmountInput.setAttribute('name', 'transpamount')
                         transportAmountInput.setAttribute('required', 'true')
                         transportAmountInput.setAttribute('placeholder', 'Cantidad')
                         transportAmountInput.setAttribute('type', 'number')
@@ -944,7 +1018,7 @@
                         transportDailyPriceInput.classList.add("form-control")
                         transportDailyPriceInput.classList.add("form-control-sm")
                         transportDailyPriceInput.classList.add("text-center")
-                        transportDailyPriceInput.setAttribute('name', 'equipment-price')
+                        transportDailyPriceInput.setAttribute('name', 'transpprice')
                         transportDailyPriceInput.setAttribute('type', 'number')
                         transportDailyPriceInput.setAttribute('placeholder', 'Tarifa diaria')
                         third_cell.appendChild(transportDailyPriceInput)
@@ -956,8 +1030,9 @@
                         transportPerformanceInput.classList.add("form-control")
                         transportPerformanceInput.classList.add("form-control-sm")
                         transportPerformanceInput.classList.add("text-center")
-                        transportPerformanceInput.setAttribute('name', 'transport-performance')
+                        transportPerformanceInput.setAttribute('name', 'transpperformance')
                         transportPerformanceInput.setAttribute('type', 'number')
+                        transportPerformanceInput.setAttribute('step', '0.01')
                         transportPerformanceInput.setAttribute('placeholder', 'Rendimiento')
                         fourth_cell.appendChild(transportPerformanceInput)
                         row.appendChild(fourth_cell)
@@ -968,7 +1043,7 @@
                         transportValueInput.classList.add("form-control")
                         transportValueInput.classList.add("form-control-sm")
                         transportValueInput.classList.add("text-center")
-                        transportValueInput.setAttribute('name', 'transport-value')
+                        transportValueInput.setAttribute('name', 'transpvalue')
                         transportValueInput.setAttribute('type', 'number')
                         transportValueInput.setAttribute('placeholder', 'Valor')
                         fifth_cell.appendChild(transportValueInput)
@@ -999,12 +1074,12 @@
                     var element = data.find(element => element.id == option)
                     // Insert in the daily price input of the same row the daily price value of the option selected
                     $(this).parent().parent().find(".transpdailyvalue")[0].value = element.daily_price;
-                    
+
                     // Insert performance value in the input '.equiperform' of the same row
                     var subitemAmount = '{{subitem.amount}}';
                     var itemDuration = '{{item.duration}}';
                     var performance = subitemAmount / itemDuration;
-                    $(this).parent().parent().find(".transperform")[0].value = performance;
+                    $(this).parent().parent().find(".transperform")[0].value = Math.round10(performance, -1);;
                 })
                 .catch(error => {
                     console.log(error);
@@ -1017,19 +1092,19 @@
         $("#transportInputs").on("change", "tr td .transpamount", function (e) {
             updateTransportValue(this)
         })
-        
         /* end of Transport */
 
         /* Secure and Others */
-
         // Update 'value' and 'subtotal' in table
-        function updateTransportValue(element) {
+        function updateSecureValue(element) {
             /* The parameter 'element' is just for position and abstraction purposes */
             var amount = $(element).parent().parent().find(".secureamount")[0].value;
             var munitprice = $(element).parent().parent().find(".securedailyvalue")[0].value;
-            var value = (amount * munitprice);
+            var days = $(element).parent().parent().find(".securedays")[0].value;
+            
+            var value = amount * (munitprice*days);
             // Insert result in 'value' input
-            $(element).parent().parent().find(".securevalue")[0].value = value;
+            $(element).parent().parent().find(".securevalue")[0].value = value.toFixed(2);
 
             // Update 'Subtotal' label
             var values = $(element).parent().parent().parent().find(".securevalue");
@@ -1039,6 +1114,7 @@
             }
             var subtotal = numeral(aux).format('0,0.00');
             $("#securesubtotal").text(`$ ${subtotal}`);
+            $("#securesubtotal2").val(aux)
         }
         // Add item to Secure and Others area
         $("#addSecureItemButton").click(function () {
@@ -1063,24 +1139,11 @@
                         secureSelect.classList.add("custom-select")
                         secureSelect.classList.add("custom-select-sm")
                         secureSelect.classList.add("text-center")
-                        secureSelect.setAttribute("name", "secure-subitem")
+                        secureSelect.setAttribute("name", "secure")
                         secureSelect.setAttribute("required", "true")
                         secureSelect.innerHTML = aux;
                         first_cell.appendChild(secureSelect)
                         row.appendChild(first_cell)
-
-                        var second_cell = document.createElement('td')
-                        var secureAmountInput = document.createElement('input')
-                        secureAmountInput.classList.add("secureamount")
-                        secureAmountInput.classList.add("form-control")
-                        secureAmountInput.classList.add("form-control-sm")
-                        secureAmountInput.classList.add("text-center")
-                        secureAmountInput.setAttribute('name', 'secure-amount')
-                        secureAmountInput.setAttribute('required', 'true')
-                        secureAmountInput.setAttribute('placeholder', 'Cantidad')
-                        secureAmountInput.setAttribute('type', 'number')
-                        second_cell.appendChild(secureAmountInput)
-                        row.appendChild(second_cell)
 
                         var third_cell = document.createElement('td')
                         var secureDailyPriceInput = document.createElement('input')
@@ -1088,23 +1151,38 @@
                         secureDailyPriceInput.classList.add("form-control")
                         secureDailyPriceInput.classList.add("form-control-sm")
                         secureDailyPriceInput.classList.add("text-center")
-                        secureDailyPriceInput.setAttribute('name', 'secure-price')
+                        secureDailyPriceInput.setAttribute('name', 'secureprice')
                         secureDailyPriceInput.setAttribute('type', 'number')
+                        secureDailyPriceInput.setAttribute('step', '0.01')
+                        secureDailyPriceInput.setAttribute('readonly', 'true')
                         secureDailyPriceInput.setAttribute('placeholder', 'Tarifa diaria')
                         third_cell.appendChild(secureDailyPriceInput)
                         row.appendChild(third_cell)
 
                         var fourth_cell = document.createElement('td')
-                        var securePerformanceInput = document.createElement('input')
-                        securePerformanceInput.classList.add("secureperformance")
-                        securePerformanceInput.classList.add("form-control")
-                        securePerformanceInput.classList.add("form-control-sm")
-                        securePerformanceInput.classList.add("text-center")
-                        securePerformanceInput.setAttribute('name', 'secure-performance')
-                        securePerformanceInput.setAttribute('type', 'number')
-                        securePerformanceInput.setAttribute('placeholder', 'Rendimiento')
-                        fourth_cell.appendChild(securePerformanceInput)
+                        var secureDaysInput = document.createElement('input')
+                        secureDaysInput.classList.add("securedays")
+                        secureDaysInput.classList.add("form-control")
+                        secureDaysInput.classList.add("form-control-sm")
+                        secureDaysInput.classList.add("text-center")
+                        secureDaysInput.setAttribute('name', 'secureperformance')
+                        secureDaysInput.setAttribute('type', 'number')
+                        secureDaysInput.setAttribute('placeholder', 'Días')
+                        fourth_cell.appendChild(secureDaysInput)
                         row.appendChild(fourth_cell)
+
+                        var second_cell = document.createElement('td')
+                        var secureAmountInput = document.createElement('input')
+                        secureAmountInput.classList.add("secureamount")
+                        secureAmountInput.classList.add("form-control")
+                        secureAmountInput.classList.add("form-control-sm")
+                        secureAmountInput.classList.add("text-center")
+                        secureAmountInput.setAttribute('name', 'secureamount')
+                        secureAmountInput.setAttribute('required', 'true')
+                        secureAmountInput.setAttribute('placeholder', 'Cantidad')
+                        secureAmountInput.setAttribute('type', 'number')
+                        second_cell.appendChild(secureAmountInput)
+                        row.appendChild(second_cell)
 
                         var fifth_cell = document.createElement('td')
                         var secureValueInput = document.createElement('input')
@@ -1112,8 +1190,9 @@
                         secureValueInput.classList.add("form-control")
                         secureValueInput.classList.add("form-control-sm")
                         secureValueInput.classList.add("text-center")
-                        secureValueInput.setAttribute('name', 'secure-value')
+                        secureValueInput.setAttribute('name', 'securevalue')
                         secureValueInput.setAttribute('type', 'number')
+                        secureValueInput.setAttribute('step', '0.01')
                         secureValueInput.setAttribute('placeholder', 'Valor')
                         fifth_cell.appendChild(secureValueInput)
                         row.appendChild(fifth_cell)
@@ -1143,12 +1222,12 @@
                     var element = data.find(element => element.id == option)
                     // Insert in the daily price input of the same row the daily price value of the option selected
                     $(this).parent().parent().find(".securedailyvalue")[0].value = element.daily_price;
-                    
+
                     // Insert performance value in the input '.equiperform' of the same row
-                    var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{item.duration}}';
-                    var performance = subitemAmount / itemDuration;
-                    $(this).parent().parent().find(".secureperformance")[0].value = performance;
+                    // var subitemAmount = '{{subitem.amount}}';
+                    // var itemDuration = '{{item.duration}}';
+                    // var performance = subitemAmount / itemDuration;
+                    // $(this).parent().parent().find(".secureperformance")[0].value = Math.round10(performance, -1);;
                 })
                 .catch(error => {
                     console.log(error);
@@ -1156,13 +1235,11 @@
         })
         // Insert 'value' for each row 
         $("#secureInputs").delegate(".secureamount", "keyup", function (e) {
-            updateTransportValue(this);
+            updateSecureValue(this);
         });
         $("#secureInputs").on("change", "tr td .secureamount", function (e) {
-            updateTransportValue(this)
+            updateSecureValue(this)
         })
-        
-        
         /* end of Secure and Others */
 
     });

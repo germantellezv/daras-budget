@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Django built-in app
+    'django.contrib.humanize',
     # My Apps
     'rest_framework', # Django Rest Framework
     'apps.api_rest',

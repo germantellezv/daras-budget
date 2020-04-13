@@ -376,7 +376,7 @@
             var form = document.getElementById("productForm");
             const data = new FormData(form);
             /* Sadly I have to write the URL in this way and not with the Django tag URL */
-            var url = `/api/budget/add-subitem/${lastSectionID}`;
+            var url = `/api/budget/{{budget.id}}/add-subitem/${lastSectionID}`;
             fetch(url, {
                 method: 'POST',
                 body: data

@@ -1,4 +1,9 @@
+# Django
+import tempfile
+from weasyprint import HTML
+from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse
 
 # Decorators
 from django.contrib.auth.decorators import login_required
@@ -9,6 +14,12 @@ from .forms import *
 # Models
 from .models import *
 
+# Utilities
+from decimal import Decimal
+from .utils import render_to_pdf
+from django.utils import timezone
+
+
 # Create your views here.
 @login_required
 def panel(request):
@@ -16,7 +27,7 @@ def panel(request):
     return render(
         request=request,
         template_name='budget/index.html'
-        )
+    )
 
 @login_required
 def createClient(request):
@@ -54,15 +65,15 @@ def listBudgets(request):
         request=request,
         template_name='budget/list-budgets.html',
         context={
-            'budgets':budgets,
-            'form':form
+            'budgets': budgets,
+            'form': form
         }
-        )
+    )
 
 @login_required
 def createBudget(request):
     """ Basic creation of budget """
-    
+
     if request.method == 'POST':
         form = CreateBudgetForm(request.POST)
         if form.is_valid():
@@ -73,10 +84,10 @@ def createBudget(request):
             b.risk = data['risk']
             b.time = data['time']
             b.iva_option = data['iva_option']
+            b.created_by = request.user.profile
             b.save()
             pk = b.id
             return redirect('budget:fill-budget', pk=pk)
-    
 
 @login_required
 def fillBudget(request, pk):
@@ -109,10 +120,10 @@ def fillBudget(request, pk):
         request=request,
         template_name='budget/fill-budget.html',
         context={
-            'clients':clients,
-            'units':units,
-            'budget':budget,
-            'items':items,
+            'clients': clients,
+            'units': units,
+            'budget': budget,
+            'items': items,
             'form': form,
         }
     )
@@ -123,6 +134,7 @@ def budgetDetail(request, budget_pk):
 
     budget = Budget.objects.get(id=budget_pk)
     items = BudgetItem.objects.filter(budget=budget)
+
     return render(
         request=request,
         template_name='budget/budget-detail.html',
@@ -166,7 +178,7 @@ def editBudgetItem(request, slug, slug_item):
         context={
             'budget': budget,
             'item': item,
-            'subitems':subitems,
+            'subitems': subitems,
         }
     )
 
@@ -176,12 +188,155 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
     budget = get_object_or_404(Budget, id=budget_pk)
     item = get_object_or_404(BudgetItem, id=item_pk)
     subitem = get_object_or_404(BudgetSubItem, id=subitem_pk)
+    if request.method == 'POST':
+
+        # Store 'value' of each row to calc the subitem unit value
+        workforce = request.POST.getlist('workforce')
+        wfamount = request.POST.getlist('wfamount')
+        wfprice = request.POST.getlist('wfprice')
+        wfperformance = request.POST.getlist('wfperformance')
+        wfvalue = request.POST.getlist('wfvalue')
+
+        WorkforceAPU.objects.filter(subitem=subitem).delete()
+        for i, j, k, l, m in zip(workforce, wfamount, wfprice, wfperformance, wfvalue):
+            w = WorkforceAPU()
+            w.subitem = subitem
+            aux = Workforce.objects.get(id=i)
+            w.workforce = aux
+            w.amount = j
+            w.daily_price = k
+            w.performance = Decimal(l)
+            w.value = m
+            w.save()
+
+        material = request.POST.getlist('material')
+        mamount = request.POST.getlist('mamount')
+        mprice = request.POST.getlist('mprice')
+        munit = request.POST.getlist('munit')
+        mvalue = request.POST.getlist('mvalue')
+
+        MaterialAPU.objects.filter(subitem=subitem).delete()
+        for i, j, k, l, m in zip(material, mamount, mprice, munit, mvalue):
+            mat = MaterialAPU()
+            mat.subitem = subitem
+            aux = Material.objects.get(id=i)
+            mat.material = aux
+            mat.amount = j
+            mat.daily_price = k
+            mat.unit = l
+            mat.value = m
+            mat.save()
+
+        equipment = request.POST.getlist('equipment')
+        equipamount = request.POST.getlist('equipamount')
+        equipprice = request.POST.getlist('equipprice')
+        equipperformance = request.POST.getlist('equipperformance')
+        equipvalue = request.POST.getlist('equipvalue')
+
+        EquipmentAPU.objects.filter(subitem=subitem).delete()
+        for i, j, k, l, m in zip(equipment, equipamount, equipprice, equipperformance, equipvalue):
+            e = EquipmentAPU()
+            e.subitem = subitem
+            aux = Equipment.objects.get(id=i)
+            e.equipment = aux
+            e.amount = j
+            e.daily_price = k
+            e.performance = Decimal(l)
+            e.value = m
+            e.save()
+
+        transport = request.POST.getlist('transport')
+        transpamount = request.POST.getlist('transpamount')
+        transpprice = request.POST.getlist('transpprice')
+        transpperformance = request.POST.getlist('transpperformance')
+        transpvalue = request.POST.getlist('transpvalue')
+
+        TransportAPU.objects.filter(subitem=subitem).delete()
+        for i, j, k, l, m in zip(transport, transpamount, transpprice, transpperformance, transpvalue):
+            t = TransportAPU()
+            t.subitem = subitem
+            aux = Transport.objects.get(id=i)
+            t.transport = aux
+            t.amount = j
+            t.daily_price = k
+            t.performance = Decimal(l)
+            t.value = m
+            t.save()
+
+        secure = request.POST.getlist('secure')
+        secureamount = request.POST.getlist('secureamount')
+        secureprice = request.POST.getlist('secureprice')
+        secureperformance = request.POST.getlist('secureperformance')
+        securevalue = request.POST.getlist('securevalue')
+
+        SecureAPU.objects.filter(subitem=subitem).delete()
+        for i, j, k, l, m in zip(secure, secureamount, secureprice, secureperformance, securevalue):
+            s = SecureAPU()
+            s.subitem = subitem
+            aux = Secure.objects.get(id=i)
+            s.secure = aux
+            s.amount = j
+            s.daily_price = k
+            s.performance = Decimal(l)
+            s.value = m
+            s.save()
+
+        subtotal = request.POST.getlist('subtotal')
+        aux = [Decimal(i) for i in subtotal]
+        subitem.unit_value = sum(aux)
+        subitem.total_value = subitem.unit_value * subitem.amount
+        subitem.apu_exists = True
+        subitem.save()
+        
+        SubtotalAPU.objects.filter(budget=budget, subitem=subitem).delete()
+        sub = SubtotalAPU(subitem=subitem)
+        sub.budget = budget
+        sub.workforce = aux[0]
+        sub.material = aux[1]
+        sub.equipment = aux[2]
+        sub.transport = aux[3]
+        sub.secure = aux[4]
+        sub.total = sum(aux)
+        sub.save()
+        
+
+        return redirect('budget:budget-detail', budget_pk=budget.id)
+
     return render(
         request=request,
-        template_name='budget/edit-subitem.html',
+        template_name='budget/create-apu.html',
         context={
             'budget': budget,
             'item': item,
             'subitem': subitem,
         }
     )
+
+@login_required
+def PreviewAPU(request, budget_pk, item_pk, subitem_pk):
+    budget = Budget.objects.get(id=budget_pk)
+    item = BudgetItem.objects.get(id=item_pk)
+    subitem = BudgetSubItem.objects.get(id=subitem_pk)
+
+    workforce = WorkforceAPU.objects.filter(subitem=subitem)
+    material = MaterialAPU.objects.filter(subitem=subitem)
+    equipment = EquipmentAPU.objects.filter(subitem=subitem)
+    transport = TransportAPU.objects.filter(subitem=subitem)
+    secure = SecureAPU.objects.filter(subitem=subitem)
+
+    subtotal = SubtotalAPU.objects.get(subitem=subitem)
+
+    data = {
+        'budget': budget,
+        'item': item,
+        'subitem': subitem,
+        'workforce': workforce,
+        'material': material,
+        'equipment': equipment,
+        'transport': transport,
+        'secure': secure,
+        'subtotal':subtotal,
+    }
+
+    pdf = render_to_pdf('budget/apu-preview.html', data)
+    return HttpResponse(pdf, content_type='application/pdf')
