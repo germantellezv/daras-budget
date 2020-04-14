@@ -84,6 +84,7 @@ def createBudget(request):
             b.risk = data['risk']
             b.time = data['time']
             b.iva_option = data['iva_option']
+            b.iva = data['iva']
             b.created_by = request.user.profile
             b.save()
             pk = b.id
@@ -103,7 +104,6 @@ def fillBudget(request, pk):
         form = FillBudgetForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-
             b = budget
             b.consecutive = data['consecutive']
             b.client = data['client']
@@ -339,4 +339,38 @@ def PreviewAPU(request, budget_pk, item_pk, subitem_pk):
     }
 
     pdf = render_to_pdf('budget/apu-preview.html', data)
+    return HttpResponse(pdf, content_type='application/pdf')
+
+@login_required
+def PreviewBudget(request, budget_pk):
+    budget = Budget.objects.get(id=budget_pk)
+    items = BudgetItem.objects.filter(budget=budget)
+    total_direct_cost = 0
+
+    for i in range(len(items)):
+        for j in range(len(items[i].subitems.all())):
+            total_direct_cost += items[i].subitems.all()[j].total_value
+
+    administration_value = Decimal(budget.administration_percentage/100) * total_direct_cost
+    incidentals_value = Decimal(budget.incidentals_percentaje/100) * total_direct_cost
+    utility_value = Decimal(budget.utility_percentage/100) * total_direct_cost
+    total_indirect_cost = administration_value+incidentals_value+utility_value
+    subtotal = total_direct_cost + total_indirect_cost
+    iva_over_subtotal = (budget.iva/100) * subtotal
+    total_cost = subtotal + iva_over_subtotal
+
+    data = {
+        'budget': budget,
+        'items': items,
+        'total_direct_cost': total_direct_cost,
+        'total_indirect_cost':total_indirect_cost,
+        'administration_value': administration_value,
+        'incidentals_value': incidentals_value,
+        'utility_value': utility_value,
+        'subtotal':subtotal,
+        'iva_over_subtotal':iva_over_subtotal,
+        'total_cost':total_cost,
+    }
+
+    pdf = render_to_pdf('budget/budget-preview.html', data)
     return HttpResponse(pdf, content_type='application/pdf')

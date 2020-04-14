@@ -21,6 +21,7 @@ class CreateBudgetForm(forms.ModelForm):
             'time',
             'service',
             'iva_option',
+            'iva',
         )
 
 

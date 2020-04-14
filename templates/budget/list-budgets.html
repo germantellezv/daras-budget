@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-12 my-3">
-        <div class="card mb-4 wow fadeIn">
+        <div class="card mb-4 wow fadeIn" style="min-height: 50vh;">
             <div class="card-body">
                 <h1 class="card-title">Presupuestos </h1>
                 {% if budgets %}
@@ -147,6 +147,12 @@ aria-hidden="true">
                             <small>Calcular IVA con respecto a</small>
                         </label>
                         {% render_field form.iva_option class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="">
+                            <small>% IVA sobre subtotal</small>
+                        </label>
+                        {% render_field form.iva class="form-control" value="19"%}
                     </div>
                 </form>
 

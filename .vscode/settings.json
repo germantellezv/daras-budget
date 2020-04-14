@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "entorno/bin/python3",
+    "python.pythonPath": "entorno/bin/python",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true
 }
