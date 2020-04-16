@@ -210,8 +210,8 @@ class Budget(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.CharField(max_length=300, blank=True, null=True)
     risk = models.ForeignKey(Risk, on_delete=models.CASCADE, blank=True, null=True)
+    
     time = models.CharField(choices=OPTIONS_PERIOD, max_length=20, blank=True, null=True)
-    total_direct_cost = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
     administration_percentage = models.SmallIntegerField(verbose_name="Porcentaje de administración", blank=True, null=True)
     administration = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
@@ -227,12 +227,12 @@ class Budget(models.Model):
 
     comment = models.TextField(blank=True, null=True)
     
+    total_direct_cost = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total_indirect_cost = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     subtotal = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
     created_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(blank=True, null=True)
 

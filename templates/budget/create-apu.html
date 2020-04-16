@@ -634,8 +634,22 @@
                 .then(data => {
                     // Element in API query result that match with the option value selected
                     var element = data.find(element => element.id == option)
-                    // Insert in the salary input of the same row the salary of the option selected
-                    $(this).parent().parent().find(".wfsalary")[0].value = element.daily_salary;
+                    // Budget type of cost (per hour / day / month)
+                    var type = "{{budget.time}}"
+                    switch (type) {
+                        case "1":
+                            // Insert in the salary input of the same row the salary of the option selected
+                            $(this).parent().parent().find(".wfsalary")[0].value = (element.daily_salary / 8).toFixed(2);
+                            break;
+                        case "2":
+                            $(this).parent().parent().find(".wfsalary")[0].value = (element.daily_salary).toFixed(2);
+                            break;
+                        case "3":
+                            $(this).parent().parent().find(".wfsalary")[0].value = (element.daily_salary * 30).toFixed(2);
+                            break;
+                    }
+                    
+
 
                     /* ....... */
 
@@ -925,8 +939,21 @@
                 .then(data => {
                     // Element in API query result that matches with the option value selected
                     var element = data.find(element => element.id == option)
-                    // Insert in the daily price input of the same row the daily price value of the option selected
-                    $(this).parent().parent().find(".equipdailyprice")[0].value = element.daily_price;
+                    var type = "{{budget.time}}"
+                    switch (type) {
+                        case "1":
+                            // Insert in the daily price input of the same row the daily price value of the option selected
+                            $(this).parent().parent().find(".equipdailyprice")[0].value = (element.daily_price/8).toFixed(2);
+                            break;
+                        case "2":
+                            // Insert in the daily price input of the same row the daily price value of the option selected
+                            $(this).parent().parent().find(".equipdailyprice")[0].value = (element.daily_price);
+                            break
+                        case "3":
+                            // Insert in the daily price input of the same row the daily price value of the option selected
+                            $(this).parent().parent().find(".equipdailyprice")[0].value = (element.daily_price*30).toFixed(2);
+                            break
+                    }
 
                     // Insert performance value in the input '.equiperform' of the same row
                     var subitemAmount = '{{subitem.amount}}';
