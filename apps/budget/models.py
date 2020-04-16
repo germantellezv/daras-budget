@@ -248,6 +248,7 @@ class BudgetSubItem(models.Model):
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    duration = models.PositiveSmallIntegerField(blank=True, null=True)
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
     
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
@@ -268,7 +269,6 @@ class BudgetItem(models.Model):
     """ Budget section, this is only the subtitle """
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
-    duration = models.SmallIntegerField(verbose_name="Duración(días)")
     subitems = models.ManyToManyField(BudgetSubItem)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

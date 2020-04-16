@@ -63,7 +63,7 @@ class BudgetItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = BudgetItem
-        fields = ['id','budget', 'description','duration']
+        fields = ['id','budget', 'description']
 
 class BudgetSubItemSerializer(serializers.HyperlinkedModelSerializer):
     """ BudgetSubItem serializer """

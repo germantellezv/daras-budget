@@ -118,9 +118,9 @@ class CreateBudgetItem(views.APIView):
         # Get description from a form sent by fetch/ajax in template
         description = request.data.get('description')
         # Get duration from a form sent by fetch/ajax in template
-        duration = request.data.get('duration')
+        # duration = request.data.get('duration')
         
-        data = {'budget':budget.id,'description':description, 'duration':duration}
+        data = {'budget':budget.id,'description':description}
         serializer = BudgetItemSerializer(data=data)
         if serializer.is_valid():
             # Save instance in database
@@ -153,6 +153,8 @@ class BudgetSubItemList(generics.ListAPIView):
 
 @api_view(['GET','POST'])
 def addBudgetSubitem(request, budget_pk, budgetItem_id):
+    """ Add budget subitem """
+
     budget = Budget.objects.get(id=budget_pk)
     item = BudgetItem.objects.get(id=budgetItem_id)
 
@@ -165,6 +167,7 @@ def addBudgetSubitem(request, budget_pk, budgetItem_id):
         subitem.budget = budget
         subitem.description = request.data.get('description')
         subitem.unit = u
+        subitem.duration = request.data.get('duration')
         subitem.amount = request.data.get('amount')
         subitem.save()
 
@@ -172,5 +175,25 @@ def addBudgetSubitem(request, budget_pk, budgetItem_id):
         item = BudgetItem.objects.get(id=budgetItem_id)
         item.subitems.add(subitem)
 
-        return Response({'id':subitem.id,'description':subitem.description,'unit':subitem.unit.name,'amount':subitem.amount})
+        return Response({'id':subitem.id,'description':subitem.description,'unit':subitem.unit.name,'duration':subitem.duration,'amount':subitem.amount})
     return Response({"message": "Hello, world!","item_id":item.id})
+
+@api_view(['POST'])
+def delBudgetSubitem(request, budget_pk):
+    """ Delete subitem """
+    
+    budget = Budget.objects.get(id=budget_pk)
+    code = request.data.get('subitem_pk')
+    subitem = BudgetSubItem.objects.get(id=code, budget=budget)
+    subitem.delete()
+    return Response({'status':'ok'})
+
+@api_view(['POST'])
+def delBudgetItem(request, budget_pk):
+    """ Delete item """
+    
+    budget = Budget.objects.get(id=budget_pk)
+    code = request.data.get('section_pk')
+    item = BudgetItem.objects.get(id=code, budget=budget)
+    item.delete()
+    return Response({'status':'ok'})

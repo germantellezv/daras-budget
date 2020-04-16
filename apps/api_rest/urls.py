@@ -18,7 +18,9 @@ urlpatterns = [
     path('material/service/<int:service>/', views.MaterialList.as_view(), name='material-service'),
     path('equipment/service/<int:service>/', views.EquipmentList.as_view(), name='equipment-service'),
     path('budget/<int:budget_id>/create-item/', views.CreateBudgetItem.as_view(), name='create-item'),
+    path('budget/<int:budget_pk>/del-item/', views.delBudgetItem, name='del-item'),
     path('budget/<int:budget_pk>/add-subitem/<int:budgetItem_id>', views.addBudgetSubitem, name='add-subitem'),
+    path('budget/<int:budget_pk>/del-subitem/', views.delBudgetSubitem, name='del-subitem'),
     path('budget/<int:budget_slug>/item/<int:item_slug>/subitems', views.BudgetSubItemList.as_view(), name='budget-subitems'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

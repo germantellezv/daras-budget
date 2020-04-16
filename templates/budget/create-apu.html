@@ -41,12 +41,11 @@
                 <p>
                     <strong>Información de la sección:</strong> <br>
                     Descripción: {{item.description}} <br>
-                    Duración: {{item.duration}} día{{item.duration|pluralize}} <br>
-
                 </p>
                 <p>
                     <strong>Información de la actividad: </strong> <br>
                     Descripción: {{subitem.description}} <br>
+                    Duración: {{subitem.duration}} <br>
                     Cantidad: {{subitem.amount}} <br>
                 </p>
 
@@ -642,7 +641,7 @@
 
                     // Insert performance value in the input '.wfperformance' of the same row
                     var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{item.duration}}';
+                    var itemDuration = '{{subitem.duration}}';
                     var performance = subitemAmount / itemDuration;
 
                     $(this).parent().parent().find(".wfperformance")[0].value = Math.round10(performance, -1);
@@ -931,7 +930,7 @@
 
                     // Insert performance value in the input '.equiperform' of the same row
                     var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{item.duration}}';
+                    var itemDuration = '{{subitem.duration}}';
                     var performance = subitemAmount / itemDuration;
                     $(this).parent().parent().find(".equiperform")[0].value = Math.round10(performance, -1);
                 })
@@ -1077,7 +1076,7 @@
 
                     // Insert performance value in the input '.equiperform' of the same row
                     var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{item.duration}}';
+                    var itemDuration = '{{subitem.duration}}';
                     var performance = subitemAmount / itemDuration;
                     $(this).parent().parent().find(".transperform")[0].value = Math.round10(performance, -1);;
                 })
@@ -1225,7 +1224,7 @@
 
                     // Insert performance value in the input '.equiperform' of the same row
                     // var subitemAmount = '{{subitem.amount}}';
-                    // var itemDuration = '{{item.duration}}';
+                    // var itemDuration = '{{subitem.duration}}';
                     // var performance = subitemAmount / itemDuration;
                     // $(this).parent().parent().find(".secureperformance")[0].value = Math.round10(performance, -1);;
                 })

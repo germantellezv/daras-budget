@@ -7,279 +7,402 @@
 {% endblock title %}
 
 {% block content %}
+
 <!-- Heading -->
-<div class="card mb-1 wow fadeIn">
+<div class="row">
+    <div class="col-8 offset-2">
+        <!-- Heading -->
+        <div class="card mb-1 wow fadeIn">
 
-    <!--Card content-->
-    <div class="card-body d-sm-flex justify-content-between">
+            <!--Card content-->
+            <div class="card-body d-sm-flex justify-content-between">
 
-        <h6 class="mb-2 mb-sm-0 pt-1">
-            <span class="text-muted">Dashboard</span>
-            <span class="text-muted">/</span>
-            <span class="text-muted">Presupuesto</span>
-            <span class="text-muted">/</span>
-            <span>Nuevo presupuesto</span>
-        </h6>
+                <h6 class="mb-2 mb-sm-0 pt-1">
+                    <span class="text-muted">Dashboard</span>
+                    <span class="text-muted">/</span>
+                    <span class="text-muted">Presupuesto</span>
+                    <span class="text-muted">/</span>
+                    <span>Nuevo presupuesto</span>
+                </h6>
 
-    </div>
-
-</div>
-<!-- Heading -->
-
-<!-- Card -->
-<div class="card">
-    <!-- Card content -->
-    <div class="card-body">
-        <!-- Title -->
-        <h4 class="card-title"><a>Nuevo presupuesto</a></h4>
-
-        <!-- Main content -->
-        <form action="" method="POST">
-            {% csrf_token %}
-            <!-- First row -->
-            <div class="row">
-                <!-- First column -->
-                <div class="col-6 border p-2 rounded">
-                    <!-- Consecutive -->
-                    <div class="form-group m-0">
-                        <label for="id_client">
-                            <small>Consecutivo</small>
-                            <input type="text" name="consecutive" class="form-control" placeholder="PS5-12" {% if budget.consecutive %}value="{{budget.consecutive}}"{% endif %}>
-                        </label>
-                    </div>
-                    <!-- Client -->
-                    <div class="form-group m-0">
-                        <label for="id_client">
-                            <small>Cliente</small>
-                            <!-- {% render_field form.client class="form-control" required="true" %} -->
-                            <select name="client" class="form-control">
-                                {% for client in clients %}
-                                <option value="{{client.id}}" {% if client.id == budget.client.id %} selected
-                                    {% endif %}>
-                                    {{client.name|lower|capfirst}}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </label>
-                    </div>
-                    <!-- Description -->
-                    <div class="form-group m-0">
-                        <label for="id_description">
-                            <small for="id_description">Descripción del proyecto</small>
-                        </label>
-                        <input type="text" name="subject" id="id_description" class="form-control" {% if budget.subject %}value="{{budget.subject}}"{% endif %}>
-                        {{budget.description}}
-                    </div>
-                </div>
-                <!-- Second column -->
-                <div class="col-6 border p-2 rounded d-flex justify-content-center align-items-center">
-                    <img src="{% static 'home/img/logo-daras.png' %}" alt="" height="80">
-                </div>
             </div>
-            <!-- Second row -->
-            <div class="row">
-                <!-- First column -->
-                <div class="col-sm-12 border rounded">
-                    <!-- Table for products/items -->
-                    <table id="BudgetElements" class="table m-0">
-                        <thead>
-                            <tr class="text-center">
-                                <th class="font-weight-bold">Descripción</th>
-                                <th class="font-weight-bold">Unidad</th>
-                                <th class="font-weight-bold">Cantidad</th>
-                            </tr>
-                        </thead>
-                        {% if items %}
-                        {% for item in items %}
-                        <tbody>
-                            <tr class="orange lighten-4" data-type="section" data-sectionid="{{item.id}}"
-                                data-budgetCode="{{budget.id}}">
-                                <td colspan="3" class="p-2">
-                                    <p class="m-0">
-                                        <strong>
-                                            {{item.description}}
-                                        </strong>
-                                    </p>
-                                </td>
-                            </tr>
-                            {% if item.subitems %}
-                            {% for i in item.subitems.all %}
-                            <tr class="grey lighten-3" data-type="product" data-id="{{i.id}}"
-                                data-budgetCode="{{budget.id}}">
-                                <td class="p-2">
-                                    <p class="m-0">
-                                        {{i.description}}
-                                    </p>
-                                </td>
-                                <td class="text-center p-2">
-                                    <p class="m-0">
-                                        {{i.unit.name}}
-                                    </p>
-                                </td>
-                                <td class="text-center p-2">
-                                    <p class="m-0">
-                                        {{i.amount}}
-                                    </p>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            {% endif %}
-                        </tbody>
-                        {% endfor %}
-                        {% endif %}
-                    </table>
-                    <table class="w-100 m-0 p-0">
-                        <tr class="text-center green lighten-5">
-                            <td colspan="3">
-                                <a href="#" class="btn btn-success" data-toggle="modal"
-                                    data-target="#sectionModal">Agregar sección</a>
-                                <a href="#" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#productModal">Agregar producto</a>
-                            </td>
-                        </tr>
-                    </table>
 
-                </div>
-            </div>
-            <!-- Third row -->
-            <div class="row pt-3">
-                <div class="col-sm-9 m-auto">
-                    <!--Textarea with icon prefix-->
-                    <div class="md-form">
-                        <i class="fas fa-pencil-alt prefix"></i>
-                        <textarea id="form10" name="comment" class="md-textarea form-control" rows="5" >{% if budget.comment %}{{budget.comment}}{% endif %}</textarea>
-                        <label for="form10">Observaciones</label>
-                    </div>
-                    
-                </div>
-                <div class="col-sm-3">
-                    <h5>Costos indirectos</h5>
-                    <div class="form-group">
-                        {% render_field form.administration_percentage class="form-control" placeholder="% de administración" value=budget.administration_percentage %}
-                    </div>
-                    <div class="form-group">
-                        {% render_field form.incidentals_percentaje class="form-control" placeholder="% de imprevistos" value=budget.incidentals_percentaje %}
-                    </div>
-                    <div class="form-group">
-                        {% render_field form.utility_percentage class="form-control" placeholder="% de utilidad" value=budget.utility_percentage%}
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Button -->
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
-
-
-
-        <!-- Modal to add section -->
-        <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
-
-            <!-- Change class .modal-sm to change the size of the modal -->
-            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                <div class="modal-content">
-                    <!-- Modal header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title w-100" id="myModalLabel">Agregar sección</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div id="sectionBody" class="modal-body">
-                        <!-- Form -->
-                        <form id="sectionForm" action="" method="POST">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="">
-                                    <small>Título</small>
-                                </label>
-                                <input id="sectionName" type="text" name="description" class="form-control"
-                                    required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="">
-                                    <small>Duración (días)</small>
-                                </label>
-                                <input id="sectionDuration" type="number" name="duration" class="form-control"
-                                    required="true">
-                            </div>
-                        </form>
-
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                        <button id="addSection" type="button" class="btn btn-primary btn-sm">Agregar</button>
-                    </div>
-                </div>
-            </div>
         </div>
-        <!-- Modal to add section -->
+        <!-- Heading -->
+    </div>
+</div>
 
-        <!-- Modal to add product -->
-        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
-
-            <!-- Change class .modal-sm to change the size of the modal -->
-            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                <div class="modal-content">
-                    <!-- Modal header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title w-100" id="myModalLabel">Agregar producto</h4>
-                        <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                            aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+<!-- Fill Budget -->
+<div class="row">
+    <div class="col-8 offset-2">
+        <!-- Card -->
+        <div class="card">
+            <!-- Card content -->
+            <div class="card-body">
+                <!-- Title -->
+                <div class="d-flex">
+                    <div class="w-50">
+                        <h4 class="card-title">Crear presupuesto</h4>
                     </div>
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <!-- Form -->
-                        <form id="productForm" action="" method="POST">
-                            {% csrf_token %}
+                    <div class="w-50 text-right">
+                        <!-- Button -->
+                        <button type="submit" form="fill-budget-form" class="btn btn-sm btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-sm btn-primary">VISTA PREVIA</button>
+                    </div>
+                </div>
+                
+                <!-- Budget form -->
+                
+                <form action="" method="POST" id="fill-budget-form">
+                    {% csrf_token %}
+                    <!-- First row -->
+                    <div class="row">
+                        <!-- First column -->
+                        <div class="col-6 p-2">
+                            <!-- Consecutive -->
+                            <div class="form-group m-0">
+                                <label for="id_client">
+                                    <small>Consecutivo</small>
+                                    <input type="text" name="consecutive" class="form-control" placeholder="PS5-12"
+                                        {% if budget.consecutive %}value="{{budget.consecutive}}" {% endif %}>
+                                </label>
+                            </div>
+                            <!-- Client -->
+                            <div class="form-group m-0">
+                                <label for="id_client">
+                                    <small>Cliente</small>
+                                    <select name="client" class="form-control">
+                                        {% for client in clients %}
+                                        <option value="{{client.id}}" {% if client.id == budget.client.id %} selected
+                                            {% endif %}>
+                                            {{client.name|lower|capfirst}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
                             <!-- Description -->
-                            <div class="form-group">
-                                <label for="">
-                                    <small>Descripción del producto</small>
+                            <div class="form-group m-0">
+                                <label for="id_description">
+                                    <small for="id_description">Descripción del proyecto</small>
                                 </label>
-                                <input id="productDescription" type="text" name="description" class="form-control"
-                                    required>
+                                <input type="text" name="subject" id="id_description" class="form-control"
+                                    {% if budget.subject %}value="{{budget.subject}}" {% endif %}>
+                                {{budget.description}}
                             </div>
-                            <!-- Unit -->
-                            <div class="form-group">
-                                <label for="">
-                                    <small>Unidad</small>
-                                </label>
-                                <select class="form-control" name="unit" id="">
-                                    <option selected></option>
-                                    {% for u in units %}
-                                    <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <!-- Amount -->
-                            <div class="form-group">
-                                <label for="">
-                                    <small>Cantidad</small>
-                                </label>
-                                <input id="productAmount" type="number" name="amount" class="form-control" required>
+                        </div>
+                        <!-- Second column -->
+                        <div class="col-6  p-2  d-flex justify-content-center align-items-center">
+                            <img src="{% static 'home/img/logo-daras.png' %}" alt="" height="80">
+                        </div>
+                    </div>
+                    <!-- Second row -->
+                    <div class="row">
+                        <!-- First column -->
+                        <div class="col-sm-12  ">
+                            <!-- Table for products/items -->
+                            <table id="BudgetElements" class="" style="width: 100%;">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="font-weight-bold">Descripción</th>
+                                        <th class="font-weight-bold">Unidad</th>
+                                        <th class="font-weight-bold">Duración</th>
+                                        <th class="font-weight-bold">Cantidad</th>
+                                        <th class="font-weight-bold">Opciones</th>
+                                    </tr>
+                                </thead>
+                                {% if items %}
+                                {% for item in items %}
+                                <div>
+
+                                    <tbody>
+                                        <tr class="blue lighten-5" data-type="section" data-sectionid="{{item.id}}"
+                                            data-budgetCode="{{budget.id}}">
+                                            <td colspan="3" class="p-2">
+                                                <p class="m-0">
+                                                    <strong>
+                                                        {{item.description}}
+                                                    </strong>
+                                                </p>
+                                            </td>
+                                            <td colspan="2" class="p-2 text-right text-muted" >
+                                                <!-- <a href="#" class="text-muted" data-toggle="modal" data-target="#deleteProductModal"> -->
+                                                    <i class="delSection fas fa-trash-alt mr-1" style="cursor: pointer;"></i>
+                                                <!-- </a> -->
+                                                <i class="fas fa-edit  mr-1"></i>
+                                            </td>
+                                        </tr>
+                                        {% if item.subitems %}
+                                        {% for i in item.subitems.all %}
+                                        <tr class="" data-type="product" data-id="{{i.id}}"
+                                            data-budgetCode="{{budget.id}}">
+                                            <td class="p-2" style="width: 50%;">
+                                                <p class="m-0">
+                                                    {{i.description}}
+                                                </p>
+                                            </td>
+                                            <td class="text-center p-2">
+                                                <p class="m-0">
+                                                    {{i.unit.name}}
+                                                </p>
+                                            </td>
+                                            <td class="text-center p-2" >
+                                                <p class="m-0">
+                                                    {{i.duration}}
+                                                </p>
+                                            </td>
+                                            <td class="text-center p-2">
+                                                <p class="m-0">
+                                                    {{i.amount}}
+                                                </p>
+                                            </td>
+                                            <td class="p-2 text-right text-muted">
+                                                <i class="delProduct fas fa-trash-alt mr-1" style="cursor: pointer;"></i>
+                                                <i class="fas fa-edit mr-1"></i>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </table>
+                            <table class="w-100 m-0 p-0">
+                                <tr class="text-center blue lighten-5">
+                                    <td colspan="3">
+                                        <a href="#" class="btn btn-sm btn-success" data-toggle="modal"
+                                            data-target="#sectionModal">Agregar sección</a>
+                                        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal"
+                                            data-target="#productModal">Agregar producto</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                    <!-- Third row -->
+                    <div class="row pt-3">
+                        <div class="col-sm-9 m-auto">
+                            <!--Textarea with icon prefix-->
+                            <div class="md-form">
+                                <i class="fas fa-pencil-alt prefix"></i>
+                                <textarea id="form10" name="comment" class="md-textarea form-control"
+                                    rows="5">{% if budget.comment %}{{budget.comment}}{% endif %}</textarea>
+                                <label for="form10">Observaciones</label>
                             </div>
 
-                        </form>
+                        </div>
+                        <div class="col-sm-3">
+                            <h5>Costos indirectos</h5>
+                            <div class="form-group">
+                                {% render_field form.administration_percentage class="form-control form-control-sm text-center" placeholder="% de administración" value=budget.administration_percentage required="true" %}
+                            </div>
+                            <div class="form-group">
+                                {% render_field form.incidentals_percentaje class="form-control form-control-sm text-center" placeholder="% de imprevistos" value=budget.incidentals_percentaje required="true" %}
+                            </div>
+                            <div class="form-group">
+                                {% render_field form.utility_percentage class="form-control form-control-sm text-center" placeholder="% de utilidad" value=budget.utility_percentage required="true" %}
+                            </div>
+                        </div>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                        <button id="addProduct" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                    <div class="w-50 text-left">
+                        <!-- Button -->
+                        <button type="submit" form="fill-budget-form" class="btn btn-sm btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-sm btn-primary">VISTA PREVIA</button>
+                    </div>
+                </form>
+
+                <!-- Modal to add section -->
+                <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Agregar sección</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div id="sectionBody" class="modal-body">
+                                <!-- Form -->
+                                <form id="sectionForm" action="" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Título</small>
+                                        </label>
+                                        <input id="sectionName" type="text" name="description" class="form-control"
+                                            required="true">
+                                    </div>
+
+                                </form>
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="addSection" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Modal to add section -->
+
+                <!-- Modal to add product -->
+                <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Agregar producto</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <!-- Form -->
+                                <form id="productForm" action="" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Description -->
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Descripción del producto</small>
+                                        </label>
+                                        <input id="productDescription" type="text" name="description"
+                                            class="form-control" required>
+                                    </div>
+                                    <!-- Unit -->
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Unidad</small>
+                                        </label>
+                                        <select class="form-control" name="unit" id="">
+                                            <option selected></option>
+                                            {% for u in units %}
+                                            <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- Days -->
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <small>Duración de la actividad</small>
+                                            </label>
+                                            <input id="productDuration" type="number" name="duration" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <!-- Amount -->
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Cantidad</small>
+                                        </label>
+                                        <input id="productAmount" type="number" name="amount" class="form-control"
+                                            required>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="addProduct" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to add product -->
+
+                <!-- Modal to delete product -->
+                <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Eliminar producto</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form action="" method="post" id="deleteProductForm">
+                                    {% csrf_token %}
+                                    <div class="text-center" id="delProductContent">
+                                    </div>
+                                </form>
+                                <!--  -->
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="delProduct" type="button" class="btn btn-danger btn-sm">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to delete product -->
+
+                <!-- Modal to delete section -->
+                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Eliminar sección</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form action="" method="post" id="deleteSectionForm">
+                                    {% csrf_token %}
+                                    <div class="text-center" id="delSectionContent">
+                                    </div>
+                                </form>
+                                <!--  -->
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="delSection" type="button" class="btn btn-danger btn-sm">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to delete section -->
+                
             </div>
         </div>
-        <!-- Modal to add product -->
+        <!-- Card -->
     </div>
 </div>
-<!-- Card -->
+
 
 {% endblock content %}
 
@@ -331,11 +454,15 @@
                     var HTMLString =
                         `
                     <tbody>
-                        <tr class="orange lighten-4" data-type="section" data-sectionid="${data.id}" data-budgetCode="{{budget.id}}">
+                        <tr class="blue lighten-5" data-type="section" data-sectionid="${data.id}" data-budgetCode="{{budget.id}}">
                             <td colspan="3" class="p-2">
                                 <strong>
                                     <p class="m-0">${data.description}</p>
                                 </strong>
+                            </td>
+                            <td colspan="2" class="p-2 text-right text-muted">
+                                <i class="delSection fas fa-trash-alt mr-1"></i>
+                                <i class="fas fa-edit mr-1"></i>
                             </td>
                         </tr>
                     </tbody>
@@ -345,7 +472,7 @@
                     document.getElementById('BudgetElements').appendChild(element)
                     $("#sectionModal").modal('toggle')
                     $("#sectionName").val('')
-                    $("#sectionDuration").val('')
+                    // $("#sectionDuration").val('')
 
                 })
                     .catch(function (err) {
@@ -389,11 +516,11 @@
                 }
             }).then(function (data) {
 
-                console.log("Texto: ", data);
+                // console.log("Texto: ", data);
                 var lastSection = $("#BudgetElements tbody:last")
                 var HTMLString =
                     `
-                        <td class="p-2">
+                        <td class="p-2" style="width: 50%;">
                             <p class="m-0">${data.description}</p>
                         </td>
                         <td class="text-center p-2">
@@ -403,13 +530,24 @@
                         </td>
                         <td class="text-center p-2">
                             <p class="m-0">
+                                ${data.duration}
+                            </p>
+                        </td>
+                        <td class="text-center p-2">
+                            <p class="m-0">
                                 ${data.amount}
                             </p>
+                        </td>
+                        <td class="p-2 text-right text-muted" >
+                            
+                            <i class="delProduct fas fa-trash-alt mr-1" style="cursor:pointer;"></i>
+                            
+                            <i class="fas fa-edit mr-1"></i>
                         </td>
                     `
 
                 element = document.createElement("tr");
-                element.classList.add("grey")
+                // element.classList.add("grey")
                 element.classList.add("lighten-3")
                 element.setAttribute("data-type", "product")
                 element.setAttribute("data-productid", `${data.id}`)
@@ -419,18 +557,146 @@
                 $(element).appendTo(lastSection)
 
             })
-            .catch(function (err) {
-                console.log(err);
-            });
+                .catch(function (err) {
+                    console.log(err);
+                });
             $("#productModal").modal('toggle')
             $("#productDescription").val('')
+            $("#productDuration").val('')
             $("#productAmount").val('')
 
-            
+
         })
 
+        /* Delete product from table */
+
+        $("#BudgetElements").on('click','tbody tr td .delProduct',function(e){
+            var container = document.getElementById('delProductContent')
+            // Reset modal content
+            container.innerHTML = "";
+            // console.log("EEEEE",e);
 
 
-    });
+            var product_name = $(this).parent().parent().find('p').first().text().trim();
+            var item_pk = $(this).parent().parent().data('id')
+            var row = $(this).parent().parent()[0]
+            
+            // console.log(product_name);
+            // console.log(item_pk);
+
+            message = document.createElement('p')
+            message.innerHTML = `¿Seguro que quiere eliminar <strong>"${product_name}"</strong>?`;
+            container.appendChild(message)
+
+            // Hidden input
+            var input = document.createElement('input')
+            input.setAttribute('type', 'number')
+            input.setAttribute('name', 'subitem_pk')
+            input.setAttribute('value', item_pk)
+            input.setAttribute('hidden', 'true')
+            input.classList.add('form-control')
+            input.classList.add('form-control-sm')
+            input.classList.add('text-center')
+            container.appendChild(input)
+
+            // Show modal
+            $("#deleteProductModal").modal('toggle')
+
+            $("#delProduct").click(function () {
+                var form = document.getElementById("deleteProductForm");
+                const data = new FormData(form);
+                var url = `{% url 'api_rest:del-subitem' budget.id %}`;
+                fetch(url, {
+                    method: 'POST',
+                    body: data
+                }).then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                })
+                .then(function (data){
+                    console.log(data.status);
+                    row.remove()
+                    $("#deleteProductModal").modal('toggle')
+                })
+                .catch(function(error){
+                    console.log(error);
+                })
+            })
+            /* End del product on click */
+
+        });
+        /* End del product */
+
+        /* Delete section from table */
+        $("#BudgetElements").on('click','tbody tr td .delSection',function(e){
+            var container = document.getElementById('delSectionContent')
+            // Reset modal content
+            container.innerHTML = "";
+
+            var section_name = $(this).parent().parent().find('p').first().text().trim();
+            var section_pk = $(this).parent().parent().data('sectionid')
+
+            // Tbody element
+            var block = $(this).parent().parent().parent()
+            
+            message = document.createElement('span')
+            message.innerHTML = 
+            `
+            <p>¿Seguro que quiere eliminar <strong>"${section_name}"</strong>?</p>
+            <small class="alert alert-danger text-center">
+                Esta acción eliminará la sección y sus actividades
+            </small>
+            `;
+            container.appendChild(message)
+
+            // Hidden input
+            var input = document.createElement('input')
+            input.setAttribute('type', 'number')
+            input.setAttribute('name', 'section_pk')
+            input.setAttribute('value', section_pk)
+            input.setAttribute('hidden', 'true')
+            input.classList.add('form-control')
+            input.classList.add('form-control-sm')
+            input.classList.add('text-center')
+            container.appendChild(input)
+
+            // Show modal
+            $("#deleteSectionModal").modal('toggle')
+
+            $("#delSection").click(function () {
+                var form = document.getElementById("deleteSectionForm");
+                const data = new FormData(form);
+                var url = `{% url 'api_rest:del-item' budget.id %}`;
+                fetch(url, {
+                    method: 'POST',
+                    body: data
+                }).then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                })
+                .then(function (data){
+                    // console.log(data.status);
+                    block.remove()
+                    $("#deleteSectionModal").modal('toggle')
+                })
+                .catch(function(error){
+                    console.log(error);
+                })
+            })
+            /* End del section on click */
+
+        });
+        /* End del section */
+
+
+    })
 </script>
 {% endblock scripts %}
