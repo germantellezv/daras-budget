@@ -39,8 +39,14 @@
                 <td>
                     CLIENTE:
                 </td>
-                <td colspan="5">
+                <td colspan="3">
                     {{budget.client.name}}
+                </td>
+                <td>
+                    NIT
+                </td>
+                <td style="text-align: center;">
+                    {{budget.client.nit}}
                 </td>
             </tr>
             <tr>
@@ -54,7 +60,7 @@
                     REVISIÓN
                 </td>
                 <td style="text-align: center;">
-                    0
+                    {{budget.rev_number}}
                 </td>
             </tr>
             <tr>
@@ -68,7 +74,7 @@
                     T.E.E
                 </td>
                 <td style="text-align: center;">
-                    7 D.C
+                    {{budget.delivery_time}}
                 </td>
             </tr>
             <tr>
@@ -202,7 +208,7 @@
                     IVA SOBRE SUBTOTAL
                 </td>
                 <td style="text-align: right;">
-                    19%
+                    {{budget.iva|floatformat:0}} %
                 </td>
                 <td style="text-align: center;">
                     $ {{iva_over_subtotal|floatformat:0|intcomma}}
@@ -220,10 +226,12 @@
         </tbody>
     </table>
     <br>
-    <span style="margin: 20px 0 0 0;font-weight: bold;">OBSERVACIONES</span>
-    <div style="width: 100%;border: 1px solid #ddd; padding: 20px; margin:0;">
-        {{budget.comment|linenumbers|linebreaks}}
-    </div>
+    {% if budget.comment %}
+        <span style="margin: 20px 0 0 0;font-weight: bold;">OBSERVACIONES</span>
+        <div style="width: 100%;border: 1px solid #ddd; padding: 20px; margin:0;">
+            {{budget.comment|linebreaks}}
+        </div>
+    {% endif %}
 </body>
 
 </html>

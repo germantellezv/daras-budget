@@ -205,27 +205,30 @@ class Budget(models.Model):
         ('2', 'Por día'),
         ('3', 'Mensual')
     ]
-    consecutive = models.CharField(max_length=10, blank=True, null=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True, null=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
-    subject = models.CharField(max_length=300, blank=True, null=True)
-    risk = models.ForeignKey(Risk, on_delete=models.CASCADE, blank=True, null=True)
+    AIU_OPTIONS = [
+        # (None, 'Periodo de tiempo'),
+        ('1', 'Presupuesto'),
+        ('2', 'APU'),
+    ]
+    consecutive = models.CharField(max_length=10, blank=True, null=True, verbose_name="Consecutivo")
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Cliente")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Especialidad")
+    subject = models.CharField(max_length=300, blank=True, null=True, verbose_name="Objeto")
+    risk = models.ForeignKey(Risk, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Riesgo de la empresa")
+    time = models.CharField(choices=OPTIONS_PERIOD, max_length=20, blank=True, null=True, verbose_name="Rango de tarifas")
+    iva_option = models.CharField(choices=OPTIONS_IVA, max_length=50, blank=True, null=True, verbose_name="Calcular IVA sobre")
+    iva = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True, verbose_name="Porcentaje IVA")
+    delivery_time = models.CharField(max_length=50, blank=True, null=True, verbose_name="Tiempo de entrega")
+    rev_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Numero de revisión")
+    aiu_over = models.CharField(max_length=50,choices=AIU_OPTIONS, blank=True, null=True, verbose_name="Aplicar AIU sobre")
+    comment = models.TextField(blank=True, null=True, verbose_name="Anotaciones")
     
-    time = models.CharField(choices=OPTIONS_PERIOD, max_length=20, blank=True, null=True)
-    
-    administration_percentage = models.SmallIntegerField(verbose_name="Porcentaje de administración", blank=True, null=True)
-    administration = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-    
-    incidentals_percentaje = models.SmallIntegerField(verbose_name="Porcentaje de imprevistos", blank=True, null=True)
+    administration_percentage = models.SmallIntegerField(blank=True, null=True, verbose_name="Porcentaje de administración")
+    incidentals_percentaje = models.SmallIntegerField(blank=True, null=True, verbose_name="Porcentaje de imprevistos")
+    utility_percentage = models.SmallIntegerField(blank=True, null=True, verbose_name="Porcentaje de utilidad")
     incidentals = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-    
-    utility_percentage = models.SmallIntegerField(verbose_name="Porcentaje de utilidad", blank=True, null=True)
+    administration = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     utility = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-
-    iva_option = models.CharField(choices=OPTIONS_IVA, max_length=50, verbose_name="Calcular IVA sobre", blank=True, null=True)
-    iva = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-
-    comment = models.TextField(blank=True, null=True)
     
     total_direct_cost = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total_indirect_cost = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)

@@ -1,9 +1,12 @@
 {% extends "budget/base.html" %}
 {% load static %}
 {% load humanize %}
+
 {% block title %}
 <title>Completar presupuesto - DARAS</title>
 {% endblock title %}
+
+
 
 {% block content %}
 
@@ -35,6 +38,8 @@
 <div class="row m-3 h-25">
     <!-- Budget summary -->
     <div class="col-3">
+        
+        <!-- Card -->
         <div class="card p-2 wow fadeIn">
 
             <div class="card-body">
@@ -44,7 +49,17 @@
                 <small>Información general del presupuesto</small>
                 <hr>
                 <!-- Budget summary -->
-                <table class="table-sm">
+                <table id="generalTable" class="table-sm table-striped table-responsive">
+                    <tr>
+                        <td>
+                            <strong>
+                                Numero de revisión
+                            </strong>
+                        </td>
+                        <td class="text-center">
+                            {{budget.rev_number}}
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <strong>
@@ -68,6 +83,26 @@
                     <tr>
                         <td>
                             <strong>
+                                Tipo de servicio
+                            </strong>
+                        </td>
+                        <td class="text-center">
+                            {{budget.service}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                Tiempo de entrega
+                            </strong>
+                        </td>
+                        <td class="text-center">
+                            {{budget.delivery_time}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
                                 Objeto
                             </strong>
                         </td>
@@ -85,15 +120,14 @@
                             {{budget.get_time_display}}
                         </td>
                     </tr>
-
                     <tr>
                         <td>
                             <strong>
-                                Tipo de servicio
+                                Aplicar AIU a
                             </strong>
                         </td>
                         <td class="text-center">
-                            {{budget.service}}
+                            {{budget.get_aiu_over_display}}
                         </td>
                     </tr>
                     <tr>
@@ -106,7 +140,7 @@
                             {{budget.get_iva_option_display}}
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>
                             <strong>
                                 Porcentaje de administración
@@ -135,7 +169,7 @@
                         <td class="text-center">
                             {{budget.utility_percentage|default_if_none:"-"}} %
                         </td>
-                    </tr>
+                    </tr> -->
                     {% if budget.comment %}
                     <!-- <tr>
                         <td>
@@ -156,7 +190,7 @@
 
             <div class="card-body">
                 <h1>Actividades</h1>
-                <small>Agrega o edita los APU de las subactividades del presupuesto</small>
+                <small>Elige una actividad y crea su APU
                 <hr class="my-3">
                 <!-- Budget items -->
                 {% if items %}

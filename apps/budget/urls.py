@@ -30,6 +30,7 @@ urlpatterns = [
     path('panel/presupuesto/<int:budget_pk>/detalle', views.budgetDetail, name='budget-detail' ),
     path('panel/presupuesto/<slug:slug>/item/<slug:slug_item>/', views.editBudgetItem, name='edit-item' ),
     path('panel/presupuesto/<int:budget_pk>/item/<int:item_pk>/subitem/<int:subitem_pk>/apu/', views.editBudgetSubItem, name='edit-subitem'),
+    path('panel/presupuesto/<int:budget_pk>/item/<int:item_pk>/actualizar/subitem/<int:subitem_pk>/', views.updateBudgetSubitem, name='update-subitem'),
     path('panel/preview/presupuesto/<int:budget_pk>/',views.PreviewBudget, name="preview-budget"),
     path('panel/preview/presupuesto/<int:budget_pk>/item/<int:item_pk>/subitem/<int:subitem_pk>/', views.PreviewAPU, name='preview-apu'),
 ]

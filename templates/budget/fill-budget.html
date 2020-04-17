@@ -42,68 +42,97 @@
                 <!-- Title -->
                 <div class="d-flex">
                     <div class="w-50">
-                        <h4 class="card-title">Crear presupuesto</h4>
+                        <h4 class="card-title">Nuevo presupuesto</h4>
                     </div>
+                    <!-- Buttons -->
                     <div class="w-50 text-right">
-                        <!-- Button -->
                         <button type="submit" form="fill-budget-form" class="btn btn-sm btn-primary">Guardar</button>
-                        <button type="submit" class="btn btn-sm btn-primary">VISTA PREVIA</button>
+                        <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-sm btn-primary">Vista previa</a>
                     </div>
                 </div>
                 
                 <!-- Budget form -->
-                
                 <form action="" method="POST" id="fill-budget-form">
                     {% csrf_token %}
                     <!-- First row -->
-                    <div class="row">
+                    <div class="row mb-5">
                         <!-- First column -->
-                        <div class="col-6 p-2">
+                        <div class="col-4 border rounded p-2">
                             <!-- Consecutive -->
-                            <div class="form-group m-0">
-                                <label for="id_client">
+                            <div class="form-group">
+                                <label for="id_client" style="margin: 0;">
                                     <small>Consecutivo</small>
-                                    <input type="text" name="consecutive" class="form-control" placeholder="PS5-12"
-                                        {% if budget.consecutive %}value="{{budget.consecutive}}" {% endif %}>
                                 </label>
-                            </div>
+                                    <input type="text" name="consecutive" class="form-control form-control-sm" placeholder="PS5-12"
+                                    {% if budget.consecutive %}value="{{budget.consecutive}}" {% endif %} size="18">
+                                </div>
                             <!-- Client -->
-                            <div class="form-group m-0">
-                                <label for="id_client">
+                            <div class="form-group">
+                                <label for="id_client" style="margin: 0;">
                                     <small>Cliente</small>
-                                    <select name="client" class="form-control">
+                                </label>
+                                    <select name="client" class="form-control form-control-sm" >
                                         {% for client in clients %}
                                         <option value="{{client.id}}" {% if client.id == budget.client.id %} selected
-                                            {% endif %}>
-                                            {{client.name|lower|capfirst}}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                </label>
+                                        {% endif %}>
+                                        {{client.name|lower|capfirst}}
+                                    </option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <!-- Description -->
-                            <div class="form-group m-0">
-                                <label for="id_description">
-                                    <small for="id_description">Descripción del proyecto</small>
+                            <div class="form-group">
+                                <label for="id_description" style="margin: 0;">
+                                <small for="id_description">Descripción del proyecto</small>
                                 </label>
-                                <input type="text" name="subject" id="id_description" class="form-control"
-                                    {% if budget.subject %}value="{{budget.subject}}" {% endif %}>
-                                {{budget.description}}
-                            </div>
+                                <input type="text" name="subject" id="id_description" class="form-control form-control-sm"
+                                    {% if budget.subject %}value="{{budget.subject}}" {% endif %} autofocus>
+                                    {{budget.description}}
+                                </div>
                         </div>
                         <!-- Second column -->
-                        <div class="col-6  p-2  d-flex justify-content-center align-items-center">
+                        <div class="col-4 border rounded p-2  d-flex justify-content-center align-items-center">
                             <img src="{% static 'home/img/logo-daras.png' %}" alt="" height="80">
+                        </div>
+                        <!-- Third column -->
+                        <div class="col-4 border rounded p-2">
+                            <!-- Delivery time -->
+                            <div class="form-group">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Tiempo de entrega
+                                    </small>
+                                </label>
+                                <input type="text" name="delivery_time" maxlength="50" class="form-control form-control-sm" id="id_delivery_time" {% if budget.delivery_time %}value="{{budget.delivery_time}}"{% endif %}>
+                            </div>
+                            <!-- Revision number -->
+                            <div class="form-group">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Número de revisión
+                                    </small>
+                                </label>
+                                <input type="number" name="rev_number" min="0" class="form-control form-control-sm" id="id_rev_number" {% if budget.rev_number %}value="{{budget.rev_number}}"{% endif %}>
+                            </div>
+                            <!-- AIU -->
+                            <div class="form-group">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Aplicar AIU a
+                                    </small>
+                                </label>
+                                {% render_field form.aiu_over class="form-control form-control-sm" required="true" %}
+                            </div>
                         </div>
                     </div>
                     <!-- Second row -->
-                    <div class="row">
+                    <div class="row mb-5">
                         <!-- First column -->
-                        <div class="col-sm-12  ">
+                        <div class="col-sm-12 p-0">
                             <!-- Table for products/items -->
-                            <table id="BudgetElements" class="" style="width: 100%;">
+                            <table id="BudgetElements" class="table table-sm table-responsive">
                                 <thead>
-                                    <tr class="text-center">
+                                    <tr class="text-center blue lighten-5">
                                         <th class="font-weight-bold">Descripción</th>
                                         <th class="font-weight-bold">Unidad</th>
                                         <th class="font-weight-bold">Duración</th>
@@ -182,7 +211,7 @@
                         </div>
                     </div>
                     <!-- Third row -->
-                    <div class="row pt-3">
+                    <div class="row mb-5">
                         <div class="col-sm-9 m-auto">
                             <!--Textarea with icon prefix-->
                             <div class="md-form">
@@ -206,10 +235,10 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Form buttons -->
                     <div class="w-50 text-left">
-                        <!-- Button -->
                         <button type="submit" form="fill-budget-form" class="btn btn-sm btn-primary">Guardar</button>
-                        <button type="submit" class="btn btn-sm btn-primary">VISTA PREVIA</button>
+                        <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-sm btn-primary">Vista previa</a>
                     </div>
                 </form>
 
@@ -461,7 +490,7 @@
                                 </strong>
                             </td>
                             <td colspan="2" class="p-2 text-right text-muted">
-                                <i class="delSection fas fa-trash-alt mr-1"></i>
+                                <i class="delSection fas fa-trash-alt mr-1" style="cursor:pointer;"></i>
                                 <i class="fas fa-edit mr-1"></i>
                             </td>
                         </tr>

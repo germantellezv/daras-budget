@@ -108,6 +108,9 @@ def fillBudget(request, pk):
             b.consecutive = data['consecutive']
             b.client = data['client']
             b.subject = data['subject']
+            b.delivery_time = data['delivery_time']
+            b.rev_number = data['rev_number']
+            b.aiu_over = data['aiu_over']
             b.comment = data['comment']
             b.utility_percentage = data['utility_percentage']
             b.incidentals_percentaje = data['incidentals_percentaje']
@@ -185,6 +188,7 @@ def editBudgetItem(request, slug, slug_item):
 @login_required
 def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
     """ Create APU for specific activity """
+
     budget = get_object_or_404(Budget, id=budget_pk)
     item = get_object_or_404(BudgetItem, id=item_pk)
     subitem = get_object_or_404(BudgetSubItem, id=subitem_pk)
@@ -313,6 +317,20 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
     )
 
 @login_required
+def updateBudgetSubitem(request, budget_pk,item_pk, subitem_pk):
+    """ Update subitem duration """
+    budget = Budget.objects.get(id=budget_pk)
+    subitem = BudgetSubItem.objects.get(id=subitem_pk, budget=budget)
+
+    if request.method == 'POST':
+        duration = request.POST.get('duration')
+        # import pdb; pdb.set_trace()
+        s = subitem
+        s.duration = duration
+        s.save()
+        return redirect('budget:edit-subitem', budget_pk=budget_pk, item_pk=item_pk, subitem_pk=subitem_pk  )
+
+@login_required
 def PreviewAPU(request, budget_pk, item_pk, subitem_pk):
     budget = Budget.objects.get(id=budget_pk)
     item = BudgetItem.objects.get(id=item_pk)
@@ -349,7 +367,10 @@ def PreviewBudget(request, budget_pk):
 
     for i in range(len(items)):
         for j in range(len(items[i].subitems.all())):
-            total_direct_cost += items[i].subitems.all()[j].total_value
+            try:
+                total_direct_cost += items[i].subitems.all()[j].total_value
+            except:
+                total_direct_cost = 0
 
     administration_value = Decimal(budget.administration_percentage/100) * total_direct_cost
     incidentals_value = Decimal(budget.incidentals_percentaje/100) * total_direct_cost
