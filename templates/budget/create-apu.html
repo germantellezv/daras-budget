@@ -65,6 +65,18 @@
                         </label>
                         <input type="number" name="duration" class="form-control form-control-sm text-center" {% if subitem.duration %}value="{{subitem.duration}}"{% endif %}>
                     </div>
+                    <div class="form-group">
+                        <label for="" style="margin: 0;">
+                            <small>Número de revisión</small>
+                        </label>
+                        <input type="number" name="rev_number" class="form-control form-control-sm text-center" {% if subitem.rev_number %}value="{{subitem.rev_number}}"{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="" style="margin: 0;">
+                            <small>Tiempo de entrega</small>
+                        </label>
+                        <input type="text" maxlength="50" name="delivery_time" class="form-control form-control-sm text-center" {% if subitem.delivery_time %}value="{{subitem.delivery_time}}"{% endif %}>
+                    </div>
                     <button class="btn btn-block btn-primary" type="submit">Actualizar</button>
                 </form>
             </div>
@@ -674,16 +686,18 @@
                     var element = data.find(element => element.id == option)
                     // Budget type of cost (per hour / day / month)
                     var type = "{{budget.time}}"
+                    var risk_value = parseFloat("{{budget.risk.value}}")
+                    console.log(risk_value);
                     switch (type) {
                         case "1":
                             // Insert in the salary input of the same row the salary of the option selected
-                            $(this).parent().parent().find(".wfsalary")[0].value = (element.daily_salary / 8).toFixed(2);
+                            $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value) / 8).toFixed(2);
                             break;
                         case "2":
-                            $(this).parent().parent().find(".wfsalary")[0].value = (element.daily_salary).toFixed(2);
+                            $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value)).toFixed(2);
                             break;
                         case "3":
-                            $(this).parent().parent().find(".wfsalary")[0].value = (element.daily_salary * 30).toFixed(2);
+                            $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value) * 30).toFixed(2);
                             break;
                     }
                     

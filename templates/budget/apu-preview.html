@@ -53,8 +53,8 @@
                 <td>
                     REVISIÓN
                 </td>
-                <td>
-                    0
+                <td style="text-align: center;">
+                    {{subitem.rev_number}}
                 </td>
             </tr>
             <tr>
@@ -67,8 +67,8 @@
                 <td>
                     T.E.E
                 </td>
-                <td>
-                    7 D.C
+                <td style="text-align: center;">
+                    {{subitem.delivery_time}}
                 </td>
             </tr>
             <tr>
@@ -118,8 +118,6 @@
             </tr>
         </thead>
         <tbody>
-
-
             {% if workforce %}
             <tr style="background-color: #c0c0c0; text-align: center;">
                 <td colspan="4" style="text-align: left;">

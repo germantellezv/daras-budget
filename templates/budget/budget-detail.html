@@ -83,6 +83,16 @@
                     <tr>
                         <td>
                             <strong>
+                                Tipo de cobro
+                            </strong>
+                        </td>
+                        <td class="text-center">
+                            {{budget.get_time_display}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
                                 Tipo de servicio
                             </strong>
                         </td>
@@ -108,16 +118,6 @@
                         </td>
                         <td class="text-center">
                             {{budget.subject|default_if_none:"-"}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>
-                                Tipo de cobro
-                            </strong>
-                        </td>
-                        <td class="text-center">
-                            {{budget.get_time_display}}
                         </td>
                     </tr>
                     <tr>
@@ -190,7 +190,7 @@
 
             <div class="card-body">
                 <h1>Actividades</h1>
-                <small>Elige una actividad y crea su APU
+                <small>Elige una actividad y crea su APU </small>
                 <hr class="my-3">
                 <!-- Budget items -->
                 {% if items %}

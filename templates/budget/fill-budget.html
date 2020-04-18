@@ -20,8 +20,6 @@
                 <h6 class="mb-2 mb-sm-0 pt-1">
                     <span class="text-muted">Dashboard</span>
                     <span class="text-muted">/</span>
-                    <span class="text-muted">Presupuesto</span>
-                    <span class="text-muted">/</span>
                     <span>Nuevo presupuesto</span>
                 </h6>
 
@@ -86,13 +84,13 @@
                                 <small for="id_description">Descripción del proyecto</small>
                                 </label>
                                 <input type="text" name="subject" id="id_description" class="form-control form-control-sm"
-                                    {% if budget.subject %}value="{{budget.subject}}" {% endif %} autofocus>
+                                    {% if budget.subject %}value="{{budget.subject}}" {% else %} autofocus {% endif %}>
                                     {{budget.description}}
                                 </div>
                         </div>
                         <!-- Second column -->
                         <div class="col-4 border rounded p-2  d-flex justify-content-center align-items-center">
-                            <img src="{% static 'home/img/logo-daras.png' %}" alt="" height="80">
+                            <img src="{% static 'home/img/logo-daras.png' %}" alt="" style="width: 100%;">
                         </div>
                         <!-- Third column -->
                         <div class="col-4 border rounded p-2">
@@ -128,9 +126,9 @@
                     <!-- Second row -->
                     <div class="row mb-5">
                         <!-- First column -->
-                        <div class="col-sm-12 p-0">
+                        <div class="col-sm-12 col-lg-12 p-0">
                             <!-- Table for products/items -->
-                            <table id="BudgetElements" class="table table-sm table-responsive">
+                            <table id="BudgetElements" class="table">
                                 <thead>
                                     <tr class="text-center blue lighten-5">
                                         <th class="font-weight-bold">Descripción</th>
@@ -143,7 +141,6 @@
                                 {% if items %}
                                 {% for item in items %}
                                 <div>
-
                                     <tbody>
                                         <tr class="blue lighten-5" data-type="section" data-sectionid="{{item.id}}"
                                             data-budgetCode="{{budget.id}}">
@@ -266,7 +263,7 @@
                                             <small>Título</small>
                                         </label>
                                         <input id="sectionName" type="text" name="description" class="form-control"
-                                            required="true">
+                                            required="true" autofocus>
                                     </div>
 
                                 </form>
@@ -282,6 +279,41 @@
                     </div>
                 </div>
                 <!-- Modal to add section -->
+
+                <!-- Modal to delete section -->
+                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Eliminar sección</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form action="" method="post" id="deleteSectionForm">
+                                    {% csrf_token %}
+                                    <div class="text-center" id="delSectionContent">
+                                    </div>
+                                </form>
+                                <!--  -->
+                
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="delSection" type="button" class="btn btn-danger btn-sm">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to delete section -->
 
                 <!-- Modal to add product -->
                 <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -308,8 +340,7 @@
                                         <label for="">
                                             <small>Descripción del producto</small>
                                         </label>
-                                        <input id="productDescription" type="text" name="description"
-                                            class="form-control" required>
+                                        <input id="productDescription" type="text" name="description" class="form-control" required="true" autofocus="true">
                                     </div>
                                     <!-- Unit -->
                                     <div class="form-group">
@@ -383,48 +414,15 @@
                             <!-- Modal footer -->
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                data-dismiss="modal">Cancelar</button>
                                 <button id="delProduct" type="button" class="btn btn-danger btn-sm">Eliminar</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Modal to delete product -->
+                
 
-                <!-- Modal to delete section -->
-                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-                    <!-- Change class .modal-sm to change the size of the modal -->
-                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                        <div class="modal-content">
-                            <!-- Modal header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title w-100" id="myModalLabel">Eliminar sección</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <!-- Modal body -->
-                            <div class="modal-body">
-                                <form action="" method="post" id="deleteSectionForm">
-                                    {% csrf_token %}
-                                    <div class="text-center" id="delSectionContent">
-                                    </div>
-                                </form>
-                                <!--  -->
-
-                            </div>
-                            <!-- Modal footer -->
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
-                                <button id="delSection" type="button" class="btn btn-danger btn-sm">Eliminar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal to delete section -->
                 
             </div>
         </div>
@@ -446,6 +444,11 @@
         if (!$this.hasClass('active')) {
             $this.addClass('active');
         }
+
+        /* Enable autofocus in Bootstrap modals */
+        $('.modal').on('shown.bs.modal', function () {
+            $(this).find('[autofocus]').focus();
+        });
 
         /* Activate select input from MD Bootstrap 4 */
         $('.mdb-select').materialSelect();

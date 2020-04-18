@@ -324,9 +324,13 @@ def updateBudgetSubitem(request, budget_pk,item_pk, subitem_pk):
 
     if request.method == 'POST':
         duration = request.POST.get('duration')
+        rev_number = request.POST.get('rev_number')
+        delivery_time = request.POST.get('delivery_time')
         # import pdb; pdb.set_trace()
         s = subitem
         s.duration = duration
+        s.rev_number = rev_number
+        s.delivery_time = delivery_time
         s.save()
         return redirect('budget:edit-subitem', budget_pk=budget_pk, item_pk=item_pk, subitem_pk=subitem_pk  )
 

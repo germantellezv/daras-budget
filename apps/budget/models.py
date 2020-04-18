@@ -219,7 +219,7 @@ class Budget(models.Model):
     iva_option = models.CharField(choices=OPTIONS_IVA, max_length=50, blank=True, null=True, verbose_name="Calcular IVA sobre")
     iva = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True, verbose_name="Porcentaje IVA")
     delivery_time = models.CharField(max_length=50, blank=True, null=True, verbose_name="Tiempo de entrega")
-    rev_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Numero de revisión")
+    rev_number = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="Numero de revisión")
     aiu_over = models.CharField(max_length=50,choices=AIU_OPTIONS, blank=True, null=True, verbose_name="Aplicar AIU sobre")
     comment = models.TextField(blank=True, null=True, verbose_name="Anotaciones")
     
@@ -253,7 +253,8 @@ class BudgetSubItem(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     duration = models.PositiveSmallIntegerField(blank=True, null=True)
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
-    
+    rev_number = models.PositiveSmallIntegerField(blank=True, null=True,default=1 , verbose_name="Numero de revisión")
+    delivery_time = models.CharField(max_length=50, blank=True, null=True, verbose_name="Tiempo de entrega")
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
