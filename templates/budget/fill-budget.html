@@ -20,7 +20,7 @@
                 <h6 class="mb-2 mb-sm-0 pt-1">
                     <span class="text-muted">Dashboard</span>
                     <span class="text-muted">/</span>
-                    <span>Nuevo presupuesto</span>
+                    <span>Completar presupuesto</span>
                 </h6>
 
             </div>
@@ -40,15 +40,16 @@
                 <!-- Title -->
                 <div class="d-flex">
                     <div class="w-50">
-                        <h4 class="card-title">Nuevo presupuesto</h4>
+                        <h4 class="card-title">Completar presupuesto</h4>
                     </div>
                     <!-- Buttons -->
                     <div class="w-50 text-right">
                         <button type="submit" form="fill-budget-form" class="btn btn-sm btn-primary">Guardar</button>
-                        <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-sm btn-primary">Vista previa</a>
+                        <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-sm btn-primary">Vista
+                            previa</a>
                     </div>
                 </div>
-                
+
                 <!-- Budget form -->
                 <form action="" method="POST" id="fill-budget-form">
                     {% csrf_token %}
@@ -61,17 +62,18 @@
                                 <label for="id_client" style="margin: 0;">
                                     <small>Consecutivo</small>
                                 </label>
-                                    <input type="text" name="consecutive" class="form-control form-control-sm" placeholder="PS5-12"
-                                    {% if budget.consecutive %}value="{{budget.consecutive}}" {% endif %} size="18">
-                                </div>
+                                <input type="text" name="consecutive" class="form-control form-control-sm"
+                                    placeholder="PS5-12" {% if budget.consecutive %}value="{{budget.consecutive}}"
+                                    {% endif %} size="18">
+                            </div>
                             <!-- Client -->
                             <div class="form-group">
                                 <label for="id_client" style="margin: 0;">
                                     <small>Cliente</small>
                                 </label>
-                                    <select name="client" class="form-control form-control-sm" >
-                                        {% for client in clients %}
-                                        <option value="{{client.id}}" {% if client.id == budget.client.id %} selected
+                                <select name="client" class="form-control form-control-sm">
+                                    {% for client in clients %}
+                                    <option value="{{client.id}}" {% if client.id == budget.client.id %} selected
                                         {% endif %}>
                                         {{client.name|lower|capfirst}}
                                     </option>
@@ -81,12 +83,13 @@
                             <!-- Description -->
                             <div class="form-group">
                                 <label for="id_description" style="margin: 0;">
-                                <small for="id_description">Descripción del proyecto</small>
+                                    <small for="id_description">Descripción del proyecto</small>
                                 </label>
-                                <input type="text" name="subject" id="id_description" class="form-control form-control-sm"
+                                <input type="text" name="subject" id="id_description"
+                                    class="form-control form-control-sm"
                                     {% if budget.subject %}value="{{budget.subject}}" {% else %} autofocus {% endif %}>
-                                    {{budget.description}}
-                                </div>
+                                {{budget.description}}
+                            </div>
                         </div>
                         <!-- Second column -->
                         <div class="col-4 border rounded p-2  d-flex justify-content-center align-items-center">
@@ -101,7 +104,7 @@
                                         Tiempo de entrega
                                     </small>
                                 </label>
-                                <input type="text" name="delivery_time" maxlength="50" class="form-control form-control-sm" id="id_delivery_time" {% if budget.delivery_time %}value="{{budget.delivery_time}}"{% endif %}>
+                                <input type="text" name="delivery_time" maxlength="50" class="text-center form-control form-control-sm" id="id_delivery_time" {% if budget.delivery_time %}value="{{budget.delivery_time}}" {% endif %}>
                             </div>
                             <!-- Revision number -->
                             <div class="form-group">
@@ -110,7 +113,7 @@
                                         Número de revisión
                                     </small>
                                 </label>
-                                <input type="number" name="rev_number" min="0" class="form-control form-control-sm" id="id_rev_number" {% if budget.rev_number %}value="{{budget.rev_number}}"{% endif %}>
+                                <input type="number" name="rev_number" min="0" class="text-center form-control form-control-sm" id="id_rev_number" {% if budget.rev_number %}value="{{budget.rev_number}}"{% endif %}>
                             </div>
                             <!-- AIU -->
                             <div class="form-group">
@@ -125,7 +128,6 @@
                     </div>
                     <!-- Second row -->
                     <div class="row mb-5">
-                        <!-- First column -->
                         <div class="col-sm-12 col-lg-12 p-0">
                             <!-- Table for products/items -->
                             <table id="BudgetElements" class="table">
@@ -145,17 +147,16 @@
                                         <tr class="blue lighten-5" data-type="section" data-sectionid="{{item.id}}"
                                             data-budgetCode="{{budget.id}}">
                                             <td colspan="3" class="p-2">
-                                                <p class="m-0">
+                                                <p id="desc{{item.id}}" class="m-0">
                                                     <strong>
                                                         {{item.description}}
                                                     </strong>
                                                 </p>
                                             </td>
-                                            <td colspan="2" class="p-2 text-right text-muted" >
-                                                <!-- <a href="#" class="text-muted" data-toggle="modal" data-target="#deleteProductModal"> -->
-                                                    <i class="delSection fas fa-trash-alt mr-1" style="cursor: pointer;"></i>
-                                                <!-- </a> -->
-                                                <i class="fas fa-edit  mr-1"></i>
+                                            <td colspan="2" class="p-2 text-right text-muted">
+                                                <i class="delSection fas fa-trash-alt mr-1"
+                                                    style="cursor: pointer;"></i>
+                                                <i class="updateSection fas fa-edit  mr-1" style="cursor: pointer;"></i>
                                             </td>
                                         </tr>
                                         {% if item.subitems %}
@@ -172,7 +173,7 @@
                                                     {{i.unit.name}}
                                                 </p>
                                             </td>
-                                            <td class="text-center p-2" >
+                                            <td class="text-center p-2">
                                                 <p class="m-0">
                                                     {{i.duration}}
                                                 </p>
@@ -183,8 +184,9 @@
                                                 </p>
                                             </td>
                                             <td class="p-2 text-right text-muted">
-                                                <i class="delProduct fas fa-trash-alt mr-1" style="cursor: pointer;"></i>
-                                                <i class="fas fa-edit mr-1"></i>
+                                                <i class="delProduct fas fa-trash-alt mr-1"
+                                                    style="cursor: pointer;"></i>
+                                                <i class="updateProduct fas fa-edit mr-1" style="cursor: pointer;"></i>
                                             </td>
                                         </tr>
                                         {% endfor %}
@@ -235,7 +237,8 @@
                     <!-- Form buttons -->
                     <div class="w-50 text-left">
                         <button type="submit" form="fill-budget-form" class="btn btn-sm btn-primary">Guardar</button>
-                        <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-sm btn-primary">Vista previa</a>
+                        <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-sm btn-primary">Vista
+                            previa</a>
                     </div>
                 </form>
 
@@ -280,9 +283,50 @@
                 </div>
                 <!-- Modal to add section -->
 
+                <!-- Modal to update section -->
+                <div class="modal fade" id="updateSectionModal" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Actualizar sección</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div id="updateSectionBody" class="modal-body">
+                                <!-- Form -->
+                                <form id="updateSectionForm" action="" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Nueva descripción</small>
+                                        </label>
+                                        <input id="updateSectionName" type="text" name="description" class="form-control" required="true" autofocus>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="updateSection" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to update section -->
+
                 <!-- Modal to delete section -->
-                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                
+                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                         <div class="modal-content">
@@ -302,7 +346,7 @@
                                     </div>
                                 </form>
                                 <!--  -->
-                
+
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
@@ -340,7 +384,8 @@
                                         <label for="">
                                             <small>Descripción del producto</small>
                                         </label>
-                                        <input id="productDescription" type="text" name="description" class="form-control" required="true" autofocus="true">
+                                        <input id="productDescription" type="text" name="description"
+                                            class="form-control" required="true" autofocus="true">
                                     </div>
                                     <!-- Unit -->
                                     <div class="form-group">
@@ -361,7 +406,8 @@
                                             <label for="">
                                                 <small>Duración de la actividad</small>
                                             </label>
-                                            <input id="productDuration" type="number" name="duration" class="form-control" required>
+                                            <input id="productDuration" type="number" name="duration"
+                                                class="form-control" required>
                                         </div>
                                     </div>
                                     <!-- Amount -->
@@ -385,6 +431,77 @@
                     </div>
                 </div>
                 <!-- Modal to add product -->
+
+                <!-- Modal to update product -->
+                <div class="modal fade" id="updateProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Actualizar actividad</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <!-- Form -->
+                                <form id="updateProductForm" action="" method="POST">
+                                    {% csrf_token %}
+                                    <!-- Description -->
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Nueva descripción</small>
+                                        </label>
+                                        <input id="updateProductDescription" type="text" name="description" class="form-control" required="true" autofocus="true">
+                                    </div>
+                                    <!-- Unit -->
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Unidad</small>
+                                        </label>
+                                        <select class="form-control" name="unit" id="">
+                                            <option selected></option>
+                                            {% for u in units %}
+                                            <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- Days -->
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <small>Duración de la actividad</small>
+                                            </label>
+                                            <input id="productDuration" type="number" name="duration"
+                                                class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <!-- Amount -->
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Cantidad</small>
+                                        </label>
+                                        <input id="productAmount" type="number" name="amount" class="form-control"
+                                            required>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="updateProduct" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to update product -->
 
                 <!-- Modal to delete product -->
                 <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
@@ -414,16 +531,14 @@
                             <!-- Modal footer -->
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light btn-sm"
-                                data-dismiss="modal">Cancelar</button>
+                                    data-dismiss="modal">Cancelar</button>
                                 <button id="delProduct" type="button" class="btn btn-danger btn-sm">Eliminar</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Modal to delete product -->
-                
 
-                
             </div>
         </div>
         <!-- Card -->
@@ -449,6 +564,12 @@
         $('.modal').on('shown.bs.modal', function () {
             $(this).find('[autofocus]').focus();
         });
+
+        /*  // Reset form in modal
+            $(".modal").on("hidden.bs.modal", function () {
+                $(this).removeData();
+        }); */
+
 
         /* Activate select input from MD Bootstrap 4 */
         $('.mdb-select').materialSelect();
@@ -600,9 +721,8 @@
 
         })
 
-        /* Delete product from table */
-
-        $("#BudgetElements").on('click','tbody tr td .delProduct',function(e){
+        /* Delete product */
+        $("#BudgetElements").on('click', 'tbody tr td .delProduct', function (e) {
             var container = document.getElementById('delProductContent')
             // Reset modal content
             container.innerHTML = "";
@@ -612,7 +732,7 @@
             var product_name = $(this).parent().parent().find('p').first().text().trim();
             var item_pk = $(this).parent().parent().data('id')
             var row = $(this).parent().parent()[0]
-            
+
             // console.log(product_name);
             // console.log(item_pk);
 
@@ -649,22 +769,22 @@
                         throw "Error en la llamada ajax";
                     }
                 })
-                .then(function (data){
-                    console.log(data.status);
-                    row.remove()
-                    $("#deleteProductModal").modal('toggle')
-                })
-                .catch(function(error){
-                    console.log(error);
-                })
+                    .then(function (data) {
+                        console.log(data.status);
+                        row.remove()
+                        $("#deleteProductModal").modal('toggle')
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             })
             /* End del product on click */
 
         });
         /* End del product */
 
-        /* Delete section from table */
-        $("#BudgetElements").on('click','tbody tr td .delSection',function(e){
+        /* Delete section */
+        $("#BudgetElements").on('click', 'tbody tr td .delSection', function (e) {
             var container = document.getElementById('delSectionContent')
             // Reset modal content
             container.innerHTML = "";
@@ -674,10 +794,10 @@
 
             // Tbody element
             var block = $(this).parent().parent().parent()
-            
+
             message = document.createElement('span')
-            message.innerHTML = 
-            `
+            message.innerHTML =
+                `
             <p>¿Seguro que quiere eliminar <strong>"${section_name}"</strong>?</p>
             <small class="alert alert-danger text-center">
                 Esta acción eliminará la sección y sus actividades
@@ -714,20 +834,101 @@
                         throw "Error en la llamada ajax";
                     }
                 })
-                .then(function (data){
-                    // console.log(data.status);
-                    block.remove()
-                    $("#deleteSectionModal").modal('toggle')
-                })
-                .catch(function(error){
-                    console.log(error);
-                })
+                    .then(function (data) {
+                        // console.log(data.status);
+                        block.remove()
+                        $("#deleteSectionModal").modal('toggle')
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             })
             /* End del section on click */
 
         });
         /* End del section */
 
+        /* Update section */
+        $("#BudgetElements").on('click', 'tbody tr td .updateSection', function (e) {
+            console.log(this);
+            var section_name = $(this).parent().parent().find('p').first().text().trim();
+            var section_pk = $(this).parent().parent().data('sectionid')
+            
+            // Clear description input in modal
+            $("#updateSectionName").val("")
+            
+            // Show modal
+            $("#updateSectionModal").modal('toggle')
+
+            // Change description in database and in the template
+            $("#updateSection").click(function () {
+                var form = document.getElementById("updateSectionForm");
+                const data = new FormData(form);
+                var url = `/api/budget/{{budget.id}}/update/item/${section_pk}`;
+                fetch(url, {
+                    method: 'POST',
+                    body: data
+                }).then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                })
+                .then(function (data) {
+                    // Reload page
+                    location.reload()
+                    // Toggle modal
+                    $("#updateSectionModal").modal('toggle')
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            })
+            /* End del section on click */
+
+        });
+        /* End update section */
+
+        /* Update product */
+        $("#BudgetElements").on('click', 'tbody tr td .updateProduct', function (e) {
+            console.log(this);
+            var subitem_pk = $(this).parent().parent().data('id')
+            
+            // Show modal
+            $("#updateProductModal").modal('toggle')
+
+            // Change description in database and in the template
+            $("#updateProduct").click(function () {
+                var form = document.getElementById("updateProductForm");
+                const data = new FormData(form);
+                var url = `/api/budget/{{budget.id}}/update/subitem/${subitem_pk}`;
+                fetch(url, {
+                    method: 'POST',
+                    body: data
+                }).then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                })
+                .then(function (data) {
+                    // Reload page
+                    location.reload()
+                    // Toggle modal
+                    $("#updateProductModal").modal('toggle')
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            })
+            /* End del section on click */
+
+        });
+        /* End update product */
 
     })
 </script>

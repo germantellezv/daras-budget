@@ -253,14 +253,13 @@ class BudgetSubItem(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     duration = models.PositiveSmallIntegerField(blank=True, null=True)
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
-    rev_number = models.PositiveSmallIntegerField(blank=True, null=True,default=1 , verbose_name="Numero de revisión")
+    slug = models.SlugField(blank=True, null=True)
+    # APU stuff
     delivery_time = models.CharField(max_length=50, blank=True, null=True, verbose_name="Tiempo de entrega")
+    rev_number = models.PositiveSmallIntegerField(blank=True, null=True,default=1 , verbose_name="Numero de revisión")
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-    
     apu_exists = models.BooleanField(default=False)
-
-    slug = models.SlugField(blank=True, null=True)
     
     def __str__(self):
         return '(subitem) - {}'.format(self.description)

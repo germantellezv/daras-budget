@@ -197,3 +197,33 @@ def delBudgetItem(request, budget_pk):
     item = BudgetItem.objects.get(id=code, budget=budget)
     item.delete()
     return Response({'status':'ok'})
+
+@api_view(['POST'])
+def updateBudgetItem(request, budget_pk, item_pk):
+    """ Update item """
+    
+    budget = Budget.objects.get(id=budget_pk)
+    item = BudgetItem.objects.get(id=item_pk, budget=budget)
+    description = request.data.get('description')
+    item.description = description
+    item.save()
+    return Response({'status':'ok','description':description,'id':item.id})
+
+@api_view(['POST'])
+def updateBudgetSubitem(request, budget_pk, subitem_pk):
+    """ Update item """
+    
+    budget = Budget.objects.get(id=budget_pk)
+    subitem = BudgetSubItem.objects.get(id=subitem_pk, budget=budget)
+    description = request.data.get('description')
+    duration = request.data.get('duration')
+    amount= request.data.get('amount')
+    aux= request.data.get('unit')
+    unit = Unit.objects.get(id=aux)
+    
+    subitem.description = description
+    subitem.duration = duration
+    subitem.amount = amount
+    subitem.unit = unit
+    subitem.save()
+    return Response({'status':'ok'})
