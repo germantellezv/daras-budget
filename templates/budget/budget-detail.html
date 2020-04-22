@@ -11,7 +11,7 @@
 {% block content %}
 
 <!-- Heading -->
-<div class="row m-3">
+<div class="row">
     <div class="col-12">
 
         <div class="card mb-1 wow fadeIn">
@@ -35,21 +35,31 @@
 </div>
 <!-- Heading -->
 
-<div class="row m-3 h-25">
-    <!-- Budget summary -->
-    <div class="col-3">
-        
-        <!-- Card -->
-        <div class="card p-2 wow fadeIn">
 
-            <div class="card-body">
-                <h1 class="text-left">
-                    General
-                </h1>
-                <small>Información general del presupuesto</small>
-                <hr>
+<div class="row mt-3">
+    <div class="col-12">
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab-just" data-toggle="tab" href="#home-just" role="tab" aria-controls="home-just"
+                aria-selected="true">General</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#profile-just" role="tab" aria-controls="profile-just"
+                aria-selected="false">Actividades</a>
+            </li>
+          </ul>
+          <!-- Tabs content -->
+          <div class="tab-content card pt-5" id="myTabContentJust">
+            <!-- First tab content -->
+            <div class="tab-pane fade show active" id="home-just" role="tabpanel" aria-labelledby="home-tab-just">
+                <small>
+                    Información general del presupuesto
+                </small>
+                
                 <!-- Budget summary -->
-                <table id="generalTable" class="table-sm table-striped table-responsive">
+                <table id="generalTable" class="table table-hover mt-4">
                     <tr>
                         <td>
                             <strong>
@@ -140,56 +150,17 @@
                             {{budget.get_iva_option_display}}
                         </td>
                     </tr>
-                    <!-- <tr>
-                        <td>
-                            <strong>
-                                Porcentaje de administración
-                            </strong>
-                        </td>
-                        <td class="text-center">
-                            {{budget.administration_percentage|default_if_none:"-"}} %
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>
-                                Porcentaje de imprevistos
-                            </strong>
-                        </td>
-                        <td class="text-center">
-                            {{budget.incidentals_percentaje|default_if_none:"-"}} %
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>
-                                Porcentaje de utilidad
-                            </strong>
-                        </td>
-                        <td class="text-center">
-                            {{budget.utility_percentage|default_if_none:"-"}} %
-                        </td>
-                    </tr> -->
-                    {% if budget.comment %}
-                    <!-- <tr>
-                        <td>
-                            Observaciones
-                        </td>
-                        <td style="font-size: small;">
-                            {{budget.comment|linenumbers|linebreaks}}
-                        </td>
-                    </tr> -->
-                    {% endif %}
+                    
                 </table>
-            </div>
-        </div>
-    </div>
-    <!-- Budget Activities -->
-    <div class="col-9">
-        <div class="card p-2 wow fadeIn">
+                <a href="{% url 'budget:fill-budget' budget.id %}" class="btn btn-indigo">Editar</a>
+                <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-indigo">Reporte</a>
 
-            <div class="card-body">
-                <h1>Actividades</h1>
+
+            </div>
+            
+            <!-- Second tab content -->
+            <div class="tab-pane fade" id="profile-just" role="tabpanel" aria-labelledby="profile-tab-just">
+                <!-- <h1>Actividades</h1> -->
                 <small>Elige una actividad y crea su APU </small>
                 <hr class="my-3">
                 <!-- Budget items -->
@@ -277,10 +248,9 @@
                 {% endif %}
 
                 <hr>
-                <a href="{% url 'budget:fill-budget' budget.id %}" class="btn btn-primary">Editar</a>
-                <a href="{% url 'budget:preview-budget' budget.id %}" class="btn btn-primary">Ver</a>
             </div>
-        </div>
+    
+          </div>
     </div>
 </div>
 

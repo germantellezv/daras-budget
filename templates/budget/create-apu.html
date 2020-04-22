@@ -31,79 +31,143 @@
 </div>
 <!-- Heading -->
 
-<div class="row mt-3">
-    <div class="col-3">
+<!-- Row (1/2) -->
+<div class="row">
+    <!-- Budget info -->
+    <div class="col-6">
         <div class="card p-2 wow fadeIn">
             <div class="card-body">
-                <h1>Actividad</h1>
-                <small>Detalle </small>
-                <small>
-                    <p style="margin: 0;">
-                        <strong>
-                            "{{subitem.description}}"
-                        </strong> 
-                    </p>
-                    <p style="margin: 0;">
-                        <strong>
-                            Cantidad: 
-                        </strong> 
-                        {{subitem.amount}}
-                    </p>
-                    <p style="margin: 0;">
-                        <strong>
-                            Duración: 
-                        </strong> 
-                        {{subitem.duration}}
-                    </p>
-                </small>
-                <hr>
-                <form action="{% url 'budget:update-subitem' budget.id item.id subitem.id %}" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="" style="margin: 0;">
-                            <small>Actualizar duración</small>
-                        </label>
-                        <input type="number" name="duration" class="form-control form-control-sm text-center" {% if subitem.duration %}value="{{subitem.duration}}"{% endif %}>
-                    </div>
-                    <div class="form-group">
-                        <label for="" style="margin: 0;">
-                            <small>Número de revisión</small>
-                        </label>
-                        <input type="number" name="rev_number" class="form-control form-control-sm text-center" {% if subitem.rev_number %}value="{{subitem.rev_number}}"{% endif %}>
-                    </div>
-                    <div class="form-group">
-                        <label for="" style="margin: 0;">
-                            <small>Tiempo de entrega</small>
-                        </label>
-                        <input type="text" maxlength="50" name="delivery_time" class="form-control form-control-sm text-center" {% if subitem.delivery_time %}value="{{subitem.delivery_time}}"{% endif %}>
-                    </div>
-                    <button class="btn btn-block btn-primary" type="submit">Actualizar</button>
-                </form>
+                <span class="h3 card-title">Presupuesto </span> <small>[Editar]</small> 
+                <br>
+                <small>Información general del presupuesto</small>
+                <table class="table table-sm table-hover">
+                    <tr>
+                        <td>N° de revisión</td>
+                        <td>{{budget.rev_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>Cliente</td>
+                        <td>{{budget.client.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Descripción</td>
+                        <td>
+                            {{budget.subject}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nivel de riesgo</td>
+                        <td>{{budget.risk}}</td>
+                    </tr>
+                    <tr>
+                        <td>Especialidad</td>
+                        <td>{{budget.service}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
-    <div class="col-9">
+    <!-- Activity info -->
+    <div class="col-6">
         <div class="card p-2 wow fadeIn">
             <div class="card-body">
-                <h1 class="text-left">
-                    Análisis de precios unitarios (APU)
-                </h1>
-                <p>
-                    <strong>Información de la sección:</strong> <br>
-                    Descripción: {{item.description}} <br>
-                </p>
-                <p>
-                    <strong>Información de la actividad: </strong> <br>
-                    Descripción: {{subitem.description}} <br>
-                    Duración: {{subitem.duration}} <br>
-                    Cantidad: {{subitem.amount}} <br>
-                </p>
+                <span class="h3 card-title">Actividad </span> 
+                <small>
+                    <a class="text-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        [Editar]
+                    </a>
+                </small> 
+                <br>
+                <small>Información general de la actividad</small>
+                <table class="table table-sm table-hover">
+                    <tr>
+                        <td>N° de revisión</td>
+                        <td>{{subitem.rev_number}}</td>
+                    </tr>
+                <tr>
+                    <td> Descripción </td>
+                    <td> {{subitem.description}} </td>
+                </tr>
+                <tr>
+                    <td> Duración </td>
+                    <td> {{subitem.duration}} </td>
+                </tr>
+                <tr>
+                    <td> Cantidad </td>
+                    <td> {{subitem.amount}} </td>
+                </tr>
+                <tr>
+                    <td> Unidad </td>
+                    <td> {{subitem.unit.name}} </td>
+                </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+        
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered" role="document">
+        
+        
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+                            <form action="{% url 'budget:update-subitem' budget.id item.id subitem.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="" style="margin: 0;">
+                                        <small>Actualizar duración</small>
+                                    </label>
+                                    <input type="number" name="duration" class="form-control form-control-sm text-center"
+                                        {% if subitem.duration %}value="{{subitem.duration}}" {% endif %}>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" style="margin: 0;">
+                                        <small>Número de revisión</small>
+                                    </label>
+                                    <input type="number" name="rev_number" class="form-control form-control-sm text-center"
+                                        {% if subitem.rev_number %}value="{{subitem.rev_number}}" {% endif %}>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" style="margin: 0;">
+                                        <small>Tiempo de entrega</small>
+                                    </label>
+                                    <input type="text" maxlength="50" name="delivery_time"
+                                        class="form-control form-control-sm text-center"
+                                        {% if subitem.delivery_time %}value="{{subitem.delivery_time}}" {% endif %}>
+                                </div>
+                                <button class="btn btn-block btn-primary" type="submit">Actualizar</button>
+                            </form>
+                        
+                    </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <hr class="mb-4">
-                <form action="" method="post">
+<!--  Row (2/2) -->
+<div class="row mt-3">
+    <!-- Create APU -->
+    <div class="col-12">
+        <div class="card p-2 wow fadeIn">
+            <div class="card-body">
+                <form action="" method="post" id="apuform">
                     {% csrf_token %}
-
-                    <!-- ITEMS TO STORE SUBTOTAL -->
+                    
+                    <!-- HIDDEN INPUTS TO STORE SUBTOTAL LABELS -->
                     <div class="form-group" hidden>
                         <label for="wfsubtotal2"><small>Subtotal mano de obra</small></label>
                         <input class="form-control" type="number" name="subtotal" id="wfsubtotal2" step="0.01">
@@ -124,361 +188,286 @@
                         <label for="securesubtotal2"><small>Subtotal seguros y otros</small></label>
                         <input class="form-control" type="number" name="subtotal" id="securesubtotal2" step="0.01">
                     </div>
-                    <!-- ITEMS TO STORE SUBTOTAL -->
-                    <!-- ITEMS TO STORE SUBTOTAL -->
+                    <!-- HIDDEN INPUTS TO STORE SUBTOTAL LABELS -->
+                    
+                    
+                    <!-- Title -->
+                    <h1 class="h1 card-title text-center">Análisis de precios unitarios (APU) </h1>
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab-just" data-toggle="tab" href="#workforce-tab" role="tab"
+                                aria-controls="home-just" aria-selected="true">Mano de obra</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#material-tab" role="tab"
+                                aria-controls="profile-just" aria-selected="false">Materiales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#equipment-tab" role="tab"
+                                aria-controls="contact-just" aria-selected="false">Herramientas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#transport-tab" role="tab"
+                                aria-controls="contact-just" aria-selected="false">Transporte</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#secure-tab" role="tab"
+                                aria-controls="contact-just" aria-selected="false">Seguros</a>
+                        </li>
+                    </ul>
+                    <!-- Tabs content -->
+                    <div class="tab-content pt-5" id="myTabContentJust">
+                
+                        <!-- First tab content -->
+                        <div class="tab-pane fade show active" id="workforce-tab" role="tabpanel" aria-labelledby="home-tab-just">
+                            <h1>Mano de obra</h1>
+                            <table id="workforceTable" class="table table-sm">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>
+                                            Mano de obra
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Salario diario
+                                        </th>
+                                        <th>
+                                            Rendimiento
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="workforceInputs">
 
+                                </tbody>
+                                <tfoot>
+                                    <tr class="text-center grey lighten-5">
+                                        <td colspan="3"></td>
 
-                    <!--Accordion wrapper-->
-                    <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
+                                        <td class="text-right">
+                                            <strong>
+                                                Subtotal
+                                            </strong>
+                                        </td>
+                                        <td id="wfsubtotal" class="text-left">
+                                            $ 0.00
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="5">
+                                            <a id="addWorkforceItemButton" class="btn btn-success">AGREGAR</a>
+                                            <a id="removeWorkforceItemButton" class="btn btn-danger">BORRAR</a>
+                                        </td>
 
-                        <!-- Workforce Accordion card -->
-                        <div class="card">
-
-                            <!-- Card header -->
-                            <div class="card-header" role="tab" id="headingTwo1">
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1"
-                                    href="#collapseTwo1" aria-expanded="false" aria-controls="collapseTwo1">
-                                    <h5 class="mb-0 text-muted">
-                                        Mano de obra <i class="fas fa-angle-down rotate-icon"></i>
-                                    </h5>
-                                </a>
-                            </div>
-
-                            <!-- Card body -->
-                            <div id="collapseTwo1" class="collapse" role="tabpanel" aria-labelledby="headingTwo1"
-                                data-parent="#accordionEx1">
-                                <div class="card-body">
-                                    <table id="workforceTable" class="table table-sm">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    Mano de obra
-                                                </th>
-                                                <th>
-                                                    Cantidad
-                                                </th>
-                                                <th>
-                                                    Salario diario
-                                                </th>
-                                                <th>
-                                                    Rendimiento
-                                                </th>
-                                                <th>
-                                                    Valor
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="workforceInputs">
-
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="text-center grey lighten-5">
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right">
-                                                    <strong>
-                                                        Subtotal
-                                                    </strong>
-                                                </td>
-                                                <td id="wfsubtotal" class="text-left">
-                                                    $ 0.00
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-
-                                                <td class="text-left" colspan="5">
-                                                    <a id="addWorkforceItemButton" class="btn btn-success">AGREGAR</a>
-                                                    <a id="removeWorkforceItemButton" class="btn btn-danger">BORRAR</a>
-                                                </td>
-
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                        <!-- Workforce Accordion card -->
+                        <!-- Second tab content -->
+                        <div class="tab-pane fade" id="material-tab" role="tabpanel" aria-labelledby="profile-tab-just">
+                            <table id="materialTable" class="table table-sm">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>
+                                            Material
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Precio unitario
+                                        </th>
+                                        <th>
+                                            Unidad
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materialInputs">
+                                    <!-- space left in blank intentionally -->
+                                </tbody>
+                                <tfoot>
+                                    <tr class="text-center grey lighten-5">
+                                        <td colspan="3"></td>
 
-                        <!-- Material Accordion card -->
-                        <div class="card">
+                                        <td class="text-right">
+                                            <strong>
+                                                Subtotal
+                                            </strong>
+                                        </td>
+                                        <td id="msubtotal" class="text-left">
+                                            $ 0.00
+                                        </td>
 
-                            <!-- Card header -->
-                            <div class="card-header" role="tab" id="headingTwo2">
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1"
-                                    href="#collapseTwo21" aria-expanded="false" aria-controls="collapseTwo21">
-                                    <h5 class="mb-0 text-muted">
-                                        Materiales <i class="fas fa-angle-down rotate-icon"></i>
-                                    </h5>
-                                </a>
-                            </div>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="5">
+                                            <a id="addMaterialItemButton" class="btn btn-success">AGREGAR</a>
+                                            <a id="removeMaterialItemButton" class="btn btn-danger">BORRAR</a>
+                                        </td>
 
-                            <!-- Card body -->
-                            <div id="collapseTwo21" class="collapse" role="tabpanel" aria-labelledby="headingTwo21"
-                                data-parent="#accordionEx1">
-                                <div class="card-body">
-                                    <table id="materialTable" class="table table-sm">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    Material
-                                                </th>
-                                                <th>
-                                                    Cantidad
-                                                </th>
-                                                <th>
-                                                    Precio unitario
-                                                </th>
-                                                <th>
-                                                    Unidad
-                                                </th>
-                                                <th>
-                                                    Valor
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="materialInputs">
-                                            <!-- space left in blank intentionally -->
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="text-center grey lighten-5">
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right">
-                                                    <strong>
-                                                        Subtotal
-                                                    </strong>
-                                                </td>
-                                                <td id="msubtotal" class="text-left">
-                                                    $ 0.00
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-left" colspan="5">
-                                                    <a id="addMaterialItemButton" class="btn btn-success">AGREGAR</a>
-                                                    <a id="removeMaterialItemButton" class="btn btn-danger">BORRAR</a>
-                                                </td>
-
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                        <!-- Material Accordion card -->
+                        <!-- Third tab content -->
+                        <div class="tab-pane fade" id="equipment-tab" role="tabpanel" aria-labelledby="contact-tab-just">
+                            <table id="equipmentTable" class="table table-sm">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>
+                                            Equipo/Herramienta
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Valor por día
+                                        </th>
+                                        <th>
+                                            Rendimiento
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="equipmentInputs">
 
-                        <!-- Equipments and tools Accordion card -->
-                        <div class="card">
+                                </tbody>
+                                <tfoot>
+                                    <tr class="text-center grey lighten-5">
+                                        <td colspan="3"></td>
 
-                            <!-- Card header -->
-                            <div class="card-header" role="tab" id="headingThree31">
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1"
-                                    href="#collapseThree31" aria-expanded="false" aria-controls="collapseThree31">
-                                    <h5 class="mb-0 text-muted">
-                                        Equipos y herramientas <i class="fas fa-angle-down rotate-icon"></i>
-                                    </h5>
-                                </a>
-                            </div>
+                                        <td class="text-right">
+                                            <strong>
+                                                Subtotal
+                                            </strong>
+                                        </td>
+                                        <td id="equipsubtotal" class="text-left">
+                                            $ 0.00
+                                        </td>
 
-                            <!-- Card body -->
-                            <div id="collapseThree31" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
-                                data-parent="#accordionEx1">
-                                <div class="card-body">
-                                    <table id="equipmentTable" class="table table-sm">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    Equipo/Herramienta
-                                                </th>
-                                                <th>
-                                                    Cantidad
-                                                </th>
-                                                <th>
-                                                    Valor por día
-                                                </th>
-                                                <th>
-                                                    Rendimiento
-                                                </th>
-                                                <th>
-                                                    Valor
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="equipmentInputs">
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="5">
+                                            <a id="addEquipmentItemButton" class="btn btn-success">AGREGAR</a>
+                                            <a id="removeEquipmentItemButton" class="btn btn-danger">BORRAR</a>
+                                        </td>
 
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="text-center grey lighten-5">
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right">
-                                                    <strong>
-                                                        Subtotal
-                                                    </strong>
-                                                </td>
-                                                <td id="equipsubtotal" class="text-left">
-                                                    $ 0.00
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-left" colspan="5">
-                                                    <a id="addEquipmentItemButton" class="btn btn-success">AGREGAR</a>
-                                                    <a id="removeEquipmentItemButton" class="btn btn-danger">BORRAR</a>
-                                                </td>
-
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                        <!-- Accordion card -->
+                        <!-- Fourth tab content -->
+                        <div class="tab-pane fade" id="transport-tab" role="tabpanel" aria-labelledby="contact-tab-just">
+                            <table id="transportTable" class="table table-sm">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>
+                                            Transporte
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Tarifa por día
+                                        </th>
+                                        <th>
+                                            Rendimiento
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transportInputs">
 
-                        <!-- Transport Accordion card -->
-                        <div class="card">
+                                </tbody>
+                                <tfoot>
+                                    <tr class="text-center grey lighten-5">
+                                        <td colspan="3"></td>
 
-                            <!-- Card header -->
-                            <div class="card-header" role="tab" id="headingThree31">
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1"
-                                    href="#collapseThree41" aria-expanded="false" aria-controls="collapseThree41">
-                                    <h5 class="mb-0 text-muted">
-                                        Transporte <i class="fas fa-angle-down rotate-icon"></i>
-                                    </h5>
-                                </a>
-                            </div>
+                                        <td class="text-right">
+                                            <strong>
+                                                Subtotal
+                                            </strong>
+                                        </td>
+                                        <td id="transpsubtotal" class="text-left">
+                                            $ 0.00
+                                        </td>
 
-                            <!-- Card body -->
-                            <div id="collapseThree41" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
-                                data-parent="#accordionEx1">
-                                <div class="card-body">
-                                    <table id="transportTable" class="table table-sm">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    Transporte
-                                                </th>
-                                                <th>
-                                                    Cantidad
-                                                </th>
-                                                <th>
-                                                    Tarifa por día
-                                                </th>
-                                                <th>
-                                                    Rendimiento
-                                                </th>
-                                                <th>
-                                                    Valor
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="transportInputs">
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="5">
+                                            <a id="addTransportItemButton" class="btn btn-success">AGREGAR</a>
+                                            <a id="removeTransportItemButton" class="btn btn-danger">BORRAR</a>
+                                        </td>
 
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="text-center grey lighten-5">
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right">
-                                                    <strong>
-                                                        Subtotal
-                                                    </strong>
-                                                </td>
-                                                <td id="transpsubtotal" class="text-left">
-                                                    $ 0.00
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-left" colspan="5">
-                                                    <a id="addTransportItemButton" class="btn btn-success">AGREGAR</a>
-                                                    <a id="removeTransportItemButton" class="btn btn-danger">BORRAR</a>
-                                                </td>
-
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                        <!-- Accordion card -->
+                        <!-- Fifth tab content -->
+                        <div class="tab-pane fade" id="secure-tab" role="tabpanel" aria-labelledby="contact-tab-just">
+                            <table id="secureAndOthersTable" class="table table-sm">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>
+                                            Seguro / otro
+                                        </th>
+                                        <th>
+                                            Tarifa por día
+                                        </th>
+                                        <th>
+                                            Días
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="secureInputs">
 
-                        <!-- Secure and Others Accordion card -->
-                        <div class="card">
-                            <!-- Card header -->
-                            <div class="card-header" role="tab" id="headingThree31">
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1"
-                                    href="#collapseThree51" aria-expanded="false" aria-controls="collapseThree51">
-                                    <h5 class="mb-0 text-muted">
-                                        Seguros y otros <i class="fas fa-angle-down rotate-icon"></i>
-                                    </h5>
-                                </a>
-                            </div>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="text-center grey lighten-5">
+                                        <td colspan="3"></td>
 
-                            <!-- Card body -->
-                            <div id="collapseThree51" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
-                                data-parent="#accordionEx1">
-                                <div class="card-body">
-                                    <table id="secureAndOthersTable" class="table table-sm">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>
-                                                    Seguro / otro
-                                                </th>
-                                                <th>
-                                                    Tarifa por día
-                                                </th>
-                                                <th>
-                                                    Días
-                                                </th>
-                                                <th>
-                                                    Cantidad
-                                                </th>
-                                                <th>
-                                                    Valor
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="secureInputs">
+                                        <td class="text-right">
+                                            <strong>
+                                                Subtotal
+                                            </strong>
+                                        </td>
+                                        <td id="securesubtotal" class="text-left">
+                                            $ 0.00
+                                        </td>
 
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="text-center grey lighten-5">
-                                                <td colspan="3"></td>
-
-                                                <td class="text-right">
-                                                    <strong>
-                                                        Subtotal
-                                                    </strong>
-                                                </td>
-                                                <td id="securesubtotal" class="text-left">
-                                                    $ 0.00
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td class="text-left" colspan="5">
-                                                    <a id="addSecureItemButton" class="btn btn-success">AGREGAR</a>
-                                                    <a id="removeSecureItemButton" class="btn btn-danger">BORRAR</a>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="5">
+                                            <a id="addSecureItemButton" class="btn btn-success">AGREGAR</a>
+                                            <a id="removeSecureItemButton" class="btn btn-danger">BORRAR</a>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                        <!-- Accordion card -->
-
                     </div>
-                    <!-- Accordion wrapper -->
+                    <div class="container">
 
-                    <button type="submit" class="btn btn-block btn-primary mt-5">GUARDAR</button>
+                        <button type="submit" form="apuform" class="btn btn-block btn-primary mt-5">GUARDAR</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -18,7 +18,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'client', 'service', 'subject','created_by')
+    list_display = ('subject', 'client', 'service', 'subject','created_by','created')
     class Meta:
         verbose_name = "Presupuesto"
 
