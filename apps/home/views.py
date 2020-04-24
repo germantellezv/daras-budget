@@ -24,6 +24,7 @@ def logout(request):
     LogoutUser(request)
     return redirect('home:login')
 
+
 def login(request):
     """ Login view """
 
@@ -44,7 +45,7 @@ def login(request):
             return redirect('budget:panel')
         else:
             return render(
-                request=request, 
+                request=request,
                 template_name='home/login.html',
                 context={
                     "error": "Verifique sus datos de acceso"
@@ -54,8 +55,9 @@ def login(request):
         request=request,
         template_name='home/login.html',
         context={
-            'messages':messages
+            'messages': messages
         })
+
 
 def signup(request):
     """ Signup client users"""
