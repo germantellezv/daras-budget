@@ -35,11 +35,11 @@
 <div class="row">
     <!-- Budget info -->
     <div class="col-6">
-        <div class="card p-2 wow fadeIn">
+        <div class="card p-2 wow fadeIn h-100">
             <div class="card-body">
                 <span class="h3 card-title">Presupuesto </span> <small>[Editar]</small>
                 <br>
-                <small>Información general del presupuesto</small>
+                <span class="card-text">Información general del presupuesto</span>
                 <table class="table table-sm table-hover">
                     <tr>
                         <td>N° de revisión</td>
@@ -63,13 +63,17 @@
                         <td>Especialidad</td>
                         <td>{{budget.service}}</td>
                     </tr>
+                    <tr>
+                        <td>Escala de tiempo</td>
+                        <td>{{budget.get_time_display}}</td>
+                    </tr>
                 </table>
             </div>
         </div>
     </div>
     <!-- Activity info -->
     <div class="col-6">
-        <div class="card p-2 wow fadeIn">
+        <div class="card p-2 wow fadeIn h-100">
             <div class="card-body">
                 <span class="h3 card-title">Actividad </span>
                 <small>
@@ -78,7 +82,7 @@
                     </a>
                 </small>
                 <br>
-                <small>Información general de la actividad</small>
+                <span class="card-text">Información general de la actividad</span>
                 <table class="table table-sm table-hover">
                     <tr>
                         <td>N° de revisión</td>
@@ -103,14 +107,13 @@
                 </table>
             </div>
         </div>
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
             <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
             <div class="modal-dialog modal-dialog-centered" role="document">
-
-
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
@@ -119,9 +122,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
-
+                        <!-- Form -->
                         <form action="{% url 'budget:update-subitem' budget.id item.id subitem.id %}" method="post">
                             {% csrf_token %}
+                            <!-- Duration -->
                             <div class="form-group">
                                 <label for="" style="margin: 0;">
                                     <small>Actualizar duración</small>
@@ -129,6 +133,7 @@
                                 <input type="number" name="duration" class="form-control form-control-sm text-center"
                                     {% if subitem.duration %}value="{{subitem.duration}}" {% endif %}>
                             </div>
+                            <!-- Revision number -->
                             <div class="form-group">
                                 <label for="" style="margin: 0;">
                                     <small>Número de revisión</small>
@@ -136,22 +141,10 @@
                                 <input type="number" name="rev_number" class="form-control form-control-sm text-center"
                                     {% if subitem.rev_number %}value="{{subitem.rev_number}}" {% endif %}>
                             </div>
-                            <div class="form-group">
-                                <label for="" style="margin: 0;">
-                                    <small>Tiempo de entrega</small>
-                                </label>
-                                <input type="text" maxlength="50" name="delivery_time"
-                                    class="form-control form-control-sm text-center"
-                                    {% if subitem.delivery_time %}value="{{subitem.delivery_time}}" {% endif %}>
-                            </div>
+                            <!-- Submit button -->
                             <button class="btn btn-block btn-primary" type="submit">Actualizar</button>
                         </form>
-
                     </div>
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -1011,7 +1004,9 @@
             /* The parameter 'element' is just for position and abstraction purposes */
             var amount = $(element).parent().parent().find(".equipamount")[0].value;
             var munitprice = $(element).parent().parent().find(".equipdailyprice")[0].value;
-            var value = (amount * munitprice);
+            var equiperform = $(element).parent().parent().find(".equiperform")[0].value;
+            
+            var value = (amount * munitprice)/equiperform;
             // Insert result in 'value' input
             $(element).parent().parent().find(".equipvalue")[0].value = value.toFixed(2);
 
@@ -1177,7 +1172,8 @@
             /* The parameter 'element' is just for position and abstraction purposes */
             var amount = $(element).parent().parent().find(".transpamount")[0].value;
             var munitprice = $(element).parent().parent().find(".transpdailyvalue")[0].value;
-            var value = (amount * munitprice);
+            var perform = $(element).parent().parent().find(".transperform")[0].value;
+            var value = (amount * munitprice)/perform;
             // Insert result in 'value' input
             $(element).parent().parent().find(".transpvalue")[0].value = value.toFixed(2);
 

@@ -109,7 +109,7 @@ class Material(models.Model):
 
     name = models.CharField(max_length=100)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True, default=1)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=1)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=2)
     daily_price = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     slug = models.SlugField()
     created = models.DateTimeField(auto_now_add=True)
@@ -201,9 +201,9 @@ class Budget(models.Model):
     ]
     OPTIONS_PERIOD = [
         # (None, 'Periodo de tiempo'),
-        ('1', 'Por hora'),
-        ('2', 'Por día'),
-        ('3', 'Mensual')
+        ('1', 'Hora'),
+        ('2', 'Día'),
+        ('3', 'Mes')
     ]
     AIU_OPTIONS = [
         # (None, 'Periodo de tiempo'),
@@ -255,7 +255,6 @@ class BudgetSubItem(models.Model):
     amount = models.PositiveSmallIntegerField(blank=True, null=True)
     slug = models.SlugField(blank=True, null=True)
     # APU stuff
-    delivery_time = models.CharField(max_length=50, blank=True, null=True, verbose_name="Tiempo de entrega")
     rev_number = models.PositiveSmallIntegerField(blank=True, null=True,default=1 , verbose_name="Numero de revisión")
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     total_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)

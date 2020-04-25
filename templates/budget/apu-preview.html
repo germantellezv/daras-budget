@@ -39,23 +39,37 @@
                 <td>
                     CLIENTE:
                 </td>
-                <td colspan="5">
+                <td colspan="3">
                     {{budget.client.name}}
                 </td>
+                <td>
+                    NIT
+                </td>
+                <td style="text-align: center;">
+                    {{budget.client.nit}}
+                </td>
+
             </tr>
             <tr>
                 <td>
                     ID:
                 </td>
-                <td colspan="3">
+                <td>
                     {{budget.consecutive}}
                 </td>
                 <td>
-                    REVISIÓN
+                    T.E.E
                 </td>
                 <td style="text-align: center;">
-                    {{subitem.rev_number}}
+                    {{subitem.duration}}
+                </td>   
+                <td>
+                    ESCALA
                 </td>
+                <td style="text-align: center;">
+                    {{budget.get_time_display}}
+                </td>
+                
             </tr>
             <tr>
                 <td>
@@ -64,11 +78,12 @@
                 <td colspan="3">
                     {{budget.created}}
                 </td>
+                
                 <td>
-                    T.E.E
+                    REVISIÓN
                 </td>
                 <td style="text-align: center;">
-                    {{subitem.delivery_time}}
+                    {{subitem.rev_number}}
                 </td>
             </tr>
             <tr>

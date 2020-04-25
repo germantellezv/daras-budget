@@ -19,10 +19,27 @@
             padding-bottom: 2px;
             line-height: 50%;
         }
+        
+        @page {
+            size: letter portrait;
+            margin: 1cm;
+            
+            @frame footer_frame {
+                -pdf-frame-content: footer_content;
+                /* width: 500pt; */
+                width: 612pt;
+                height: 200pt;
+                top: 772pt;
+                /* left: 120pt; */
+                text-align: center;
+            }
+        }
+
     </style>
 </head>
 
 <body>
+    <!-- Budget report -->
     <table align="center" id="TableAPU" cellpadding="5">
         <thead>
             <tr>
@@ -53,14 +70,20 @@
                 <td>
                     ID:
                 </td>
-                <td colspan="3" style="text-align: center;">
+                <td style="text-align: center;">
                     {{budget.consecutive}}
                 </td>
                 <td>
-                    REVISIÓN
+                    T.E.E
                 </td>
                 <td style="text-align: center;">
-                    {{budget.rev_number}}
+                    {{budget.delivery_time}}
+                </td>
+                <td>
+                    ESCALA
+                </td>
+                <td style="text-align: center;">
+                    {{budget.get_time_display}}
                 </td>
             </tr>
             <tr>
@@ -71,11 +94,12 @@
                     {{budget.created}}
                 </td>
                 <td>
-                    T.E.E
+                    REVISIÓN
                 </td>
                 <td style="text-align: center;">
-                    {{budget.delivery_time}}
+                    {{budget.rev_number}}
                 </td>
+                
             </tr>
             <tr>
                 <td>
@@ -232,6 +256,15 @@
             {{budget.comment|linebreaks}}
         </div>
     {% endif %}
+    
+    <!-- Footer -->
+    <table id="footer_content">
+        <tr>
+            <td style="text-align: center;">
+                Daras Ingenieria S.A.S. Teléfono: +5 6654474 - Celular: 313-5249278 - Correo: comercial@daras.com.co
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>
