@@ -186,6 +186,8 @@
 
                     <!-- Title -->
                     <h1 class="h1 card-title text-center">Análisis de precios unitarios (APU) </h1>
+                    
+                    
                     <!-- Tabs -->
                     <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
                         <li class="nav-item">
@@ -703,28 +705,65 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // console.log(data);
-                    var aux = ''
-                    var aux = `<option value="" selected>Mano de obra</option>`;
-                    for (let i = 0; i < data.length; i++) {
-                        aux += `<option value="${data[i].id}">${data[i].name}</option>`
-                    }
-
                     var row = document.createElement('tr')
                     row.classList.add("wfrow")
+                    
+                    if ('{{budget.service.slug}}'=='integral') {
+                        // Building Workforce select
+                        var first_cell = document.createElement('td')
+                        var workforceSelect = document.createElement('select')
+                        workforceSelect.classList.add("wfselect")
+                        workforceSelect.classList.add("custom-select")
+                        workforceSelect.classList.add("custom-select-sm")
+                        workforceSelect.classList.add("text-center")
+                        workforceSelect.setAttribute("name", "workforce")
+                        workforceSelect.setAttribute("required", "true")
 
-                    // Workforce select
-                    var first_cell = document.createElement('td')
-                    var workforceSelect = document.createElement('select')
-                    workforceSelect.classList.add("wfselect")
-                    workforceSelect.classList.add("custom-select")
-                    workforceSelect.classList.add("custom-select-sm")
-                    workforceSelect.classList.add("text-center")
-                    workforceSelect.setAttribute("name", "workforce")
-                    workforceSelect.setAttribute("required", "true")
-                    workforceSelect.innerHTML = aux;
-                    first_cell.appendChild(workforceSelect)
-                    row.appendChild(first_cell)
+                        /* Insert data in select element */
+                        var data = `{%autoescape off%}{{wfJson}}{% endautoescape%}`
+                        data = JSON.parse(data)
+                        for (let i = 0; i < data.length; i++) {
+                            const service = data[i];
+                            for (var key in service) {
+                                // console.log("llave -->",key);
+                                var group = document.createElement('optgroup')
+                                group.setAttribute('label',key)
+                                workforceSelect.appendChild(group)
+                                // console.log("valores -->",service[`${key}`]);
+                                for (let j = 0; j < service[`${key}`].length; j++) {
+                                    const element = service[`${key}`][j];
+                                    var option = document.createElement('option')
+                                    option.setAttribute('value',element.id)
+                                    option.innerHTML = element.name
+                                    workforceSelect.appendChild(option)
+                                }
+                            }
+                        }
+
+                        first_cell.appendChild(workforceSelect)
+                        row.appendChild(first_cell)
+
+                        
+                    } else {
+                        var aux = ''
+                        var aux = `<option value="" selected>Mano de obra</option>`;
+                        for (let i = 0; i < data.length; i++) {
+                            aux += `<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+                        // Workforce select
+                        var first_cell = document.createElement('td')
+                        var workforceSelect = document.createElement('select')
+                        workforceSelect.classList.add("wfselect")
+                        workforceSelect.classList.add("custom-select")
+                        workforceSelect.classList.add("custom-select-sm")
+                        workforceSelect.classList.add("text-center")
+                        workforceSelect.setAttribute("name", "workforce")
+                        workforceSelect.setAttribute("required", "true")
+                        workforceSelect.innerHTML = aux; // Add options to select
+                        first_cell.appendChild(workforceSelect)
+                        row.appendChild(first_cell)
+                    }
+
 
                     // Workforce amount
                     var second_cell = document.createElement('td')
@@ -801,48 +840,76 @@
         $("#workforceInputs").on("click", "tr td .wfselect", function (e) {
             // Value selected in workforce select
             var option = $(this).children("option:selected").val()
-            // API url
-            var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    // Element in API query result that match with the option value selected
-                    var element = data.find(element => element.id == option)
-                    // Budget type of cost (per hour / day / month)
-                    var type = "{{budget.time}}"
-                    var risk_value = parseFloat("{{budget.risk.value}}")
-                    console.log(risk_value);
-                    switch (type) {
-                        case "1":
-                            // Insert in the salary input of the same row the salary of the option selected
-                            $(this).parent().parent().find(".wfsalary")[0].value = ((element
-                                .daily_salary * risk_value) / 8).toFixed(2);
-                            break;
-                        case "2":
-                            $(this).parent().parent().find(".wfsalary")[0].value = ((element
-                                .daily_salary * risk_value)).toFixed(2);
-                            break;
-                        case "3":
-                            $(this).parent().parent().find(".wfsalary")[0].value = ((element
-                                .daily_salary * risk_value) * 30).toFixed(2);
-                            break;
-                    }
+            if ('{{budget.service.slug}}'=='integral') {
+                // API url
+                var url = "{% url 'api_rest:workforce-list'%}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Element in API query result that match with the option value selected
+                        var element = data.find(element => element.id == option)
+                        // Budget type of cost (per hour / day / month)
+                        var type = "{{budget.time}}"
+                        var risk_value = parseFloat("{{budget.risk.value}}")
+                        switch (type) {
+                            case "1":
+                                // Insert in the salary input of the same row the salary of the option selected
+                                $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value) / 8).toFixed(2);
+                                break;
+                            case "2":
+                                $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value)).toFixed(2);
+                                break;
+                            case "3":
+                                $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value) * 30).toFixed(2);
+                                break;
+                        }
+                        /* ....... */
 
+                        // Insert performance value in the input '.wfperformance' of the same row
+                        var subitemAmount = '{{subitem.amount}}';
+                        var itemDuration = '{{subitem.duration}}';
+                        var performance = subitemAmount / itemDuration;
 
+                        $(this).parent().parent().find(".wfperformance")[0].value = Math.round10(performance,-1);
 
-                    /* ....... */
+                    })
+            } else {
+                // API url
+                var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Element in API query result that match with the option value selected
+                        var element = data.find(element => element.id == option)
+                        // Budget type of cost (per hour / day / month)
+                        var type = "{{budget.time}}"
+                        var risk_value = parseFloat("{{budget.risk.value}}")
+                        switch (type) {
+                            case "1":
+                                // Insert in the salary input of the same row the salary of the option selected
+                                $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value) / 8).toFixed(2);
+                                break;
+                            case "2":
+                                $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value)).toFixed(2);
+                                break;
+                            case "3":
+                                $(this).parent().parent().find(".wfsalary")[0].value = ((element.daily_salary * risk_value) * 30).toFixed(2);
+                                break;
+                        }
 
-                    // Insert performance value in the input '.wfperformance' of the same row
-                    var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{subitem.duration}}';
-                    var performance = subitemAmount / itemDuration;
+                        /* ....... */
 
-                    $(this).parent().parent().find(".wfperformance")[0].value = Math.round10(
-                        performance, -1);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+                        // Insert performance value in the input '.wfperformance' of the same row
+                        var subitemAmount = '{{subitem.amount}}';
+                        var itemDuration = '{{subitem.duration}}';
+                        var performance = subitemAmount / itemDuration;
+
+                        $(this).parent().parent().find(".wfperformance")[0].value = Math.round10(performance,-1);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
         })
         // Insert 'value' for each forkworce row 
         $("#workforceInputs").delegate(".wfamount", "keyup", function (e) {
@@ -1479,8 +1546,8 @@
             $("#totalfixedbar").text("$ "+r) // Visible            
         }, 500);
 
-
-
+        
+        
     });
 </script>
 {% endblock scripts %}

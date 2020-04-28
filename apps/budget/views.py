@@ -18,6 +18,7 @@ from .models import *
 from decimal import Decimal
 from .utils import render_to_pdf
 from django.utils import timezone
+import json
 
 
 # Create your views here.
@@ -93,7 +94,6 @@ def createBudget(request):
 @login_required
 def fillBudget(request, pk):
     """ Fill Budget """
-
     budget = Budget.objects.get(id=pk)
     items = BudgetItem.objects.filter(budget=budget)
     clients = Client.objects.all()
@@ -192,8 +192,32 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
     budget = get_object_or_404(Budget, id=budget_pk)
     item = get_object_or_404(BudgetItem, id=item_pk)
     subitem = get_object_or_404(BudgetSubItem, id=subitem_pk)
-    if request.method == 'POST':
+    servicios = Service.objects.all()
+    wfJson = []
+    
+    # Building Workforce optgroups for select element (HTML)
+    for i in range(len(servicios)):
+        q = Workforce.objects.filter(service=servicios[i]).exists()
+        if q:
+            w = Workforce.objects.filter(service=servicios[i])
+        else:
+            # Avoid add 'Integral' label in json and select element (HTML)
+            break
 
+        aux = {
+            "{}".format(servicios[i].name):list()
+        }
+        wfJson.append(aux)
+        for j in w:
+            aux2 = {
+                'id':'{}'.format(j.id),
+                'name':'{}'.format(j.name)
+            }
+            aux[servicios[i].name].append(aux2)
+    
+    wfJson = json.dumps(wfJson,ensure_ascii=False)
+    
+    if request.method == 'POST':
         # Store 'value' of each row to calc the subitem unit value
         workforce = request.POST.getlist('workforce')
         wfamount = request.POST.getlist('wfamount')
@@ -313,6 +337,7 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
             'budget': budget,
             'item': item,
             'subitem': subitem,
+            'wfJson':wfJson
         }
     )
 
