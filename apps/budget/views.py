@@ -194,29 +194,69 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
     subitem = get_object_or_404(BudgetSubItem, id=subitem_pk)
     servicios = Service.objects.all()
     wfJson = []
+    matJson = []
+    equipJson = []
     
-    # Building Workforce optgroups for select element (HTML)
-    for i in range(len(servicios)):
-        q = Workforce.objects.filter(service=servicios[i]).exists()
-        if q:
-            w = Workforce.objects.filter(service=servicios[i])
-        else:
-            # Avoid add 'Integral' label in json and select element (HTML)
-            break
+    if budget.service.slug == 'integral':
+        # Building Workforce optgroups for select element (HTML)
+        for i in range(len(servicios)):
+            q = Workforce.objects.filter(service=servicios[i]).exists()
+            if q:
+                w = Workforce.objects.filter(service=servicios[i])
+            else:
+                # Avoid add 'Integral' label in json and select element (HTML)
+                break
 
-        aux = {
-            "{}".format(servicios[i].name):list()
-        }
-        wfJson.append(aux)
-        for j in w:
-            aux2 = {
-                'id':'{}'.format(j.id),
-                'name':'{}'.format(j.name)
+            aux = {
+                "{}".format(servicios[i].name):list()
             }
-            aux[servicios[i].name].append(aux2)
-    
-    wfJson = json.dumps(wfJson,ensure_ascii=False)
-    
+            wfJson.append(aux)
+            for j in w:
+                aux2 = {
+                    'id':'{}'.format(j.id),
+                    'name':'{}'.format(j.name)
+                }
+                aux[servicios[i].name].append(aux2)
+        wfJson = json.dumps(wfJson,ensure_ascii=False)
+        # Building Material optgroups for select element (HTML)
+        for i in range(len(servicios)):
+            q = Material.objects.filter(service=servicios[i]).exists()
+            if q:
+                m = Material.objects.filter(service=servicios[i])
+            else:
+                # Avoid add 'Integral' label in json and select element (HTML)
+                break
+            aux = {
+                '{}'.format(servicios[i].name):list()
+            }
+            matJson.append(aux)
+            for j in m:
+                aux2 = {
+                    'id':'{}'.format(j.id),
+                    'name':'{}'.format(j.name.replace('"', '\\"'))
+                }
+                aux[servicios[i].name].append(aux2)
+        matJson = json.dumps(matJson,ensure_ascii=False)
+        # Building Equipment and Tools optgroups for select element (HTML)
+        for i in range(len(servicios)):
+            q = Equipment.objects.filter(service=servicios[i]).exists()
+            if q:
+                e = Equipment.objects.filter(service=servicios[i])
+            else:
+                # Avoid add 'Integral' label in json and select element (HTML)
+                break
+            aux = {
+                '{}'.format(servicios[i].name):list()
+            }
+            equipJson.append(aux)
+            for j in e:
+                aux2 = {
+                    'id':'{}'.format(j.id),
+                    'name':'{}'.format(j.name.replace('"', '\\"'))
+                }
+                aux[servicios[i].name].append(aux2)
+        equipJson = json.dumps(equipJson,ensure_ascii=False)
+        
     if request.method == 'POST':
         # Store 'value' of each row to calc the subitem unit value
         workforce = request.POST.getlist('workforce')
@@ -310,7 +350,14 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
             s.save()
 
         subtotal = request.POST.getlist('subtotal')
-        aux = [Decimal(i) for i in subtotal]
+        aux = []
+        # Avoid error at save Subtotals of APU incomplete
+        for i in subtotal:
+            if i == '':
+                aux.append(Decimal(0))
+            else:
+                aux.append(Decimal(i))
+
         subitem.unit_value = sum(aux)
         subitem.total_value = subitem.unit_value * subitem.amount
         subitem.apu_exists = True
@@ -337,7 +384,9 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
             'budget': budget,
             'item': item,
             'subitem': subitem,
-            'wfJson':wfJson
+            'wfJson':wfJson,
+            'matJson':matJson,
+            'equipJson':equipJson
         }
     )
 

@@ -5,6 +5,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'units', views.UnitViewSet, basename='units')
 router.register(r'materials', views.MaterialViewSet, basename='materials')
+router.register(r'equipment', views.EquipmentViewSet, basename='equipment')
 router.register(r'transports', views.TransportViewSet, basename='transports')
 router.register(r'secures', views.SecureViewSet, basename='secures')
 router.register(r'workforce', views.WorkforceViewSet)

@@ -26,6 +26,15 @@ class MaterialViewSet(viewsets.ModelViewSet):
     serializer_class = MaterialSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class EquipmentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that lists all equipment and tools
+    """
+
+    queryset = Equipment.objects.all()
+    serializer_class = EquipmentAndToolsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 class UnitViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users choose units
@@ -34,7 +43,6 @@ class UnitViewSet(viewsets.ModelViewSet):
     queryset = Unit.objects.all()
     serializer_class = UnitSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
 class WorkforceViewSet(viewsets.ModelViewSet):
     """
@@ -94,7 +102,7 @@ class MaterialList(generics.ListAPIView):
 
 class EquipmentList(generics.ListAPIView):
     """ 
-    API endpoint that allows list equipments and tools
+    API endpoint that allows list equipments and tools by service id
     """
 
     serializer_class = EquipmentSerializer

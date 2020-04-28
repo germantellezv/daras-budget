@@ -15,7 +15,6 @@ class WorkforceSerializer(serializers.HyperlinkedModelSerializer):
         model = Workforce
         fields = ['id','service','name','experience_time','daily_salary']
 
-
 class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
@@ -31,8 +30,6 @@ class SecureSerializer(serializers.ModelSerializer):
         model = Secure
         fields = ['id', 'name','daily_price']
 
-
-
 class MaterialSerializer(serializers.ModelSerializer):
     service = serializers.SlugRelatedField(
         slug_field='id',
@@ -47,6 +44,18 @@ class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
         fields = ['id','name', 'unit','service','daily_price','slug','created','modified']
+
+class EquipmentAndToolsSerializer(serializers.ModelSerializer):
+    
+    service = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+
+    class Meta:
+        model = Equipment
+        fields = ['id','name','service','daily_price']
 
 class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
     """ Equipment serializer """

@@ -625,8 +625,6 @@
         }
         /* Highlight current sidebar item */
 
-        
-
         // Use 'round10' for performance value
         (function () {
             /**Info: https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Math/round
@@ -742,9 +740,8 @@
 
                         first_cell.appendChild(workforceSelect)
                         row.appendChild(first_cell)
-
-                        
-                    } else {
+                    }
+                    else {
                         var aux = ''
                         var aux = `<option value="" selected>Mano de obra</option>`;
                         for (let i = 0; i < data.length; i++) {
@@ -873,7 +870,8 @@
                         $(this).parent().parent().find(".wfperformance")[0].value = Math.round10(performance,-1);
 
                     })
-            } else {
+            } 
+            else {
                 // API url
                 var url = "{% url 'api_rest:workforce-service' budget.service.id %}"
                 fetch(url)
@@ -944,21 +942,52 @@
         }
         // Add item to Material area
         $("#addMaterialItemButton").click(function () {
-            var selectedService = '{{budget.service.id}}'
-            if (selectedService != '') {
-                var url = "{% url 'api_rest:material-service' budget.service.id %}"
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        // console.log(data);
+            var url = "{% url 'api_rest:material-service' budget.service.id %}"
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var row = document.createElement('tr')
+                    if('{{budget.service.slug}}'=='integral'){
+                        // Material select
+                        var first_cell = document.createElement('td')
+                        var materialSelect = document.createElement('select')
+                        materialSelect.classList.add("mselect")
+                        materialSelect.classList.add("custom-select")
+                        materialSelect.classList.add("custom-select-sm")
+                        materialSelect.classList.add("text-center")
+                        materialSelect.setAttribute("name", "material")
+                        materialSelect.setAttribute("required", "true")
+
+                        // Insert data in select element
+                        var data = `{%autoescape off%}{{matJson}}{%endautoescape%}`
+                        data = JSON.parse(data)
+                        for (let i = 0; i < data.length; i++) { 
+                            const service=data[i];
+                            for (var key in service) {
+                                var group = document.createElement('optgroup')
+                                group.setAttribute('label',key)
+                                materialSelect.appendChild(group)
+                                
+                                for (let j = 0; j < service[`${key}`].length; j++) {
+                                    const element=service[`${key}`][j];
+                                    var option=document.createElement('option');
+                                    option.setAttribute('value',element.id);
+                                    option.innerHTML=element.name;
+                                    materialSelect.appendChild(option);
+                                }
+                            }
+                        }
+                        
+                        first_cell.appendChild(materialSelect);
+                        row.appendChild(first_cell)
+                    }
+                    else {
                         var aux = ''
                         var aux = `<option value="" selected>Materiales</option>`;
                         for (let i = 0; i < data.length; i++) {
                             aux += `<option value="${data[i].id}">${data[i].name}</option>`
                         }
-
-                        var row = document.createElement('tr')
-
+                        // Material select
                         var first_cell = document.createElement('td')
                         var materialSelect = document.createElement('select')
                         materialSelect.classList.add("mselect")
@@ -970,62 +999,65 @@
                         materialSelect.innerHTML = aux;
                         first_cell.appendChild(materialSelect)
                         row.appendChild(first_cell)
+                    }
 
-                        var second_cell = document.createElement('td')
-                        var materialAmountInput = document.createElement('input')
-                        materialAmountInput.classList.add("mamount")
-                        materialAmountInput.classList.add("form-control")
-                        materialAmountInput.classList.add("form-control-sm")
-                        materialAmountInput.classList.add("text-center")
-                        materialAmountInput.setAttribute('name', 'mamount')
-                        materialAmountInput.setAttribute('required', 'true')
-                        materialAmountInput.setAttribute('placeholder', 'Cantidad')
-                        materialAmountInput.setAttribute('type', 'number')
-                        second_cell.appendChild(materialAmountInput)
-                        row.appendChild(second_cell)
 
-                        var third_cell = document.createElement('td')
-                        var materialDailyPriceInput = document.createElement('input')
-                        materialDailyPriceInput.classList.add("munitprice")
-                        materialDailyPriceInput.classList.add("form-control")
-                        materialDailyPriceInput.classList.add("form-control-sm")
-                        materialDailyPriceInput.classList.add("text-center")
-                        materialDailyPriceInput.setAttribute('name', 'mprice')
-                        materialDailyPriceInput.setAttribute('type', 'number')
-                        materialDailyPriceInput.setAttribute('step', '0.01')
-                        materialDailyPriceInput.setAttribute('placeholder', 'Precio unitario')
-                        third_cell.appendChild(materialDailyPriceInput)
-                        row.appendChild(third_cell)
 
-                        var fourth_cell = document.createElement('td')
-                        var materialPerformanceInput = document.createElement('input')
-                        materialPerformanceInput.classList.add("munit")
-                        materialPerformanceInput.classList.add("form-control")
-                        materialPerformanceInput.classList.add("form-control-sm")
-                        materialPerformanceInput.classList.add("text-center")
-                        materialPerformanceInput.setAttribute('name', 'munit')
-                        materialPerformanceInput.setAttribute('type', 'text')
-                        materialPerformanceInput.setAttribute('readonly', 'true')
-                        materialPerformanceInput.setAttribute('placeholder', 'Unidad')
-                        fourth_cell.appendChild(materialPerformanceInput)
-                        row.appendChild(fourth_cell)
+                    var second_cell = document.createElement('td')
+                    var materialAmountInput = document.createElement('input')
+                    materialAmountInput.classList.add("mamount")
+                    materialAmountInput.classList.add("form-control")
+                    materialAmountInput.classList.add("form-control-sm")
+                    materialAmountInput.classList.add("text-center")
+                    materialAmountInput.setAttribute('name', 'mamount')
+                    materialAmountInput.setAttribute('required', 'true')
+                    materialAmountInput.setAttribute('placeholder', 'Cantidad')
+                    materialAmountInput.setAttribute('type', 'number')
+                    second_cell.appendChild(materialAmountInput)
+                    row.appendChild(second_cell)
 
-                        var fifth_cell = document.createElement('td')
-                        var materialValueInput = document.createElement('input')
-                        materialValueInput.classList.add("mvalue")
-                        materialValueInput.classList.add("form-control")
-                        materialValueInput.classList.add("form-control-sm")
-                        materialValueInput.classList.add("text-center")
-                        materialValueInput.setAttribute('name', 'mvalue')
-                        materialValueInput.setAttribute('type', 'number')
-                        materialValueInput.setAttribute('placeholder', 'Valor')
-                        fifth_cell.appendChild(materialValueInput)
-                        row.appendChild(fifth_cell)
+                    var third_cell = document.createElement('td')
+                    var materialDailyPriceInput = document.createElement('input')
+                    materialDailyPriceInput.classList.add("munitprice")
+                    materialDailyPriceInput.classList.add("form-control")
+                    materialDailyPriceInput.classList.add("form-control-sm")
+                    materialDailyPriceInput.classList.add("text-center")
+                    materialDailyPriceInput.setAttribute('name', 'mprice')
+                    materialDailyPriceInput.setAttribute('type', 'number')
+                    materialDailyPriceInput.setAttribute('step', '0.01')
+                    materialDailyPriceInput.setAttribute('placeholder', 'Precio unitario')
+                    third_cell.appendChild(materialDailyPriceInput)
+                    row.appendChild(third_cell)
 
-                        document.getElementById('materialInputs').appendChild(row)
-                    })
-                    .catch(error => console.log(error))
-            }
+                    var fourth_cell = document.createElement('td')
+                    var materialPerformanceInput = document.createElement('input')
+                    materialPerformanceInput.classList.add("munit")
+                    materialPerformanceInput.classList.add("form-control")
+                    materialPerformanceInput.classList.add("form-control-sm")
+                    materialPerformanceInput.classList.add("text-center")
+                    materialPerformanceInput.setAttribute('name', 'munit')
+                    materialPerformanceInput.setAttribute('type', 'text')
+                    materialPerformanceInput.setAttribute('readonly', 'true')
+                    materialPerformanceInput.setAttribute('placeholder', 'Unidad')
+                    fourth_cell.appendChild(materialPerformanceInput)
+                    row.appendChild(fourth_cell)
+
+                    var fifth_cell = document.createElement('td')
+                    var materialValueInput = document.createElement('input')
+                    materialValueInput.classList.add("mvalue")
+                    materialValueInput.classList.add("form-control")
+                    materialValueInput.classList.add("form-control-sm")
+                    materialValueInput.classList.add("text-center")
+                    materialValueInput.setAttribute('name', 'mvalue')
+                    materialValueInput.setAttribute('type', 'number')
+                    materialValueInput.setAttribute('placeholder', 'Valor')
+                    fifth_cell.appendChild(materialValueInput)
+                    row.appendChild(fifth_cell)
+
+                    document.getElementById('materialInputs').appendChild(row)
+                })
+                .catch(error => console.log(error))
+            
         })
         // Remove last item from Material area
         $("#removeMaterialItemButton").click(function () {
@@ -1038,21 +1070,42 @@
         $("#materialInputs").on("click", "tr td .mselect", function (e) {
             // Value selected in workforce select
             var option = $(this).children("option:selected").val()
-            // API url
-            var url = "{% url 'api_rest:material-service' budget.service.id %}"
-            fetch(url)
+            if('{{budget.service.slug}}'=='integral'){
+                // API url
+                var url = "{% url 'api_rest:materials-list' %}"
+                fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // Element in API query result that matches with the option value selected
-                    var element = data.find(element => element.id == option)
-                    // Insert in the unit value input of the same row the unit value of the option selected
-                    $(this).parent().parent().find(".munitprice")[0].value = element.daily_price;
-                    // Insert 'unit' name in the input of the same row
-                    $(this).parent().parent().find(".munit")[0].value = element.unit;
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+                        console.log(data);
+                        // Element in API query result that matches with the option value selected
+                        var element = data.find(element => element.id == option)
+                        console.log(element);
+                        // Insert in the unit value input of the same row the unit value of the option selected
+                        $(this).parent().parent().find(".munitprice")[0].value = element.daily_price;
+                        // Insert 'unit' name in the input of the same row
+                        $(this).parent().parent().find(".munit")[0].value = element.unit;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
+            else {
+                // API url
+                var url = "{% url 'api_rest:material-service' budget.service.id %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Element in API query result that matches with the option value selected
+                        var element = data.find(element => element.id == option)
+                        // Insert in the unit value input of the same row the unit value of the option selected
+                        $(this).parent().parent().find(".munitprice")[0].value = element.daily_price;
+                        // Insert 'unit' name in the input of the same row
+                        $(this).parent().parent().find(".munit")[0].value = element.unit;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
         })
         // Insert 'value' for each Material row 
         $("#materialInputs").delegate(".mamount", "keyup", function (e) {
@@ -1062,8 +1115,6 @@
             updateMaterialValue(this)
         })
         /* end of Material */
-
-
 
         /* Equipment and tools */
         // Update 'value' and 'subtotal' in table
@@ -1092,20 +1143,52 @@
         }
         // Add item to Equipment area
         $("#addEquipmentItemButton").click(function () {
-            var selectedService = '{{budget.service.id}}'
-            if (selectedService != '') {
-                var url = "{% url 'api_rest:equipment-service' budget.service.id %}"
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        // console.log(data);
+            
+            var url = "{% url 'api_rest:equipment-service' budget.service.id %}"
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var row = document.createElement('tr')
+
+                    if('{{budget.service.slug}}'=='integral'){
+                        var first_cell = document.createElement('td')
+                        var equipmentSelect = document.createElement('select')
+                        equipmentSelect.classList.add("equipselect")
+                        equipmentSelect.classList.add("custom-select")
+                        equipmentSelect.classList.add("custom-select-sm")
+                        equipmentSelect.classList.add("text-center")
+                        equipmentSelect.setAttribute("name", "equipment")
+                        equipmentSelect.setAttribute("required", "true")
+                        /* Insert data in select element */
+                        var data = `{%autoescape off%}{{equipJson}}{% endautoescape%}`
+                        data = JSON.parse(data)
+                        for (let i = 0; i < data.length; i++) {
+                            const service = data[i];
+                            for (var key in service) {
+                                
+                                var group = document.createElement('optgroup')
+                                group.setAttribute('label',key)
+                                equipmentSelect.appendChild(group)
+                                
+                                for (let j = 0; j < service[`${key}`].length; j++) {
+                                    const element = service[`${key}`][j];
+                                    var option = document.createElement('option')
+                                    option.setAttribute('value',element.id)
+                                    option.innerHTML = element.name
+                                    equipmentSelect.appendChild(option)
+                                }
+                            }
+                        }
+
+                        first_cell.appendChild(equipmentSelect)
+                        row.appendChild(first_cell)
+                    }
+                    else {
                         var aux = ''
                         var aux = `<option value=""  selected>Equipo</option>`;
                         for (let i = 0; i < data.length; i++) {
                             aux += `<option value="${data[i].id}">${data[i].name}</option>`
                         }
-
-                        var row = document.createElement('tr')
 
                         var first_cell = document.createElement('td')
                         var equipmentSelect = document.createElement('select')
@@ -1118,61 +1201,62 @@
                         equipmentSelect.innerHTML = aux;
                         first_cell.appendChild(equipmentSelect)
                         row.appendChild(first_cell)
+                    }
 
-                        var second_cell = document.createElement('td')
-                        var equipmentAmountInput = document.createElement('input')
-                        equipmentAmountInput.classList.add("equipamount")
-                        equipmentAmountInput.classList.add("form-control")
-                        equipmentAmountInput.classList.add("form-control-sm")
-                        equipmentAmountInput.classList.add("text-center")
-                        equipmentAmountInput.setAttribute('name', 'equipamount')
-                        equipmentAmountInput.setAttribute('required', 'true')
-                        equipmentAmountInput.setAttribute('placeholder', 'Cantidad')
-                        equipmentAmountInput.setAttribute('type', 'number')
-                        second_cell.appendChild(equipmentAmountInput)
-                        row.appendChild(second_cell)
+                    var second_cell = document.createElement('td')
+                    var equipmentAmountInput = document.createElement('input')
+                    equipmentAmountInput.classList.add("equipamount")
+                    equipmentAmountInput.classList.add("form-control")
+                    equipmentAmountInput.classList.add("form-control-sm")
+                    equipmentAmountInput.classList.add("text-center")
+                    equipmentAmountInput.setAttribute('name', 'equipamount')
+                    equipmentAmountInput.setAttribute('required', 'true')
+                    equipmentAmountInput.setAttribute('placeholder', 'Cantidad')
+                    equipmentAmountInput.setAttribute('type', 'number')
+                    second_cell.appendChild(equipmentAmountInput)
+                    row.appendChild(second_cell)
 
-                        var third_cell = document.createElement('td')
-                        var equipmentDailyPriceInput = document.createElement('input')
-                        equipmentDailyPriceInput.classList.add("equipdailyprice")
-                        equipmentDailyPriceInput.classList.add("form-control")
-                        equipmentDailyPriceInput.classList.add("form-control-sm")
-                        equipmentDailyPriceInput.classList.add("text-center")
-                        equipmentDailyPriceInput.setAttribute('name', 'equipprice')
-                        equipmentDailyPriceInput.setAttribute('type', 'number')
-                        equipmentDailyPriceInput.setAttribute('placeholder', 'Valor diario')
-                        third_cell.appendChild(equipmentDailyPriceInput)
-                        row.appendChild(third_cell)
+                    var third_cell = document.createElement('td')
+                    var equipmentDailyPriceInput = document.createElement('input')
+                    equipmentDailyPriceInput.classList.add("equipdailyprice")
+                    equipmentDailyPriceInput.classList.add("form-control")
+                    equipmentDailyPriceInput.classList.add("form-control-sm")
+                    equipmentDailyPriceInput.classList.add("text-center")
+                    equipmentDailyPriceInput.setAttribute('name', 'equipprice')
+                    equipmentDailyPriceInput.setAttribute('type', 'number')
+                    equipmentDailyPriceInput.setAttribute('placeholder', 'Valor diario')
+                    third_cell.appendChild(equipmentDailyPriceInput)
+                    row.appendChild(third_cell)
 
-                        var fourth_cell = document.createElement('td')
-                        var performanceInput = document.createElement('input')
-                        performanceInput.classList.add("equiperform")
-                        performanceInput.classList.add("form-control")
-                        performanceInput.classList.add("form-control-sm")
-                        performanceInput.classList.add("text-center")
-                        performanceInput.setAttribute('name', 'equipperformance')
-                        performanceInput.setAttribute('type', 'number')
-                        performanceInput.setAttribute('step', '0.01')
-                        performanceInput.setAttribute('placeholder', 'Rendimiento')
-                        fourth_cell.appendChild(performanceInput)
-                        row.appendChild(fourth_cell)
+                    var fourth_cell = document.createElement('td')
+                    var performanceInput = document.createElement('input')
+                    performanceInput.classList.add("equiperform")
+                    performanceInput.classList.add("form-control")
+                    performanceInput.classList.add("form-control-sm")
+                    performanceInput.classList.add("text-center")
+                    performanceInput.setAttribute('name', 'equipperformance')
+                    performanceInput.setAttribute('type', 'number')
+                    performanceInput.setAttribute('step', '0.01')
+                    performanceInput.setAttribute('placeholder', 'Rendimiento')
+                    fourth_cell.appendChild(performanceInput)
+                    row.appendChild(fourth_cell)
 
-                        var fifth_cell = document.createElement('td')
-                        var valueInput = document.createElement('input')
-                        valueInput.classList.add("equipvalue")
-                        valueInput.classList.add("form-control")
-                        valueInput.classList.add("form-control-sm")
-                        valueInput.classList.add("text-center")
-                        valueInput.setAttribute('name', 'equipvalue')
-                        valueInput.setAttribute('type', 'number')
-                        valueInput.setAttribute('placeholder', 'Valor')
-                        fifth_cell.appendChild(valueInput)
-                        row.appendChild(fifth_cell)
+                    var fifth_cell = document.createElement('td')
+                    var valueInput = document.createElement('input')
+                    valueInput.classList.add("equipvalue")
+                    valueInput.classList.add("form-control")
+                    valueInput.classList.add("form-control-sm")
+                    valueInput.classList.add("text-center")
+                    valueInput.setAttribute('name', 'equipvalue')
+                    valueInput.setAttribute('type', 'number')
+                    valueInput.setAttribute('placeholder', 'Valor')
+                    fifth_cell.appendChild(valueInput)
+                    row.appendChild(fifth_cell)
 
-                        document.getElementById('equipmentInputs').appendChild(row)
-                    })
-                    .catch(error => console.log(error))
-            }
+                    document.getElementById('equipmentInputs').appendChild(row)
+                })
+                .catch(error => console.log(error))
+            
         })
         // Remove last item from Equipment area
         $("#removeEquipmentItemButton").click(function () {
@@ -1185,42 +1269,79 @@
         $("#equipmentInputs").on("click", "tr td .equipselect", function (e) {
             // Value selected in workforce select
             var option = $(this).children("option:selected").val()
-            // API url
-            var url = "{% url 'api_rest:equipment-service' budget.service.id %}"
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    // Element in API query result that matches with the option value selected
-                    var element = data.find(element => element.id == option)
-                    var type = "{{budget.time}}"
-                    switch (type) {
-                        case "1":
-                            // Insert in the daily price input of the same row the daily price value of the option selected
-                            $(this).parent().parent().find(".equipdailyprice")[0].value = (element
-                                .daily_price / 8).toFixed(2);
-                            break;
-                        case "2":
-                            // Insert in the daily price input of the same row the daily price value of the option selected
-                            $(this).parent().parent().find(".equipdailyprice")[0].value = (element
-                                .daily_price);
-                            break
-                        case "3":
-                            // Insert in the daily price input of the same row the daily price value of the option selected
-                            $(this).parent().parent().find(".equipdailyprice")[0].value = (element
-                                .daily_price * 30).toFixed(2);
-                            break
-                    }
 
-                    // Insert performance value in the input '.equiperform' of the same row
-                    var subitemAmount = '{{subitem.amount}}';
-                    var itemDuration = '{{subitem.duration}}';
-                    var performance = subitemAmount / itemDuration;
-                    $(this).parent().parent().find(".equiperform")[0].value = Math.round10(
-                        performance, -1);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+            if('{{budget.service.slug}}'=='integral'){
+                // API url
+                var url = "{% url 'api_rest:equipment-list' %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Element in API query result that match with the option value selected
+                        var element = data.find(element => element.id == option)
+                        
+                        // Budget type of cost (per hour / day / month)
+                        var type = "{{budget.time}}"
+                        var risk_value = parseFloat("{{budget.risk.value}}")
+                        switch (type) {
+                            case "1":
+                                // Insert in the salary input of the same row the salary of the option selected
+                                $(this).parent().parent().find(".equipdailyprice")[0].value = ((element.daily_price * risk_value) / 8).toFixed(2);
+                                break;
+                            case "2":
+                                $(this).parent().parent().find(".equipdailyprice")[0].value = ((element.daily_price * risk_value)).toFixed(2);
+                                break;
+                            case "3":
+                                $(this).parent().parent().find(".equipdailyprice")[0].value = ((element.daily_price * risk_value) * 30).toFixed(2);
+                                break;
+                        }
+                        /* ....... */
+
+                        // Insert performance value in the input with class '.equiperform' of the same row
+                        var subitemAmount = '{{subitem.amount}}';
+                        var itemDuration = '{{subitem.duration}}';
+                        var performance = subitemAmount / itemDuration;
+
+                        $(this).parent().parent().find(".equiperform")[0].value = Math.round10(performance,-1);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
+            else {
+                // API url
+                var url = "{% url 'api_rest:equipment-service' budget.service.id %}"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Element in API query result that matches with the option value selected
+                        var element = data.find(element => element.id == option)
+                        var type = "{{budget.time}}"
+                        switch (type) {
+                            case "1":
+                                // Insert in the daily price input of the same row the daily price value of the option selected
+                                $(this).parent().parent().find(".equipdailyprice")[0].value = (element.daily_price / 8).toFixed(2);
+                                break;
+                            case "2":
+                                // Insert in the daily price input of the same row the daily price value of the option selected
+                                $(this).parent().parent().find(".equipdailyprice")[0].value = (element.daily_price);
+                                break
+                            case "3":
+                                // Insert in the daily price input of the same row the daily price value of the option selected
+                                $(this).parent().parent().find(".equipdailyprice")[0].value = (element.daily_price * 30).toFixed(2);
+                                break
+                        }
+
+                        // Insert performance value in the input '.equiperform' of the same row
+                        var subitemAmount = '{{subitem.amount}}';
+                        var itemDuration = '{{subitem.duration}}';
+                        var performance = subitemAmount / itemDuration;
+                        $(this).parent().parent().find(".equiperform")[0].value = Math.round10(performance, -1);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
+
         })
         // Insert 'value' for each row 
         $("#equipmentInputs").delegate(".equipamount", "keyup", function (e) {
@@ -1233,7 +1354,6 @@
 
 
         /* Transport */
-
         // Update 'value' and 'subtotal' in table
         function updateTransportValue(element) {
             /* The parameter 'element' is just for position and abstraction purposes */
