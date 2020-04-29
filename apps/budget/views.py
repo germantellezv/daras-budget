@@ -351,7 +351,7 @@ def editBudgetSubItem(request, budget_pk, item_pk, subitem_pk):
 
         subtotal = request.POST.getlist('subtotal')
         aux = []
-        # Avoid error at save Subtotals of APU incomplete
+        # Avoid error at save Subtotals of APU (1 of 4) incomplete
         for i in subtotal:
             if i == '':
                 aux.append(Decimal(0))
@@ -420,6 +420,16 @@ def PreviewAPU(request, budget_pk, item_pk, subitem_pk):
 
     subtotal = SubtotalAPU.objects.get(subitem=subitem)
 
+    if budget.aiu_over == '2':
+        admon_value =  round(Decimal(budget.administration_percentage/100) * subtotal.total,2)
+        incident_value =  round(Decimal(budget.incidentals_percentaje/100) * subtotal.total,2)
+        utility_value =  round(Decimal(budget.utility_percentage/100) * subtotal.total,2)
+    else:
+        admon_value = 0
+        incident_value = 0
+        utility_value = 0
+    
+    total = subtotal.total + admon_value + incident_value + utility_value
     data = {
         'budget': budget,
         'item': item,
@@ -430,6 +440,10 @@ def PreviewAPU(request, budget_pk, item_pk, subitem_pk):
         'transport': transport,
         'secure': secure,
         'subtotal':subtotal,
+        'admon_value':admon_value,
+        'incident_value':incident_value,
+        'utility_value':utility_value,
+        'total':total
     }
 
     pdf = render_to_pdf('budget/apu-preview.html', data)
@@ -447,10 +461,16 @@ def PreviewBudget(request, budget_pk):
                 total_direct_cost += items[i].subitems.all()[j].total_value
             except:
                 total_direct_cost = 0
+    
+    if budget.aiu_over == '1':
+        administration_value = Decimal(budget.administration_percentage/100) * total_direct_cost
+        incidentals_value = Decimal(budget.incidentals_percentaje/100) * total_direct_cost
+        utility_value = Decimal(budget.utility_percentage/100) * total_direct_cost
+    else:
+        administration_value = 0
+        incidentals_value = 0
+        utility_value = 0
 
-    administration_value = Decimal(budget.administration_percentage/100) * total_direct_cost
-    incidentals_value = Decimal(budget.incidentals_percentaje/100) * total_direct_cost
-    utility_value = Decimal(budget.utility_percentage/100) * total_direct_cost
     total_indirect_cost = administration_value+incidentals_value+utility_value
     subtotal = total_direct_cost + total_indirect_cost
     iva_over_subtotal = (budget.iva/100) * subtotal

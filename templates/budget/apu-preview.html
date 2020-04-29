@@ -142,7 +142,7 @@
                     # TRABAJADORES
                 </td>
                 <td>
-                    SALARIO DIARIO
+                    SALARIO
                 </td>
                 <td>
                     RENDIMIENTO
@@ -244,7 +244,7 @@
                     CANTIDAD
                 </td>
                 <td>
-                    VALOR DIA
+                    VALOR
                 </td>
                 <td>
                     RENDIMIENTO
@@ -294,7 +294,7 @@
                     CANTIDAD
                 </td>
                 <td>
-                    TARIFA DÍA
+                    TARIFA
                 </td>
                 <td>
                     RENDIMIENTO
@@ -344,10 +344,10 @@
                     CANTIDAD
                 </td>
                 <td>
-                    TARIFA DÍA
+                    TARIFA
                 </td>
                 <td>
-                    DÍAS
+                    TIEMPO
                 </td>
                 <td>
                     VALOR
@@ -407,10 +407,10 @@
                 ADMINISTRACIÓN
             </td>
             <td style="text-align: right; border: 1px solid #ddd;">
-                0,0%
+                {{budget.administration_percentage}} %
             </td>
-            <td style="text-align: right; border: 1px solid #ddd;">
-                -
+            <td style="text-align: right; border: 1px solid #ddd; padding-right: 5px;">
+                $ {{admon_value|floatformat:"2"|intcomma}}
             </td>
         </tr>
         <tr>
@@ -418,10 +418,10 @@
                 IMPREVISTOS
             </td>
             <td style="text-align: right; border: 1px solid #ddd;">
-                0,0%
+                {{budget.incidentals_percentaje}} %
             </td>
-            <td style="text-align: right; border: 1px solid #ddd;">
-                -
+            <td style="text-align: right; border: 1px solid #ddd; padding-right: 5px;">
+            $ {{incident_value|intcomma}}
             </td>
         </tr>
         <tr>
@@ -429,10 +429,10 @@
                 UTILIDAD
             </td>
             <td style="text-align: right;">
-                0,0%
+                {{budget.utility_percentage}} %
             </td>
-            <td style="text-align: right;">
-                -
+            <td style="text-align: right; border: 1px solid #ddd; padding-right: 5px;">
+                $ {{utility_value|intcomma}}
             </td>
         </tr>
         <tr>
@@ -440,7 +440,7 @@
                 TOTAL COSTO
             </td>
             <td style="text-align: right; background-color: #c0c0c0; border: 1px solid #ddd;">
-                $ {{subtotal.total|intcomma}}
+                $ {{total|intcomma}}
             </td>
 
         </tr>
