@@ -178,6 +178,8 @@
                     ${{total_direct_cost|intcomma}}
                 </td>
             </tr>
+            
+            {% if budget.aiu_over == '1' %}
             <tr>
                 <td colspan="6">
                     Administración
@@ -211,6 +213,9 @@
                     $ {{utility_value|floatformat:0|intcomma}}
                 </td>
             </tr>
+                
+            {% endif %}
+                
             <tr style="background-color: #ddd; font-weight: bold;">
                 <td colspan="7">
                     TOTAL COSTOS INDIRECTOS
@@ -229,13 +234,13 @@
             </tr>
             <tr>
                 <td colspan="6">
-                    IVA SOBRE SUBTOTAL
+                    IVA SOBRE {{budget.get_iva_option_display|upper}}
                 </td>
                 <td style="text-align: right;">
                     {{budget.iva|floatformat:0}} %
                 </td>
                 <td style="text-align: center;">
-                    $ {{iva_over_subtotal|floatformat:0|intcomma}}
+                    $ {{iva_over|floatformat:0|intcomma}}
                 </td>
             </tr>
             <tr style="background-color: black; color: white; font-weight: bold;">

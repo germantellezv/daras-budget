@@ -16,6 +16,7 @@ class CreateBudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
         fields = (
+            'typeOf',
             'client',
             'risk',
             'time',
@@ -41,6 +42,7 @@ class FillBudgetForm(forms.ModelForm):
             'utility_percentage',
             'incidentals_percentaje',
             'administration_percentage',
+            'iva_option',
         )
 
 

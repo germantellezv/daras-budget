@@ -63,7 +63,7 @@
                                     <small>Consecutivo</small>
                                 </label>
                                 <input type="text" name="consecutive" class="form-control form-control-sm"
-                                    placeholder="PS5-12" {% if budget.consecutive %}value="{{budget.consecutive}}"
+                                    placeholder="" {% if budget.consecutive %}value="{{budget.consecutive}}"
                                     {% endif %} size="18">
                             </div>
                             <!-- Client -->
@@ -115,14 +115,19 @@
                                 </label>
                                 <input type="number" name="rev_number" min="0" class="text-center form-control form-control-sm" id="id_rev_number" {% if budget.rev_number %}value="{{budget.rev_number}}"{% endif %}>
                             </div>
-                            <!-- AIU -->
+                            
                             <div class="form-group">
                                 <label for="" style="margin: 0;">
                                     <small>
-                                        Aplicar AIU a
+                                        Aplicar IVA
                                     </small>
                                 </label>
-                                {% render_field form.aiu_over class="form-control form-control-sm" required="true" %}
+                                <select name="iva_option" class="form-control form-control-sm">
+                                {% for x,y in form.fields.iva_option.choices %}
+                                    <option value="{{x}}" {% if x == budget.iva_option %}selected{% endif %}>{{y}}</option>
+                                {% endfor %}
+                                </select>
+                                
                             </div>
                         </div>
                     </div>
@@ -199,10 +204,17 @@
                             <table class="w-100 m-0 p-0">
                                 <tr class="text-center blue lighten-5">
                                     <td colspan="3">
-                                        <a href="#" class="btn btn-sm btn-success" data-toggle="modal"
-                                            data-target="#sectionModal">Agregar sección</a>
-                                        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal"
-                                            data-target="#productModal">Agregar producto</a>
+                                        
+                                        {% if budget.typeOf == 1 %}
+                                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal"
+                                                data-target="#sectionModal">Agregar sección</a>
+                                            <a href="#" class="btn btn-sm btn-primary" data-toggle="modal"
+                                                data-target="#productModal">Agregar producto</a>
+                                        {% else %}
+                                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#activitySection">Agregar sección</a>
+                                            <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#activityProduct">Agregar actividad</a>
+                                        {% endif %}
+                                            
                                     </td>
                                 </tr>
                             </table>
@@ -223,15 +235,46 @@
                         </div>
                         <div class="col-sm-3">
                             <h5>Costos indirectos</h5>
-                            <div class="form-group">
+                            
+                            <div class="form-group m-0">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Porcentaje de administración
+                                    </small>
+                                </label>
                                 {% render_field form.administration_percentage class="form-control form-control-sm text-center" placeholder="% de administración" value=budget.administration_percentage required="true" %}
                             </div>
-                            <div class="form-group">
+                            <div class="form-group m-0">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Porcentaje de imprevistos
+                                    </small>
+                                </label>
                                 {% render_field form.incidentals_percentaje class="form-control form-control-sm text-center" placeholder="% de imprevistos" value=budget.incidentals_percentaje required="true" %}
                             </div>
-                            <div class="form-group">
+                            <div class="form-group m-0">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Porcentaje de utilidad
+                                    </small>
+                                </label>
                                 {% render_field form.utility_percentage class="form-control form-control-sm text-center" placeholder="% de utilidad" value=budget.utility_percentage required="true" %}
                             </div>
+                            <!-- AIU -->
+                            <div class="form-group m-0">
+                                <label for="" style="margin: 0;">
+                                    <small>
+                                        Aplicar AIU a
+                                    </small>
+                                </label>
+                                
+                                <select name="aiu_over" class="form-control form-control-sm">
+                                {% for x,y in form.fields.aiu_over.choices %}
+                                    <option value="{{ x }}"{% if budget.aiu_over == x %} selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                            
                         </div>
                     </div>
                     <!-- Form buttons -->
@@ -241,6 +284,7 @@
                             previa</a>
                     </div>
                 </form>
+                <!---------------------------- APU MODALS---------------------------->
 
                 <!-- Modal to add section -->
                 <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -538,6 +582,86 @@
                     </div>
                 </div>
                 <!-- Modal to delete product -->
+                
+                <!---------------------------- APU MODALS---------------------------->
+                
+                <!---------------------------- ACTIVITIES MODALS---------------------------->
+                <!-- Modal to add activity section -->
+                <div class="modal fade" id="activitySection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Agregar sección</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div id="sectionBody" class="modal-body">
+                                <!-- Form -->
+                                <!-- <form id="sectionForm" action="" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="">
+                                            <small>Título</small>
+                                        </label>
+                                        <input id="sectionName" type="text" name="description" class="form-control"
+                                            required="true" autofocus>
+                                    </div>
+
+                                </form> -->
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Cancelar</button>
+                                <button id="" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to add activity section -->
+
+                <!-- Modal to add activity -->
+                <div class="modal fade" id="activityProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Agregar producto</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <!-- Form -->
+                                
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                                <button id="" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal to add activity -->
+                <!---------------------------- ACTIVITIES MODALS---------------------------->
+
+
+
+
+
 
             </div>
         </div>

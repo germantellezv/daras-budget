@@ -99,7 +99,6 @@ def fillBudget(request, pk):
     clients = Client.objects.all()
     units = Unit.objects.all()
     form = FillBudgetForm()
-
     if request.method == "POST":
         form = FillBudgetForm(request.POST)
         if form.is_valid():
@@ -111,6 +110,7 @@ def fillBudget(request, pk):
             b.delivery_time = data['delivery_time']
             b.rev_number = data['rev_number']
             b.aiu_over = data['aiu_over']
+            b.iva_option = data['iva_option']
             b.comment = data['comment']
             b.utility_percentage = data['utility_percentage']
             b.incidentals_percentaje = data['incidentals_percentaje']
@@ -473,8 +473,11 @@ def PreviewBudget(request, budget_pk):
 
     total_indirect_cost = administration_value+incidentals_value+utility_value
     subtotal = total_direct_cost + total_indirect_cost
-    iva_over_subtotal = (budget.iva/100) * subtotal
-    total_cost = subtotal + iva_over_subtotal
+    if budget.iva_option == '1':
+        iva_over = (budget.iva/100) * subtotal
+    else:
+        iva_over = (budget.iva/100) * utility_value
+    total_cost = subtotal + iva_over
 
     data = {
         'budget': budget,
@@ -485,7 +488,7 @@ def PreviewBudget(request, budget_pk):
         'incidentals_value': incidentals_value,
         'utility_value': utility_value,
         'subtotal':subtotal,
-        'iva_over_subtotal':iva_over_subtotal,
+        'iva_over':iva_over,
         'total_cost':total_cost,
     }
 
