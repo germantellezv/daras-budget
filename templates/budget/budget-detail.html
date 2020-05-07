@@ -64,6 +64,16 @@
                     <tr>
                         <td>
                             <strong>
+                                Tipo de presupuesto
+                            </strong>
+                        </td>
+                        <td class="text-center">
+                            {{budget.typeOf.title}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
                                 Numero de revisión
                             </strong>
                         </td>
@@ -178,9 +188,13 @@
                                 <th>
                                     Unidad
                                 </th>
+                                
+                                {% if budget.typeOf.slug == 'apu' %}
                                 <th>
                                     Duración
                                 </th>
+                                {% endif %}
+
                                 <th>
                                     Cantidad
                                 </th>
@@ -217,9 +231,11 @@
                                         <td>
                                             {{i.unit.name}}
                                         </td>
+                                        {% if budget.typeOf.slug == 'apu' %}
                                         <td>
                                             {{i.duration}}
                                         </td>
+                                        {% endif %}
                                         <td>
                                             {{i.amount}}
                                         </td>

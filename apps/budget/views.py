@@ -80,6 +80,7 @@ def createBudget(request):
         if form.is_valid():
             data = form.cleaned_data
             b = Budget()
+            b.typeOf = data['typeOf']
             b.client = data['client']
             b.service = data['service']
             b.risk = data['risk']
@@ -99,6 +100,7 @@ def fillBudget(request, pk):
     clients = Client.objects.all()
     units = Unit.objects.all()
     form = FillBudgetForm()
+    activities = Activity.objects.filter(service=budget.service)
     if request.method == "POST":
         form = FillBudgetForm(request.POST)
         if form.is_valid():
@@ -127,6 +129,7 @@ def fillBudget(request, pk):
             'units': units,
             'budget': budget,
             'items': items,
+            'activities':activities,
             'form': form,
         }
     )

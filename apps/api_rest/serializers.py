@@ -30,6 +30,11 @@ class SecureSerializer(serializers.ModelSerializer):
         model = Secure
         fields = ['id', 'name','daily_price']
 
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ['id','name', 'budget_type','slug']
+
 class MaterialSerializer(serializers.ModelSerializer):
     service = serializers.SlugRelatedField(
         slug_field='id',

@@ -6,6 +6,9 @@ from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import status
 
+# Utilities
+from django.shortcuts import get_object_or_404
+from decimal import Decimal
 
 # Decorators
 from rest_framework.decorators import action
@@ -16,6 +19,15 @@ from .serializers import *
 
 # Models
 from apps.budget.models import *
+
+class ServicesViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that lists all services
+    """
+
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 class MaterialViewSet(viewsets.ModelViewSet):
     """
@@ -234,4 +246,26 @@ def updateBudgetSubitem(request, budget_pk, subitem_pk):
     subitem.amount = amount
     subitem.unit = unit
     subitem.save()
+    return Response({'status':'ok'})
+
+@api_view(['POST'])
+def addBudgetActivity(request, budget_pk, budgetItem_id):
+    """ Add Budget Activity """
+    budget = Budget.objects.get(id=budget_pk)
+    item = BudgetItem.objects.get(id=budgetItem_id)
+    unit = get_object_or_404(Unit, acronym=request.data.get('unit'))
+    
+    subitem = BudgetSubItem()
+    subitem.budget = budget
+    subitem.description = request.data.get('description')
+    subitem.unit = unit
+    subitem.unit_value = Decimal(request.data.get('unit_value'))
+    subitem.amount = request.data.get('amount')
+    subitem.total_value = subitem.unit_value * int(subitem.amount)
+    subitem.save()
+    
+    # Create item and add subitem to item
+    item = BudgetItem.objects.get(id=budgetItem_id)
+    item.subitems.add(subitem)
+
     return Response({'status':'ok'})

@@ -1,7 +1,7 @@
 {% extends "budget/base.html" %}
 {% load static %}
 {% load widget_tweaks %}
-
+{% load humanize %}
 {% block title %}
 <title>Crear presupuesto - DARAS</title>
 {% endblock title %}
@@ -140,7 +140,9 @@
                                     <tr class="text-center blue lighten-5">
                                         <th class="font-weight-bold">Descripción</th>
                                         <th class="font-weight-bold">Unidad</th>
+                                        {% if budget.typeOf.slug == 'apu' %}
                                         <th class="font-weight-bold">Duración</th>
+                                        {% endif %}
                                         <th class="font-weight-bold">Cantidad</th>
                                         <th class="font-weight-bold">Opciones</th>
                                     </tr>
@@ -175,14 +177,16 @@
                                             </td>
                                             <td class="text-center p-2">
                                                 <p class="m-0">
-                                                    {{i.unit.name}}
+                                                    {{i.unit.acronym}} - {{i.unit.name}}
                                                 </p>
                                             </td>
+                                            {% if budget.typeOf.slug == 'apu' %}
                                             <td class="text-center p-2">
                                                 <p class="m-0">
                                                     {{i.duration}}
                                                 </p>
                                             </td>
+                                            {% endif %}
                                             <td class="text-center p-2">
                                                 <p class="m-0">
                                                     {{i.amount}}
@@ -205,13 +209,13 @@
                                 <tr class="text-center blue lighten-5">
                                     <td colspan="3">
                                         
-                                        {% if budget.typeOf == 1 %}
+                                        {% if budget.typeOf.slug == 'apu' %}
                                             <a href="#" class="btn btn-sm btn-success" data-toggle="modal"
                                                 data-target="#sectionModal">Agregar sección</a>
                                             <a href="#" class="btn btn-sm btn-primary" data-toggle="modal"
                                                 data-target="#productModal">Agregar producto</a>
                                         {% else %}
-                                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#activitySection">Agregar sección</a>
+                                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#sectionModal">Agregar sección</a>
                                             <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#activityProduct">Agregar actividad</a>
                                         {% endif %}
                                             
@@ -436,7 +440,7 @@
                                         <label for="">
                                             <small>Unidad</small>
                                         </label>
-                                        <select class="form-control" name="unit" id="">
+                                        <select class="form-control" name="unit">
                                             <option selected></option>
                                             {% for u in units %}
                                             <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}
@@ -507,7 +511,7 @@
                                         <label for="">
                                             <small>Unidad</small>
                                         </label>
-                                        <select class="form-control" name="unit" id="">
+                                        <select class="form-control" name="unit">
                                             <option selected></option>
                                             {% for u in units %}
                                             <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}
@@ -586,57 +590,18 @@
                 <!---------------------------- APU MODALS---------------------------->
                 
                 <!---------------------------- ACTIVITIES MODALS---------------------------->
-                <!-- Modal to add activity section -->
-                <div class="modal fade" id="activitySection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
-
-                    <!-- Change class .modal-sm to change the size of the modal -->
-                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                        <div class="modal-content">
-                            <!-- Modal header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title w-100" id="myModalLabel">Agregar sección</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <!-- Modal body -->
-                            <div id="sectionBody" class="modal-body">
-                                <!-- Form -->
-                                <!-- <form id="sectionForm" action="" method="POST">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="">
-                                            <small>Título</small>
-                                        </label>
-                                        <input id="sectionName" type="text" name="description" class="form-control"
-                                            required="true" autofocus>
-                                    </div>
-
-                                </form> -->
-
-                            </div>
-                            <!-- Modal footer -->
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
-                                <button id="" type="button" class="btn btn-primary btn-sm">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal to add activity section -->
-
-                <!-- Modal to add activity -->
+                
+                <!-- Add activity -->
+                
                 <div class="modal fade" id="activityProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                     aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
-                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <!-- Modal header -->
                             <div class="modal-header">
-                                <h4 class="modal-title w-100" id="myModalLabel">Agregar producto</h4>
+                                <h4 class="modal-title w-100" id="myModalLabel">Agregar actividad</h4>
                                 <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
                                     aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -644,19 +609,98 @@
                             </div>
                             <!-- Modal body -->
                             <div class="modal-body">
-                                <!-- Form -->
-                                
+                                <table id="activities_table" class="table">
+                                    <thead>
+                                        <th>Titulo</th>
+                                        <th>Categoría</th>
+                                        <th>Unidad</th>
+                                        <th>Precio unitario</th>
+                                        <th>Opciones</th>
+                                    </thead>
+                                    <tbody>
+                                    {% for a in activities %}
+                                        <tr>
+                                            <td class="text-center">{{a.title}}</td>
+                                            <td class="text-center">{{a.category.title}}</td>
+                                            <td class="text-center">{{a.unit.acronym}}</td>
+                                            <td class="text-center">{{a.unit_value|safe}}</td>
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#testModal">Agregar</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>                               
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                                <button id="" type="button" class="btn btn-primary btn-sm">Agregar</button>
+                                <!-- <button type="button" class="btn btn-primary btn-sm">Agregar</button> -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Modal to add activity -->
+
+                <!-- Ask amount of activity -->
+                <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+
+                    <!-- Change class .modal-sm to change the size of the modal -->
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title w-100" id="myModalLabel">Agregar actividad</h4>
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form id="addActivityForm" action="" method="post">
+                                    {% csrf_token %}
+                                    <label for="">
+                                        <small>Descripción de la actividad</small>
+                                    </label>
+                                    <div class="form-group">
+                                        <input type="text" name="description" id="activityDescription" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <label for="">
+                                        <small>Unidad</small>
+                                    </label>
+                                    <div class="form-group">
+                                        <input type="text" name="unit" id="activityUnit" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <label for="">
+                                        <small>Precio unitario</small>
+                                    </label>
+                                    <div class="form-group">
+                                        <input type="text" name="unit_value" id="activityUnitValue" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <label for="">
+                                        <small>Cantidad</small>
+                                    </label>
+                                    <div class="form-group">
+                                        <input type="number" name="amount" id="activityAmount" class="form-control form-control-sm" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                                <button id="addActivity" type="button" class="btn btn-primary btn-sm">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ask amount of activity -->
+
+                <!-- Add activity -->
+                
                 <!---------------------------- ACTIVITIES MODALS---------------------------->
+                
+
 
 
 
@@ -677,12 +721,35 @@
 
 <script>
     $(document).ready(function () {
+
         /* Highlight current sidebar item */
         $('#sidebar .list-group-item').removeClass('active');
         var $this = $('#btnSidebarBudget');
         if (!$this.hasClass('active')) {
             $this.addClass('active');
         }
+
+        /* Table search */
+        $('#activities_table').DataTable({
+            "pagingType": "simple_numbers",
+            "pageLength":3, //Initial amount of rows
+            "lengthChange": true,
+            "lengthMenu": [ 3,10, 25, 50, 75, 100 ],
+            "language":{
+                "info": "Página _PAGE_ de _PAGES_",
+                "search":         "Buscar:",
+                "lengthMenu":     "Mostrar _MENU_ filas",
+                "paginate": {
+                    "first":      "Inicio",
+                    "last":       "Fin",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"
+                }, 
+
+            }
+               
+        });
+        $('.dataTables_length').addClass('bs-select');
 
         /* Enable autofocus in Bootstrap modals */
         $('.modal').on('shown.bs.modal', function () {
@@ -733,7 +800,7 @@
                             </td>
                             <td colspan="2" class="p-2 text-right text-muted">
                                 <i class="delSection fas fa-trash-alt mr-1" style="cursor:pointer;"></i>
-                                <i class="fas fa-edit mr-1"></i>
+                                <i class="updateSection fas fa-edit mr-1" style="cursor:pointer;"></i>
                             </td>
                         </tr>
                     </tbody>
@@ -968,7 +1035,7 @@
 
         /* Update section */
         $("#BudgetElements").on('click', 'tbody tr td .updateSection', function (e) {
-            console.log(this);
+            // console.log(this);
             var section_name = $(this).parent().parent().find('p').first().text().trim();
             var section_pk = $(this).parent().parent().data('sectionid')
             
@@ -1047,6 +1114,46 @@
 
         });
         /* End update product */
+
+        /* ---------- Activities ----------- */
+        $("#activities_table").on('click','tbody tr td a',function(e){
+            var title = $(this).parent().parent().children().first().text()
+            var category = $(this).parent().parent().children().first().next().text()
+            var unit = $(this).parent().parent().children().first().next().next().text()
+            var unit_value = $(this).parent().parent().children().first().next().next().next().text()
+            $("#activityUnitValue").val(unit_value)
+            $("#activityDescription").val(category+" - "+title)
+            $("#activityUnit").val(unit)
+            
+
+            /*  */
+            $("#addActivity").click(function(){
+                var last_item_id = parseInt($("tr[data-type='section']:last").data('sectionid'))
+                var form = document.getElementById("addActivityForm")
+                const data = new FormData(form);
+                var url = `/api/budget/{{budget.id}}/add-activity/${last_item_id}`;
+                fetch(url, {
+                method: 'POST',
+                body: data})
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                })
+                .then(function(data){
+                    console.log(data);
+                    window.location.reload();
+                })
+            })
+            /*  */
+
+            
+        })
+        /* ---------- Activities ----------- */
+
 
     })
 </script>

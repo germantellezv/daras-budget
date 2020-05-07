@@ -30,10 +30,30 @@ class Client(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.nit, self.name)
 
+class BudgetType(models.Model):
+    """Model definition for BudgetType."""
+
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'tipo de presupuesto'
+        verbose_name_plural = 'tipos de presupuesto'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(BudgetType, self).save(*args, **kwargs)
+
+    def __str__(self):
+        """Unicode representation of BudgetType."""
+        return self.title
+
+
 class Service(models.Model):
     """ Type of service Model """
+
     name = models.CharField(max_length=100)
-    photo = models.ImageField(blank=True, null=True)
+    budget_type = models.ForeignKey(BudgetType, on_delete=models.CASCADE)
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
@@ -41,7 +61,7 @@ class Service(models.Model):
         super(Service, self).save(*args, **kwargs)
 
     def __str__(self):
-        return '{}'.format(self.name)
+        return '{0} - Presupuesto de tipo {1}'.format(self.name, self.budget_type)
 
     class Meta:
         verbose_name = "tipo de servicio"
@@ -193,28 +213,25 @@ class Secure(models.Model):
 
 class Budget(models.Model):
     """ Budget model """
-    OPTIONS_TYPE = [
-        # (None, 'Periodo de tiempo'),
-        ('1', 'APU'),
-        ('2', 'Actividades'),
-    ]
+    
     OPTIONS_IVA = [
         # (None, 'Calcular IVA con respecto a'),
         ('1', 'Subtotal'),
         ('2', 'Utilidad')
     ]
     OPTIONS_PERIOD = [
-        # (None, 'Periodo de tiempo'),
+        # (None, 'Escala de tiempo'),
         ('1', 'Hora'),
         ('2', 'Día'),
         ('3', 'Mes')
     ]
     AIU_OPTIONS = [
-        # (None, 'Periodo de tiempo'),
+        # (None, 'Aplicar AIU sobre'),
         ('1', 'Presupuesto'),
         ('2', 'APU'),
     ]
-    typeOf = models.CharField(choices=OPTIONS_TYPE, max_length = 20, verbose_name="Tipo de presupuesto")
+    
+    typeOf = models.ForeignKey(BudgetType, on_delete=models.CASCADE, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Cliente")
     consecutive = models.CharField(max_length=10, blank=True, null=True, verbose_name="Consecutivo")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Especialidad")
@@ -374,3 +391,31 @@ class SubtotalAPU(models.Model):
     
     class Meta:
         verbose_name = "General APU data"
+
+class ActivityCategory(models.Model):
+    title = models.CharField(max_length=50)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=4)
+    slug = models.SlugField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(ActivityCategory, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{}'.format(self.title)
+
+class Activity(models.Model):
+    title = models.CharField(max_length=150)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True)
+    unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    
+    category = models.ForeignKey(ActivityCategory, on_delete=models.CASCADE, default=11)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=4)
+    slug = models.SlugField(blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Activity, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{}'.format(self.title)

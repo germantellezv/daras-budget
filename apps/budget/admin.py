@@ -12,6 +12,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('name','budget_type')
     readonly_fields = ('slug',)
     class Meta:
         verbose_name = "Tipos de servicio"
@@ -95,4 +96,21 @@ class EquipmentAPUAdmin(admin.ModelAdmin):
 class SecureAPUAdmin(admin.ModelAdmin):
     list_display = ('subitem','secure','amount','daily_price','performance','value')
     
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ('title', 'unit','unit_value', 'slug')
+    list_editable = ('unit', 'unit_value')
+    readonly_fields = ('slug',)
+    class Meta:
+        verbose_name = "Actividades"
 
+@admin.register(ActivityCategory)
+class ActivityCategoryAdmin(admin.ModelAdmin):
+    class Meta:
+        verbose_name = "Categoría de actividad"
+@admin.register(BudgetType)
+class BudgetTypeAdmin(admin.ModelAdmin):
+    list_display = ('id','title','slug')
+
+    class Meta:
+        verbose_name = "Tipo de presupuesto"

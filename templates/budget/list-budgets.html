@@ -56,13 +56,16 @@
                                 Cliente
                             </th>
                             <th>
-                                Tipo
+                                Tipo de presupuesto
+                            </th>
+                            <th>
+                                Especialidad
                             </th>
                             <th>
                                 Riesgo
                             </th>
                             <th>
-                                Creado
+                                Fecha de creación
                             </th>
                         </tr>
                     </thead>
@@ -79,6 +82,9 @@
                             </td>
                             <td>
                                 {{b.client.name | upper}}
+                            </td>
+                            <td>
+                                {{b.typeOf.title}}
                             </td>
                             <td>
                                 {{b.service.name | default_if_none:"-"}}
@@ -188,6 +194,7 @@ aria-hidden="true">
         /* Highlight current sidebar item */
 
         /* Customizing budget creation form */
+
         $("#budget_type").click(function(){
             option = this.value
             group = document.getElementById('formGroupTime')
@@ -195,12 +202,43 @@ aria-hidden="true">
             // if budget type is 'APU', keep it visible
             
             if (option == 1) {
+                // Keep scale time
                 group.style.display = "block";
+                
+
             }
-            else {
+            if (option == 2) {
                 time.value = 2;
                 group.style.display = "none";
+                
             }
+
+            // Custom select
+            var url = "{% url 'api_rest:services-list' %}"
+                fetch(url, {
+                method: 'GET',
+                })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        throw "Error en la llamada ajax";
+                    }
+                })
+                .then(function(data){
+                    
+                    var innerText = '<option value="" selected="">---------</option>';
+
+                    for (let i = 0; i < data.length; i++) {
+                        if (option == data[i].budget_type) {
+                            var innerText = innerText + `
+                            <option value="${data[i].id}">${data[i].name}</options>
+                            `
+                        }
+                    }
+                    document.getElementById('id_service').innerHTML = innerText;
+                })
         })
         /* Customizing budget creation form */
 

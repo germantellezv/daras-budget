@@ -4,6 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'units', views.UnitViewSet, basename='units')
+router.register(r'services', views.ServicesViewSet, basename='services')
 router.register(r'materials', views.MaterialViewSet, basename='materials')
 router.register(r'equipment', views.EquipmentViewSet, basename='equipment')
 router.register(r'transports', views.TransportViewSet, basename='transports')
@@ -22,6 +23,7 @@ urlpatterns = [
     path('budget/<int:budget_pk>/del-item/', views.delBudgetItem, name='del-item'),
     path('budget/<int:budget_pk>/update/item/<int:item_pk>', views.updateBudgetItem, name='update-item'),
     path('budget/<int:budget_pk>/add-subitem/<int:budgetItem_id>', views.addBudgetSubitem, name='add-subitem'),
+    path('budget/<int:budget_pk>/add-activity/<int:budgetItem_id>', views.addBudgetActivity, name='add-activity'),
     path('budget/<int:budget_pk>/update/subitem/<int:subitem_pk>', views.updateBudgetSubitem, name='update-subitem'),
     path('budget/<int:budget_pk>/del-subitem/', views.delBudgetSubitem, name='del-subitem'),
     path('budget/<int:budget_slug>/item/<int:item_slug>/subitems', views.BudgetSubItemList.as_view(), name='budget-subitems'),
