@@ -1,0 +1,91 @@
+{% extends 'budget/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block title %}
+<title>Panel de Administración - DARAS </title>
+{% endblock title %}
+
+
+{% block content %}
+<!-- Heading -->
+<div class="row">
+    <div class="col-12">
+        <!-- Heading -->
+        <div class="card mb-1 wow fadeIn">
+
+            <!--Card content-->
+            <div class="card-body d-sm-flex justify-content-between">
+
+                <h6 class="mb-2 mb-sm-0 pt-1">
+                    <span class="text-muted">Dashboard</span>
+                    <span class="text-muted">/</span>
+                    <span>Administración</span>
+                </h6>
+
+            </div>
+
+        </div>
+        <!-- Heading -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+          
+          <div class="card-body">
+            <h5 class="card-title">Crear usuario</h5>
+            <p class="card-text">Aquí podras registrar nuevos usuarios de la plataforma o listar todos las que ya estén registrados. <strong> Estos usuarios deben ser miembros del equipo de trabajo de Daras Ingeniería </strong>.</p>
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="form-group w-25">
+                    <label for="">
+                        <small>Correo electrónico</small>
+                    </label>
+                    {% render_field form.username class="form-control" %}
+                </div>
+
+                <div class="form-group w-25">
+                    <label for="">
+                        <small>Nombre</small>
+                    </label>
+                    {% render_field form.first_name class="form-control" %}
+                </div>
+                <div class="form-group w-25">
+                    <label for="">
+                        <small>Apellidos</small>
+                    </label>
+                    {% render_field form.last_name class="form-control" %}
+                </div>
+                
+                <div class="form-group w-25">
+                    <label for="">
+                        <small>Contraseña</small>
+                    </label>
+                    {% render_field form.password1 class="form-control" %}
+                </div>
+                
+                <div class="form-group w-25">
+                    <label for="">
+                        <small>Confirmar contraseña</small>
+                    </label>
+                    <input type="password" name="password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}">
+                    <div class="invalid-feedback">
+                        {% for error in form.password2.errors  %}
+                        {{error}}
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">CREAR USUARIO</button>
+            </form>
+
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+    

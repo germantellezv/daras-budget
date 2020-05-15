@@ -22,6 +22,44 @@ import json
 
 
 # Create your views here.
+
+@login_required
+def createDarasUser(request):
+    """ Create Daras user view """
+    form = CreateDarasUserForm()
+    if request.method == 'POST':
+        form = CreateDarasUserForm(request.POST)
+        
+        if form.is_valid():
+            data = form.cleaned_data
+            
+            username = data['username']
+            password1 = data['password1']
+            password2 = data['password2']
+
+            member = User(username=username, password=password1)
+            member.first_name = data['first_name']
+            member.last_name = data['last_name']
+            member.save()
+            
+            p = Profile()
+            p.user = member
+            p.is_client = False
+            p.save()
+
+            return redirect('budget:administration')
+
+    return render(request, 'budget/create-user.html', {
+        'form':form
+    })
+
+@login_required
+def listDarasUsers(request):
+    daras_users = Profile.objects.filter(is_client=False)
+    return render(request, 'budget/list-users.html',{
+        'daras_users':daras_users,
+    })
+
 @login_required
 def panel(request):
     """ Panel view """
@@ -56,6 +94,19 @@ def createClient(request):
         })
 
 @login_required
+def listClient(request):
+    """ List clients """
+
+    clients = Client.objects.all()
+    return render(
+        request=request,
+        template_name='budget/list-clients.html', 
+        context= 
+        {
+            'clients':clients,
+        })
+
+@login_required
 def listBudgets(request):
 
     # Only render purposes
@@ -80,6 +131,7 @@ def createBudget(request):
         if form.is_valid():
             data = form.cleaned_data
             b = Budget()
+            
             b.typeOf = data['typeOf']
             b.client = data['client']
             b.service = data['service']
@@ -497,3 +549,7 @@ def PreviewBudget(request, budget_pk):
 
     pdf = render_to_pdf('budget/budget-preview.html', data)
     return HttpResponse(pdf, content_type='application/pdf')
+
+@login_required
+def PanelAdmin(request):
+    return render(request, 'budget/administration.html')

@@ -23,7 +23,10 @@ from . import views
 app_name = 'budget'
 urlpatterns = [
     path('panel/', views.panel, name='panel' ),
+    path('panel/crear/usuario/', views.createDarasUser, name='create-daras-user'),
     path('panel/crear/cliente/', views.createClient, name='create-client'),
+    path('panel/ver/clientes/', views.listClient, name='list-client'),
+    path('panel/ver/usuarios/', views.listDarasUsers, name='list-users'),
     path('panel/ver/presupuestos/', views.listBudgets, name='list-budgets' ),
     path('panel/crear/presupuesto/', views.createBudget, name='create-budget' ),
     path('panel/completar/presupuesto/<int:pk>', views.fillBudget, name='fill-budget'),
@@ -33,4 +36,6 @@ urlpatterns = [
     path('panel/presupuesto/<int:budget_pk>/item/<int:item_pk>/actualizar/subitem/<int:subitem_pk>/', views.updateBudgetSubitem, name='update-subitem'),
     path('panel/preview/presupuesto/<int:budget_pk>/',views.PreviewBudget, name="preview-budget"),
     path('panel/preview/presupuesto/<int:budget_pk>/item/<int:item_pk>/subitem/<int:subitem_pk>/', views.PreviewAPU, name='preview-apu'),
+    path('panel/admin/', views.PanelAdmin, name='administration' ),
+
 ]

@@ -98,8 +98,8 @@ class SecureAPUAdmin(admin.ModelAdmin):
     
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('title', 'unit','unit_value', 'slug')
-    list_editable = ('unit', 'unit_value')
+    list_display = ('title', 'unit','unit_value','service','slug')
+    list_editable = ('service',)
     readonly_fields = ('slug',)
     class Meta:
         verbose_name = "Actividades"

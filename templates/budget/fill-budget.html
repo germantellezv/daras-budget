@@ -131,6 +131,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Optional row -->
+                    {% if not budget.typeOf.slug == 'apu' %}
+                    <div class="row mb-5">
+                        <div class="col-sm-12 col-lg-12 p-0 border">
+                            <h5>Resultados</h5>
+                        </div>
+                        
+                    </div>
+                    {% endif %}
+                                        
                     <!-- Second row -->
                     <div class="row mb-5">
                         <div class="col-sm-12 col-lg-12 p-0">
@@ -140,10 +151,16 @@
                                     <tr class="text-center blue lighten-5">
                                         <th class="font-weight-bold">Descripción</th>
                                         <th class="font-weight-bold">Unidad</th>
+                                        <th class="font-weight-bold">Cantidad</th>
                                         {% if budget.typeOf.slug == 'apu' %}
                                         <th class="font-weight-bold">Duración</th>
                                         {% endif %}
-                                        <th class="font-weight-bold">Cantidad</th>
+                                        {% if not budget.typeOf.slug == 'apu' %}
+                                        <th class="font-weight-bold">Precio unitario</th>
+                                        <th class="font-weight-bold">Precio total</th>
+                                        <!-- hidden cell -->
+                                        <th class="font-weight-bold" hidden>Precio total oculto</th>
+                                        {% endif %}
                                         <th class="font-weight-bold">Opciones</th>
                                     </tr>
                                 </thead>
@@ -151,9 +168,8 @@
                                 {% for item in items %}
                                 <div>
                                     <tbody>
-                                        <tr class="blue lighten-5" data-type="section" data-sectionid="{{item.id}}"
-                                            data-budgetCode="{{budget.id}}">
-                                            <td colspan="3" class="p-2">
+                                        <tr class="blue lighten-5" data-type="section" data-sectionid="{{item.id}}" data-itemslug="{{item.slug}}" data-budgetCode="{{budget.id}}">
+                                            <td colspan="4" class="p-2">
                                                 <p id="desc{{item.id}}" class="m-0">
                                                     <strong>
                                                         {{item.description}}
@@ -169,7 +185,7 @@
                                         {% if item.subitems %}
                                         {% for i in item.subitems.all %}
                                         <tr class="" data-type="product" data-id="{{i.id}}"
-                                            data-budgetCode="{{budget.id}}">
+                                            data-budgetCode="{{budget.id}}" data-itemslug="{{item.slug}}">
                                             <td class="p-2" style="width: 50%;">
                                                 <p class="m-0">
                                                     {{i.description}}
@@ -180,6 +196,11 @@
                                                     {{i.unit.acronym}} - {{i.unit.name}}
                                                 </p>
                                             </td>
+                                            <td class="text-center p-2">
+                                                <p class="m-0">
+                                                    {{i.amount}}
+                                                </p>
+                                            </td>
                                             {% if budget.typeOf.slug == 'apu' %}
                                             <td class="text-center p-2">
                                                 <p class="m-0">
@@ -187,11 +208,19 @@
                                                 </p>
                                             </td>
                                             {% endif %}
+                                            {% if not budget.typeOf.slug == 'apu' %}
                                             <td class="text-center p-2">
-                                                <p class="m-0">
-                                                    {{i.amount}}
-                                                </p>
+                                                $ {{i.unit_value}}
                                             </td>
+                                            <td class="text-center p-2">
+                                                $ {{i.total_value}}
+                                            </td>
+                                            <!-- hidden cell -->
+                                            <td class="total_value" hidden>
+                                                {{i.total_value}}
+                                            </td>
+                                            {% endif %}
+                                            
                                             <td class="p-2 text-right text-muted">
                                                 <i class="delProduct fas fa-trash-alt mr-1"
                                                     style="cursor: pointer;"></i>
@@ -466,7 +495,7 @@
                                         <input id="productAmount" type="number" name="amount" class="form-control"
                                             required>
                                     </div>
-
+                                    
                                 </form>
                             </div>
                             <!-- Modal footer -->
@@ -511,34 +540,52 @@
                                         <label for="">
                                             <small>Unidad</small>
                                         </label>
-                                        <select class="form-control" name="unit">
+                                        <select id="updateProductUnit" class="form-control" name="unit">
                                             <option selected></option>
                                             {% for u in units %}
-                                            <option value="{{u.id}}">({{u.acronym|upper}})- {{u.name|lower|capfirst}}
+                                            <option value="{{u.id}}">{{u.acronym|upper}} - {{u.name|lower|capfirst}}
                                             </option>
                                             {% endfor %}
                                         </select>
-                                    </div>
-                                    <!-- Days -->
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <label for="">
-                                                <small>Duración de la actividad</small>
-                                            </label>
-                                            <input id="productDuration" type="number" name="duration"
-                                                class="form-control" required>
-                                        </div>
                                     </div>
                                     <!-- Amount -->
                                     <div class="form-group">
                                         <label for="">
                                             <small>Cantidad</small>
                                         </label>
-                                        <input id="productAmount" type="number" name="amount" class="form-control"
+                                        <input id="updateProductAmount" type="number" name="amount" class="form-control"
                                             required>
                                     </div>
+
+                                    <!-- Duration -->
+                                    {% if budget.typeOf.slug == 'apu' %}
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <small>Duración de la actividad</small>
+                                            </label>
+                                            <input id="updateProductDuration" type="number" name="duration"
+                                                class="form-control" required>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- Unit value -->
+                                    {% if not budget.typeOf.slug == 'apu' %}
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <small>Precio unitario</small>
+                                            </label>
+                                            <input id="updateProductUnitValue" type="number" step="0.01" name="unit_value" class="form-control">
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    
                                     
                                 </form>
+
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
@@ -615,6 +662,7 @@
                                         <th>Categoría</th>
                                         <th>Unidad</th>
                                         <th>Precio unitario</th>
+                                        <th hidden>Precio unitario oculto</th>
                                         <th>Opciones</th>
                                     </thead>
                                     <tbody>
@@ -624,6 +672,9 @@
                                             <td class="text-center">{{a.category.title}}</td>
                                             <td class="text-center">{{a.unit.acronym}}</td>
                                             <td class="text-center">{{a.unit_value|safe}}</td>
+                                            <!-- hidden cell -->
+                                            <td class="text-center" hidden>{{a.unit_value}}</td>
+
                                             <td class="text-center">
                                                 <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#testModal">Agregar</a>
                                             </td>
@@ -660,29 +711,49 @@
                             <div class="modal-body">
                                 <form id="addActivityForm" action="" method="post">
                                     {% csrf_token %}
-                                    <label for="">
-                                        <small>Descripción de la actividad</small>
-                                    </label>
                                     <div class="form-group">
+                                        <label for="">
+                                            <small>Descripción de la actividad</small>
+                                        </label>
                                         <input type="text" name="description" id="activityDescription" class="form-control form-control-sm" readonly>
                                     </div>
-                                    <label for="">
-                                        <small>Unidad</small>
-                                    </label>
+
                                     <div class="form-group">
+                                        <label for="">
+                                            <small>Unidad</small>
+                                        </label>
                                         <input type="text" name="unit" id="activityUnit" class="form-control form-control-sm" readonly>
                                     </div>
-                                    <label for="">
-                                        <small>Precio unitario</small>
-                                    </label>
+                                    <!-- Unit value -->
                                     <div class="form-group">
+                                        <label for="">
+                                            <small>Precio unitario</small>
+                                        </label>
                                         <input type="text" name="unit_value" id="activityUnitValue" class="form-control form-control-sm" readonly>
                                     </div>
-                                    <label for="">
-                                        <small>Cantidad</small>
-                                    </label>
+
+                                    <!-- Hidden unit value -->
+                                    <div class="form-group" hidden>
+                                        <label for="">
+                                            <small>Precio unitario</small>
+                                        </label>
+                                        <input type="text" id="hiddenUnitValue" class="form-control form-control-sm" readonly>
+                                    </div>
+
+                                    <!-- Amount -->
                                     <div class="form-group">
+                                        <label for="">
+                                            <small>Cantidad</small>
+                                        </label>
                                         <input type="number" name="amount" id="activityAmount" class="form-control form-control-sm" required>
+                                    </div>
+
+                                    <div>
+                                        <p>
+                                            <small>
+                                                El costo total del presupuesto sería $<span id="estimatedTotalValue">0</span>
+                                            </small>
+                                        </p>
                                     </div>
                                 </form>
                             </div>
@@ -718,7 +789,8 @@
 
 {% block scripts %}
 {{block.super}}
-
+<!-- Humanize numbers -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -749,6 +821,7 @@
             }
                
         });
+
         $('.dataTables_length').addClass('bs-select');
 
         /* Enable autofocus in Bootstrap modals */
@@ -1078,9 +1151,47 @@
 
         /* Update product */
         $("#BudgetElements").on('click', 'tbody tr td .updateProduct', function (e) {
-            console.log(this);
-            var subitem_pk = $(this).parent().parent().data('id')
             
+            var subitem_pk = $(this).parent().parent().data('id')
+            var description = $(this).parent().parent().children().first().text().trim()
+            $("#updateProductDescription").val(description)
+            
+            var unit = $(this).parent().parent().children().first().next().text().trim()
+            $('#updateProductUnit option').filter(function(){
+                var option = $(this).text().trim()
+                if(option == `${unit}` ){
+                    return $(this)
+                }
+            }).prop('selected', true);
+            
+            var amount = $(this).parent().parent().children().first().next().next().text().trim()
+            $("#updateProductAmount").val(amount)
+            
+            "{% if not budget.typeOf.slug == 'apu' %}"
+                var budget_slug = '{{budget.slug}}'
+                var item_slug = $(this).parent().parent().data('itemslug')
+                
+                $.get(`/api/budget/${budget_slug}/item/${item_slug}/subitems`, 
+                function(data){
+                    // Filter method iterate over every json object in the json query result
+                    return data.filter(
+                        function(data){
+                            // find object in json
+                            if (data.id == subitem_pk) {
+                                $("#updateProductUnitValue").val(data.unit_value)
+                            }
+                        }
+                    )
+                })
+            "{% else %}"
+                var duration = $(this).parent().parent().children().first().next().next().next().text().trim()
+                $("#updateProductDuration").val(duration)
+            "{% endif %}"
+            
+
+
+
+
             // Show modal
             $("#updateProductModal").modal('toggle')
 
@@ -1121,12 +1232,53 @@
             var category = $(this).parent().parent().children().first().next().text()
             var unit = $(this).parent().parent().children().first().next().next().text()
             var unit_value = $(this).parent().parent().children().first().next().next().next().text()
+            var hidden_unit_value = $(this).parent().parent().children().last().prev().text()
             $("#activityUnitValue").val(unit_value)
             $("#activityDescription").val(category+" - "+title)
             $("#activityUnit").val(unit)
-            
+            $("#hiddenUnitValue").val(hidden_unit_value)
 
-            /*  */
+            /* Show total value estimated */
+            var total_value = document.getElementsByClassName('total_value')
+            // Store sum of total_value of activities already added to the budget
+            var current_total_value = 0;
+            for (let i = 0; i < total_value.length; i++) {
+                    const element = total_value[i].innerHTML.trim();
+                    current_total_value +=  parseFloat(element)
+            }
+            current_total_value = numeral(current_total_value).format('0,0');
+            document.getElementById('estimatedTotalValue').innerHTML = current_total_value;
+            
+            /* Estimate the budget total value */
+            function estimateBudgetTotalValue(html_element) {
+                var amount = html_element.value;
+                // console.log("Cantidad >>",amount);
+                var unit_price = parseFloat($("#hiddenUnitValue").val())
+                // console.log("Precio unitario >>",unit_price);
+                var total_value = document.getElementsByClassName('total_value')
+                // Store sum of total_value of activities already added to the budget
+                var aux = 0;
+                // Estimated value of the budget
+                var estimation = 0;
+
+                for (let i = 0; i < total_value.length; i++) {
+                    const element = total_value[i].innerHTML.trim();
+                    aux +=  parseFloat(element)
+                }
+                // console.log("Aux >>",aux);
+                estimation = (amount * unit_price) + aux;
+                estimation = numeral(estimation).format('0,0');
+                document.getElementById('estimatedTotalValue').innerHTML = estimation;
+            }
+
+            $("#activityAmount").keyup(function(){
+                estimateBudgetTotalValue(this);
+            })
+            $("#activityAmount").change(function(){
+                estimateBudgetTotalValue(this);
+            })
+            
+            /* Add activity */
             $("#addActivity").click(function(){
                 var last_item_id = parseInt($("tr[data-type='section']:last").data('sectionid'))
                 var form = document.getElementById("addActivityForm")
@@ -1144,11 +1296,9 @@
                     }
                 })
                 .then(function(data){
-                    console.log(data);
                     window.location.reload();
                 })
             })
-            /*  */
 
             
         })

@@ -26,6 +26,6 @@ urlpatterns = [
     path('budget/<int:budget_pk>/add-activity/<int:budgetItem_id>', views.addBudgetActivity, name='add-activity'),
     path('budget/<int:budget_pk>/update/subitem/<int:subitem_pk>', views.updateBudgetSubitem, name='update-subitem'),
     path('budget/<int:budget_pk>/del-subitem/', views.delBudgetSubitem, name='del-subitem'),
-    path('budget/<int:budget_slug>/item/<int:item_slug>/subitems', views.BudgetSubItemList.as_view(), name='budget-subitems'),
+    path('budget/<slug:budget_slug>/item/<slug:item_slug>/subitems', views.BudgetSubItemList.as_view(), name='budget-subitems'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

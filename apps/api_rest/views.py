@@ -20,6 +20,9 @@ from .serializers import *
 # Models
 from apps.budget.models import *
 
+# Exceptions
+from django.core.exceptions import ObjectDoesNotExist
+
 class ServicesViewSet(viewsets.ModelViewSet):
     """
     API endpoint that lists all services
@@ -166,9 +169,10 @@ class BudgetSubItemList(generics.ListAPIView):
         slug = self.kwargs['budget_slug']
         b = Budget.objects.get(slug=slug)
         slug2 = self.kwargs['item_slug']
-        i = BudgetItem.objects.get(slug=slug2)
+        i = BudgetItem.objects.get(budget=b, slug=slug2)
+        # import pdb; pdb.set_trace()
+        result = i.subitems.all().values()
 
-        result = BudgetSubItem.objects.filter(budget=b, item=i)
         return result
 
 @api_view(['GET','POST'])
@@ -236,16 +240,23 @@ def updateBudgetSubitem(request, budget_pk, subitem_pk):
     budget = Budget.objects.get(id=budget_pk)
     subitem = BudgetSubItem.objects.get(id=subitem_pk, budget=budget)
     description = request.data.get('description')
-    duration = request.data.get('duration')
     amount= request.data.get('amount')
     aux= request.data.get('unit')
     unit = Unit.objects.get(id=aux)
     
     subitem.description = description
-    subitem.duration = duration
     subitem.amount = amount
     subitem.unit = unit
+
+    if budget.typeOf.slug == 'apu':
+        duration = request.data.get('duration')
+        subitem.duration = duration
+
+    if not budget.typeOf.slug == 'apu':
+        subitem.unit_value = request.data.get('unit_value')
+        subitem.total_value = Decimal(subitem.unit_value) * int(subitem.amount)
     subitem.save()
+
     return Response({'status':'ok'})
 
 @api_view(['POST'])
@@ -253,7 +264,7 @@ def addBudgetActivity(request, budget_pk, budgetItem_id):
     """ Add Budget Activity """
     budget = Budget.objects.get(id=budget_pk)
     item = BudgetItem.objects.get(id=budgetItem_id)
-    unit = get_object_or_404(Unit, acronym=request.data.get('unit'))
+    unit = Unit.objects.get(acronym=request.data.get('unit')) or None
     
     subitem = BudgetSubItem()
     subitem.budget = budget

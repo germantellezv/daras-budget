@@ -14,11 +14,11 @@ from django.dispatch import receiver
 
 class Client(models.Model):
     """ Client Model """
-    nit = models.CharField(max_length=20)
-    name = models.CharField(max_length=100)
-    country = models.CharField(max_length=50, default="Colombia")
-    state = models.CharField(max_length=50, default="Bolívar")
-    city = models.CharField(max_length=50, default="Cartagena")
+    nit = models.CharField(max_length=20, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=50, default="Colombia", blank=True, null=True)
+    state = models.CharField(max_length=50, default="Bolívar", blank=True, null=True)
+    city = models.CharField(max_length=50, default="Cartagena", blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -47,7 +47,6 @@ class BudgetType(models.Model):
     def __str__(self):
         """Unicode representation of BudgetType."""
         return self.title
-
 
 class Service(models.Model):
     """ Type of service Model """
@@ -261,6 +260,10 @@ class Budget(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        self.slug = "{}-{}".format(slugify(self.subject),now().strftime("%Y%m%d%H%M%S"))
+        super(Budget, self).save(*args, **kwargs)
+    
     def __str__(self):
         return '{} - {} - {}'.format(self.client, self.service, self.subject)
 
@@ -282,6 +285,10 @@ class BudgetSubItem(models.Model):
     total_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     apu_exists = models.BooleanField(default=False)
     
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.description)
+        super(BudgetSubItem, self).save(*args, **kwargs)
+
     def __str__(self):
         return '(subitem) - {}'.format(self.description)
 
@@ -297,6 +304,10 @@ class BudgetItem(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     slug = models.SlugField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.description)
+        super(BudgetItem, self).save(*args, **kwargs)
 
     def __str__(self):
         return 'Actividad del presupuesto {}'.format(self.budget.subject)
@@ -406,7 +417,7 @@ class ActivityCategory(models.Model):
 
 class Activity(models.Model):
     title = models.CharField(max_length=150)
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
     category = models.ForeignKey(ActivityCategory, on_delete=models.CASCADE, default=11)
