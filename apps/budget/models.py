@@ -60,7 +60,7 @@ class Service(models.Model):
         super(Service, self).save(*args, **kwargs)
 
     def __str__(self):
-        return '{0} - Presupuesto de tipo {1}'.format(self.name, self.budget_type)
+        return '{0} - {1}'.format(self.name, self.budget_type)
 
     class Meta:
         verbose_name = "tipo de servicio"
@@ -405,7 +405,7 @@ class SubtotalAPU(models.Model):
 
 class ActivityCategory(models.Model):
     title = models.CharField(max_length=50)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=4)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
     slug = models.SlugField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -416,12 +416,13 @@ class ActivityCategory(models.Model):
         return '{}'.format(self.title)
 
 class Activity(models.Model):
+    
     title = models.CharField(max_length=150)
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE,  blank=True, null=True)
     unit_value = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     
-    category = models.ForeignKey(ActivityCategory, on_delete=models.CASCADE, default=11)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=4)
+    category = models.ForeignKey(ActivityCategory, on_delete=models.CASCADE, default=21)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=6)
     slug = models.SlugField(blank=True, null=True)
     
     def save(self, *args, **kwargs):

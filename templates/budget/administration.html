@@ -92,8 +92,8 @@
                         </p>
                     </small>
                     <div class="text-center">
-                        <button type="button" class="btn btn-rounded btn-primary"><i class="fas fa-plus pr-2" aria-hidden="true"></i></i>Crear</button>
-                        <button type="button" class="btn btn-rounded btn-amber"><i class="fas fa-th-list pr-2" aria-hidden="true"></i>Ver</button>
+                        <a href="{% url 'budget:create-activity' %}" class="btn btn-rounded btn-primary"><i class="fas fa-plus pr-2"></i></i>Crear</a>
+                        <a href="{% url 'budget:list-activities' %}" class="btn btn-rounded btn-amber"><i class="fas fa-th-list pr-2"></i>Ver</a>
                     </div>
 
                 </div>

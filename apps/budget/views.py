@@ -61,6 +61,37 @@ def listDarasUsers(request):
     })
 
 @login_required
+def createBudgetActivity(request):
+    form = CreateActivityForm()
+    services = Service.objects.filter(budget_type__slug='actividades')
+    if request.method == 'POST':
+        form = CreateActivityForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            a = Activity()
+            a.title = data['title']
+            a.unit = data['unit']
+            a.unit_value = data['unit_value']
+            a.service = data['service']
+            a.category = data['category']
+            a.save()
+
+            return redirect('budget:administration')
+
+    return render(request, 'budget/create-activity.html', {
+        'form':form,
+        'services':services,
+    })
+
+@login_required
+def listActivities(request):
+    activities = Activity.objects.all()
+
+    return render(request, 'budget/list-activities.html',{
+        'activities':activities,
+    })
+
+@login_required
 def panel(request):
     """ Panel view """
     return render(

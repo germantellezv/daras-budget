@@ -12,7 +12,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name','budget_type')
+    list_display = ('id','name','budget_type')
     readonly_fields = ('slug',)
     class Meta:
         verbose_name = "Tipos de servicio"
@@ -98,16 +98,20 @@ class SecureAPUAdmin(admin.ModelAdmin):
     
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('title', 'unit','unit_value','service','slug')
-    list_editable = ('service',)
+    list_display = ('title', 'unit','unit_value','service','category')
+    list_editable = ('category','service')
     readonly_fields = ('slug',)
     class Meta:
         verbose_name = "Actividades"
 
 @admin.register(ActivityCategory)
 class ActivityCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id','title','service','slug')
+    # list_editable = ('service',)
+
     class Meta:
         verbose_name = "Categoría de actividad"
+
 @admin.register(BudgetType)
 class BudgetTypeAdmin(admin.ModelAdmin):
     list_display = ('id','title','slug')

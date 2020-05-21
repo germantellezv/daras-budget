@@ -53,3 +53,20 @@ Equipment(name="", service=x, daily_price=),
 Equipment(name="", service=x, daily_price=),
 Equipment(name="", service=x, daily_price=),
 ])
+
+
+from apps.budget.models import Activity, ActivityCategory, Service
+s=Service.objects.get(id=4)
+c=ActivityCategory.objects.get(id=20)
+Activity.objects.bulk_create([
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='', unit_value=, category=c, service=s),
+])

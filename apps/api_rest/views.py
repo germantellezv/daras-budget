@@ -9,7 +9,7 @@ from rest_framework import status
 # Utilities
 from django.shortcuts import get_object_or_404
 from decimal import Decimal
-
+import json
 # Decorators
 from rest_framework.decorators import action
 from rest_framework.decorators import api_view
@@ -30,6 +30,15 @@ class ServicesViewSet(viewsets.ModelViewSet):
 
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class ActivityCategoriesViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that lists all services
+    """
+
+    queryset = ActivityCategory.objects.all()
+    serializer_class = ActivityCategorySerializer
     permission_classes = [permissions.IsAuthenticated]
 
 class MaterialViewSet(viewsets.ModelViewSet):
@@ -280,3 +289,18 @@ def addBudgetActivity(request, budget_pk, budgetItem_id):
     item.subitems.add(subitem)
 
     return Response({'status':'ok'})
+
+@api_view(['GET'])
+def getActivityCategory(request):
+    """ Get activity category list by service id """
+    service_id = request.GET['service_id']
+    query = Service.objects.get(id=int(service_id))
+    categories = ActivityCategory.objects.filter(service=query)
+    
+    data = []
+    for i in categories:
+        aux = {'id':i.id,'title':i.title,'service':i.service.id}
+        result = json.dumps(aux, ensure_ascii=False).encode('utf8')
+        data.append(result)
+
+    return Response(data)

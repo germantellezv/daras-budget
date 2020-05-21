@@ -6,6 +6,13 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from django.contrib.auth.models import User
 
+class CreateActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = ('title','unit','unit_value','category','service')
+
+
+
 
 class CreateDarasUserForm(UserCreationForm, forms.ModelForm):
     username = forms.EmailField(max_length=50, required=True)

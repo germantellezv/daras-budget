@@ -15,6 +15,16 @@ class WorkforceSerializer(serializers.HyperlinkedModelSerializer):
         model = Workforce
         fields = ['id','service','name','experience_time','daily_salary']
 
+class ActivityCategorySerializer(serializers.HyperlinkedModelSerializer):
+    service = serializers.SlugRelatedField(
+        slug_field='id',
+        many=False,
+        read_only=True
+    )
+    class Meta:
+        model = ActivityCategory
+        fields = ['id','title', 'service','slug']
+
 class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
