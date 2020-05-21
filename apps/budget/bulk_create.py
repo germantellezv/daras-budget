@@ -18,8 +18,6 @@ Workforce(service=x,name="ARMADOR IV",daily_salary=115620.00),
 Workforce(service=x,name="AYUDANTE TEC.",daily_salary=113350.38),
 Workforce(service=x,name="PINTOR",daily_salary=98335.38),
 ])
-
-
 from apps.budget.models import Equipment, Service
 x = Service.objects.get(id=2)
 Equipment.objects.bulk_create([
@@ -57,16 +55,11 @@ Equipment(name="", service=x, daily_price=),
 
 from apps.budget.models import Activity, ActivityCategory, Service
 s=Service.objects.get(id=4)
-c=ActivityCategory.objects.get(id=20)
+c=ActivityCategory.objects.get(id=21)
 Activity.objects.bulk_create([
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
-    Activity(title='', unit_value=, category=c, service=s),
+    Activity(title='Puertas en lamina cocina CR cal 16', unit_value=374540, category=c, service=s),
+    Activity(title='Puerta principal  apersianada en lamina CR cal 16', unit_value=652840, category=c, service=s),
+    Activity(title='Ventaneria en lamina C R cal 18', unit_value=438841, category=c, service=s),
+    Activity(title='Division acrilico ducha', unit_value=322238, category=c, service=s),
+    Activity(title='Espejos baño', unit_value=208379, category=c, service=s),
 ])
