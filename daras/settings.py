@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'apps.budget.apps.BudgetConfig',
     # Third party apps
     'widget_tweaks',
-    'material',
-
 ]
 
 MIDDLEWARE = [
