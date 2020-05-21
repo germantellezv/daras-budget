@@ -1,4 +1,4 @@
 staticfiles
 entorno
-db.sqlite3
 .vscode
+#db.sqlite3
