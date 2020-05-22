@@ -35,7 +35,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Clientes registrados</h5>
+                <h5 class="card-title">Usuarios registrados</h5>
+                <small>Unicamente miembros del equipo de trabajo de DARAS</small>
                 
                 <table class="table table-stripped">
                     <thead>
@@ -50,10 +51,16 @@
                             <th>
                                 Nombre
                             </th>
-                           
                             <th>
                                 Apellidos
                             </th>
+                            
+                            {% if request.user.is_staff %}
+                            <th>
+                                Opciones
+                            </th>
+                            {% endif %}
+                                
                             
                         </tr>
                     </thead>
@@ -72,6 +79,15 @@
                             <td>
                                 {{profile.user.last_name}}
                             </td>
+                            
+                            {% if request.user.is_staff %}
+                            <td>
+                                <a href="{% url 'budget:edit-daras-user' user_id=profile.user.id %}">
+                                    Editar
+                                </a>
+                            </td>
+                            {% endif %}
+                                
                         </tr>
                     {% endfor %}
                     </tbody>

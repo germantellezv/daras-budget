@@ -11,9 +11,6 @@ class CreateActivityForm(forms.ModelForm):
         model = Activity
         fields = ('title','unit','unit_value','category','service')
 
-
-
-
 class CreateDarasUserForm(UserCreationForm, forms.ModelForm):
     username = forms.EmailField(max_length=50, required=True)
 
@@ -28,6 +25,10 @@ class CreateDarasUserForm(UserCreationForm, forms.ModelForm):
         model = User
         fields = ('username','first_name','last_name','password1','password2')
 
+class EditDarasUserForm(UserCreationForm, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username','first_name','last_name','password1')
 
 class CreateClientForm(forms.ModelForm):
     class Meta:

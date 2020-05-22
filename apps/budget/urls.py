@@ -24,6 +24,7 @@ app_name = 'budget'
 urlpatterns = [
     path('panel/', views.panel, name='panel' ),
     path('panel/crear/usuario/', views.createDarasUser, name='create-daras-user'),
+    path('panel/editar/usuario/<int:user_id>', views.editDarasUser, name='edit-daras-user'),
     path('panel/crear/cliente/', views.createClient, name='create-client'),
     path('panel/crear/actividad/', views.createBudgetActivity, name='create-activity'),
     path('panel/ver/actividades/', views.listActivities, name='list-activities'),

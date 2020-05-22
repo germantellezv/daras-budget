@@ -53,6 +53,27 @@ def createDarasUser(request):
         'form':form
     })
 
+def editDarasUser(request,user_id):
+    form = EditDarasUserForm()
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        form = EditDarasUserForm(request.POST)
+        if form.is_Valid():
+            data = form.cleaned_data
+            u = User.objects.get(id=user_id)
+            u.first_name = data['first_name']
+            u.last_name = data['last_name']
+            u.email = data['email']
+            if data['password1'] != '':
+                u.password = data['password1']
+            u.save()
+            return redirect('budget:administration')
+    return render(request, 'budget/edit-user.html',{
+        'form':form,
+        'user':user,
+    })
+
 @login_required
 def listDarasUsers(request):
     daras_users = Profile.objects.filter(is_client=False)
