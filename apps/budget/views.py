@@ -1,6 +1,6 @@
 # Django
 import tempfile
-from weasyprint import HTML
+# from weasyprint import HTML
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
