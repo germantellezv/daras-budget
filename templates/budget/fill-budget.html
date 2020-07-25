@@ -1,12 +1,6 @@
-{% extends "budget/base.html" %}
-{% load static %}
-{% load widget_tweaks %}
-{% load humanize %}
-{% block title %}
+{% extends "budget/base.html" %} {% load static %} {% load widget_tweaks %} {% load humanize %} {% block title %}
 <title>Crear presupuesto - DARAS</title>
-{% endblock title %}
-
-{% block content %}
+{% endblock title %} {% block content %}
 
 <!-- Heading -->
 <div class="row">
@@ -62,9 +56,7 @@
                                 <label for="id_client" style="margin: 0;">
                                     <small>Consecutivo</small>
                                 </label>
-                                <input type="text" name="consecutive" class="form-control form-control-sm"
-                                    placeholder="" {% if budget.consecutive %}value="{{budget.consecutive}}"
-                                    {% endif %} size="18">
+                                <input type="text" name="consecutive" class="form-control form-control-sm" placeholder="" {% if budget.consecutive %}value="{{budget.consecutive}}" {% endif %} size="18">
                             </div>
                             <!-- Client -->
                             <div class="form-group">
@@ -85,10 +77,7 @@
                                 <label for="id_description" style="margin: 0;">
                                     <small for="id_description">Descripción del proyecto</small>
                                 </label>
-                                <input type="text" name="subject" id="id_description"
-                                    class="form-control form-control-sm"
-                                    {% if budget.subject %}value="{{budget.subject}}" {% else %} autofocus {% endif %}>
-                                {{budget.description}}
+                                <input type="text" name="subject" id="id_description" class="form-control form-control-sm" {% if budget.subject %}value="{{budget.subject}}" {% else %} autofocus {% endif %}> {{budget.description}}
                             </div>
                         </div>
                         <!-- Second column -->
@@ -113,9 +102,9 @@
                                         Número de revisión
                                     </small>
                                 </label>
-                                <input type="number" name="rev_number" min="0" class="text-center form-control form-control-sm" id="id_rev_number" {% if budget.rev_number %}value="{{budget.rev_number}}"{% endif %}>
+                                <input type="number" name="rev_number" min="0" class="text-center form-control form-control-sm" id="id_rev_number" {% if budget.rev_number %}value="{{budget.rev_number}}" {% endif %}>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="" style="margin: 0;">
                                     <small>
@@ -127,7 +116,7 @@
                                     <option value="{{x}}" {% if x == budget.iva_option %}selected{% endif %}>{{y}}</option>
                                 {% endfor %}
                                 </select>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -138,10 +127,10 @@
                         <div class="col-sm-12 col-lg-12 p-0 border">
                             <h5>Resultados</h5>
                         </div>
-                        
+
                     </div>
                     {% endif %}
-                                        
+
                     <!-- Second row -->
                     <div class="row mb-5">
                         <div class="col-sm-12 col-lg-12 p-0">
@@ -154,8 +143,7 @@
                                         <th class="font-weight-bold">Cantidad</th>
                                         {% if budget.typeOf.slug == 'apu' %}
                                         <th class="font-weight-bold">Duración</th>
-                                        {% endif %}
-                                        {% if not budget.typeOf.slug == 'apu' %}
+                                        {% endif %} {% if not budget.typeOf.slug == 'apu' %}
                                         <th class="font-weight-bold">Precio unitario</th>
                                         <th class="font-weight-bold">Precio total</th>
                                         <!-- hidden cell -->
@@ -164,8 +152,7 @@
                                         <th class="font-weight-bold">Opciones</th>
                                     </tr>
                                 </thead>
-                                {% if items %}
-                                {% for item in items %}
+                                {% if items %} {% for item in items %}
                                 <div>
                                     <tbody>
                                         <tr class="blue lighten-5" data-type="section" data-sectionid="{{item.id}}" data-itemslug="{{item.slug}}" data-budgetCode="{{budget.id}}">
@@ -177,15 +164,12 @@
                                                 </p>
                                             </td>
                                             <td colspan="2" class="p-2 text-right text-muted">
-                                                <i class="delSection fas fa-trash-alt mr-1"
-                                                    style="cursor: pointer;"></i>
+                                                <i class="delSection fas fa-trash-alt mr-1" style="cursor: pointer;"></i>
                                                 <i class="updateSection fas fa-edit  mr-1" style="cursor: pointer;"></i>
                                             </td>
                                         </tr>
-                                        {% if item.subitems %}
-                                        {% for i in item.subitems.all %}
-                                        <tr class="" data-type="product" data-id="{{i.id}}"
-                                            data-budgetCode="{{budget.id}}" data-itemslug="{{item.slug}}">
+                                        {% if item.subitems %} {% for i in item.subitems.all %}
+                                        <tr class="" data-type="product" data-id="{{i.id}}" data-budgetCode="{{budget.id}}" data-itemslug="{{item.slug}}">
                                             <td class="p-2" style="width: 50%;">
                                                 <p class="m-0">
                                                     {{i.description}}
@@ -207,8 +191,7 @@
                                                     {{i.duration}}
                                                 </p>
                                             </td>
-                                            {% endif %}
-                                            {% if not budget.typeOf.slug == 'apu' %}
+                                            {% endif %} {% if not budget.typeOf.slug == 'apu' %}
                                             <td class="text-center p-2">
                                                 $ {{i.unit_value}}
                                             </td>
@@ -220,34 +203,27 @@
                                                 {{i.total_value}}
                                             </td>
                                             {% endif %}
-                                            
+
                                             <td class="p-2 text-right text-muted">
-                                                <i class="delProduct fas fa-trash-alt mr-1"
-                                                    style="cursor: pointer;"></i>
+                                                <i class="delProduct fas fa-trash-alt mr-1" style="cursor: pointer;"></i>
                                                 <i class="updateProduct fas fa-edit mr-1" style="cursor: pointer;"></i>
                                             </td>
                                         </tr>
-                                        {% endfor %}
-                                        {% endif %}
+                                        {% endfor %} {% endif %}
                                     </tbody>
                                 </div>
-                                {% endfor %}
-                                {% endif %}
+                                {% endfor %} {% endif %}
                             </table>
                             <table class="w-100 m-0 p-0">
                                 <tr class="text-center blue lighten-5">
                                     <td colspan="3">
-                                        
+
                                         {% if budget.typeOf.slug == 'apu' %}
-                                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal"
-                                                data-target="#sectionModal">Agregar sección</a>
-                                            <a href="#" class="btn btn-sm btn-primary" data-toggle="modal"
-                                                data-target="#productModal">Agregar producto</a>
-                                        {% else %}
-                                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#sectionModal">Agregar sección</a>
-                                            <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#activityProduct">Agregar actividad</a>
-                                        {% endif %}
-                                            
+                                        <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#sectionModal">Agregar sección</a>
+                                        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#productModal">Agregar producto</a> {% else %}
+                                        <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#sectionModal">Agregar sección</a>
+                                        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#activityProduct">Agregar actividad</a> {% endif %}
+
                                     </td>
                                 </tr>
                             </table>
@@ -260,38 +236,34 @@
                             <!--Textarea with icon prefix-->
                             <div class="md-form">
                                 <i class="fas fa-pencil-alt prefix"></i>
-                                <textarea id="form10" name="comment" class="md-textarea form-control"
-                                    rows="5">{% if budget.comment %}{{budget.comment}}{% endif %}</textarea>
+                                <textarea id="form10" name="comment" class="md-textarea form-control" rows="5">{% if budget.comment %}{{budget.comment}}{% endif %}</textarea>
                                 <label for="form10">Observaciones</label>
                             </div>
 
                         </div>
                         <div class="col-sm-3">
                             <h5>Costos indirectos</h5>
-                            
+
                             <div class="form-group m-0">
                                 <label for="" style="margin: 0;">
                                     <small>
                                         Porcentaje de administración
                                     </small>
-                                </label>
-                                {% render_field form.administration_percentage class="form-control form-control-sm text-center" placeholder="% de administración" value=budget.administration_percentage required="true" %}
+                                </label> {% render_field form.administration_percentage class="form-control form-control-sm text-center" placeholder="% de administración" value=budget.administration_percentage required="true"%}
                             </div>
                             <div class="form-group m-0">
                                 <label for="" style="margin: 0;">
                                     <small>
                                         Porcentaje de imprevistos
                                     </small>
-                                </label>
-                                {% render_field form.incidentals_percentaje class="form-control form-control-sm text-center" placeholder="% de imprevistos" value=budget.incidentals_percentaje required="true" %}
+                                </label> {% render_field form.incidentals_percentaje class="form-control form-control-sm text-center" placeholder="% de imprevistos" value=budget.incidentals_percentaje required="true" %}
                             </div>
                             <div class="form-group m-0">
                                 <label for="" style="margin: 0;">
                                     <small>
                                         Porcentaje de utilidad
                                     </small>
-                                </label>
-                                {% render_field form.utility_percentage class="form-control form-control-sm text-center" placeholder="% de utilidad" value=budget.utility_percentage required="true" %}
+                                </label> {% render_field form.utility_percentage class="form-control form-control-sm text-center" placeholder="% de utilidad" value=budget.utility_percentage required="true" %}
                             </div>
                             <!-- AIU -->
                             <div class="form-group m-0">
@@ -300,14 +272,14 @@
                                         Aplicar AIU a
                                     </small>
                                 </label>
-                                
+
                                 <select name="aiu_over" class="form-control form-control-sm">
                                 {% for x,y in form.fields.aiu_over.choices %}
                                     <option value="{{ x }}"{% if budget.aiu_over == x %} selected{% endif %}>{{ y }}</option>
                                 {% endfor %}
                                 </select>
                             </div>
-                            
+
                         </div>
                     </div>
                     <!-- Form buttons -->
@@ -320,8 +292,7 @@
                 <!---------------------------- APU MODALS---------------------------->
 
                 <!-- Modal to add section -->
-                <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -342,8 +313,7 @@
                                         <label for="">
                                             <small>Título</small>
                                         </label>
-                                        <input id="sectionName" type="text" name="description" class="form-control"
-                                            required="true" autofocus>
+                                        <input id="sectionName" type="text" name="description" class="form-control" required="true" autofocus>
                                     </div>
 
                                 </form>
@@ -351,8 +321,7 @@
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
                                 <button id="addSection" type="button" class="btn btn-primary btn-sm">Agregar</button>
                             </div>
                         </div>
@@ -361,8 +330,7 @@
                 <!-- Modal to add section -->
 
                 <!-- Modal to update section -->
-                <div class="modal fade" id="updateSectionModal" tabindex="-1" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="updateSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -391,8 +359,7 @@
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
                                 <button id="updateSection" type="button" class="btn btn-primary btn-sm">Agregar</button>
                             </div>
                         </div>
@@ -401,8 +368,7 @@
                 <!-- Modal to update section -->
 
                 <!-- Modal to delete section -->
-                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -410,8 +376,7 @@
                             <!-- Modal header -->
                             <div class="modal-header">
                                 <h4 class="modal-title w-100" id="myModalLabel">Eliminar sección</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -427,8 +392,7 @@
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-light btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancelar</button>
                                 <button id="delSection" type="button" class="btn btn-danger btn-sm">Eliminar</button>
                             </div>
                         </div>
@@ -437,8 +401,7 @@
                 <!-- Modal to delete section -->
 
                 <!-- Modal to add product -->
-                <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -446,8 +409,7 @@
                             <!-- Modal header -->
                             <div class="modal-header">
                                 <h4 class="modal-title w-100" id="myModalLabel">Agregar producto</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -461,8 +423,7 @@
                                         <label for="">
                                             <small>Descripción del producto</small>
                                         </label>
-                                        <input id="productDescription" type="text" name="description"
-                                            class="form-control" required="true" autofocus="true">
+                                        <input id="productDescription" type="text" name="description" class="form-control" required="true" autofocus="true">
                                     </div>
                                     <!-- Unit -->
                                     <div class="form-group">
@@ -483,8 +444,7 @@
                                             <label for="">
                                                 <small>Duración de la actividad</small>
                                             </label>
-                                            <input id="productDuration" type="number" name="duration"
-                                                class="form-control" required>
+                                            <input id="productDuration" type="number" name="duration" class="form-control" required>
                                         </div>
                                     </div>
                                     <!-- Amount -->
@@ -492,16 +452,14 @@
                                         <label for="">
                                             <small>Cantidad</small>
                                         </label>
-                                        <input id="productAmount" type="number" name="amount" class="form-control"
-                                            required>
+                                        <input id="productAmount" type="number" name="amount" class="form-control" required>
                                     </div>
-                                    
+
                                 </form>
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
                                 <button id="addProduct" type="button" class="btn btn-primary btn-sm">Agregar</button>
                             </div>
                         </div>
@@ -518,8 +476,7 @@
                             <!-- Modal header -->
                             <div class="modal-header">
                                 <h4 class="modal-title w-100" id="myModalLabel">Actualizar actividad</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -553,8 +510,7 @@
                                         <label for="">
                                             <small>Cantidad</small>
                                         </label>
-                                        <input id="updateProductAmount" type="number" name="amount" class="form-control"
-                                            required>
+                                        <input id="updateProductAmount" type="number" name="amount" class="form-control" required>
                                     </div>
 
                                     <!-- Duration -->
@@ -564,8 +520,7 @@
                                             <label for="">
                                                 <small>Duración de la actividad</small>
                                             </label>
-                                            <input id="updateProductDuration" type="number" name="duration"
-                                                class="form-control" required>
+                                            <input id="updateProductDuration" type="number" name="duration" class="form-control" required>
                                         </div>
                                     </div>
                                     {% endif %}
@@ -581,16 +536,15 @@
                                         </div>
                                     </div>
                                     {% endif %}
-                                    
-                                    
-                                    
+
+
+
                                 </form>
 
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
                                 <button id="updateProduct" type="button" class="btn btn-primary btn-sm">Agregar</button>
                             </div>
                         </div>
@@ -599,8 +553,7 @@
                 <!-- Modal to update product -->
 
                 <!-- Modal to delete product -->
-                <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -608,8 +561,7 @@
                             <!-- Modal header -->
                             <div class="modal-header">
                                 <h4 class="modal-title w-100" id="myModalLabel">Eliminar producto</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -625,23 +577,21 @@
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-light btn-sm"
-                                    data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancelar</button>
                                 <button id="delProduct" type="button" class="btn btn-danger btn-sm">Eliminar</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Modal to delete product -->
-                
+
                 <!---------------------------- APU MODALS---------------------------->
-                
+
                 <!---------------------------- ACTIVITIES MODALS---------------------------->
-                
+
                 <!-- Add activity -->
-                
-                <div class="modal fade" id="activityProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
+
+                <div class="modal fade" id="activityProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -649,8 +599,7 @@
                             <!-- Modal header -->
                             <div class="modal-header">
                                 <h4 class="modal-title w-100" id="myModalLabel">Agregar actividad</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -666,7 +615,7 @@
                                         <th>Opciones</th>
                                     </thead>
                                     <tbody>
-                                    {% for a in activities %}
+                                        {% for a in activities %}
                                         <tr>
                                             <td class="text-center">{{a.title}}</td>
                                             <td class="text-center">{{a.category.title}}</td>
@@ -679,9 +628,9 @@
                                                 <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#testModal">Agregar</a>
                                             </td>
                                         </tr>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </tbody>
-                                </table>                               
+                                </table>
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
@@ -693,8 +642,7 @@
                 </div>
 
                 <!-- Ask amount of activity -->
-                <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
                     <!-- Change class .modal-sm to change the size of the modal -->
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -702,8 +650,7 @@
                             <!-- Modal header -->
                             <div class="modal-header">
                                 <h4 class="modal-title w-100" id="myModalLabel">Agregar actividad</h4>
-                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">
+                                <button id="addBtnSectionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -768,9 +715,9 @@
                 <!-- Ask amount of activity -->
 
                 <!-- Add activity -->
-                
+
                 <!---------------------------- ACTIVITIES MODALS---------------------------->
-                
+
 
 
 
@@ -785,14 +732,11 @@
 </div>
 
 
-{% endblock content %}
-
-{% block scripts %}
-{{block.super}}
+{% endblock content %} {% block scripts %} {{block.super}}
 <!-- Humanize numbers -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         /* Highlight current sidebar item */
         $('#sidebar .list-group-item').removeClass('active');
@@ -804,28 +748,28 @@
         /* Table search */
         $('#activities_table').DataTable({
             "pagingType": "simple_numbers",
-            "pageLength":3, //Initial amount of rows
+            "pageLength": 3, //Initial amount of rows
             "lengthChange": true,
-            "lengthMenu": [ 3,10, 25, 50, 75, 100 ],
-            "language":{
+            "lengthMenu": [3, 10, 25, 50, 75, 100],
+            "language": {
                 "info": "Página _PAGE_ de _PAGES_",
-                "search":         "Buscar:",
-                "lengthMenu":     "Mostrar _MENU_ filas",
+                "search": "Buscar:",
+                "lengthMenu": "Mostrar _MENU_ filas",
                 "paginate": {
-                    "first":      "Inicio",
-                    "last":       "Fin",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"
-                }, 
+                    "first": "Inicio",
+                    "last": "Fin",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
 
             }
-               
+
         });
 
         $('.dataTables_length').addClass('bs-select');
 
         /* Enable autofocus in Bootstrap modals */
-        $('.modal').on('shown.bs.modal', function () {
+        $('.modal').on('shown.bs.modal', function() {
             $(this).find('[autofocus]').focus();
         });
 
@@ -835,12 +779,12 @@
         /* Validate element data-type of the last element of table */
         function validateLastElement() {
             var type = $("#BudgetElements tr:last").data("type")
-            // Type can return 'section' or 'product'
+                // Type can return 'section' or 'product'
             return type;
         }
 
         /* Add section element */
-        $("#addSection").click(function () {
+        $("#addSection").click(function() {
 
             var v = validateLastElement();
 
@@ -849,24 +793,23 @@
                 const data = new FormData(form);
                 var url = "{% url 'api_rest:create-item' budget.id %}";
                 fetch(url, {
-                    method: 'POST',
-                    body: data
-                }).then(function (response) {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    else {
-                        throw "Error en la llamada ajax";
-                    }
-                }).then(function (data) {
+                        method: 'POST',
+                        body: data
+                    }).then(function(response) {
+                        if (response.ok) {
+                            return response.json()
+                        } else {
+                            throw "Error en la llamada ajax";
+                        }
+                    }).then(function(data) {
 
-                    console.log("Texto: ", data);
+                        console.log("Texto: ", data);
 
-                    var HTMLString =
-                        `
+                        var HTMLString =
+                            `
                     <tbody>
                         <tr class="blue lighten-5" data-type="section" data-sectionid="${data.id}" data-budgetCode="{{budget.id}}">
-                            <td colspan="3" class="p-2">
+                            <td colspan="4" class="p-2">
                                 <strong>
                                     <p class="m-0">${data.description}</p>
                                 </strong>
@@ -878,19 +821,18 @@
                         </tr>
                     </tbody>
                     `
-                    element = document.createElement("tbody");
-                    element.innerHTML = HTMLString;
-                    document.getElementById('BudgetElements').appendChild(element)
-                    $("#sectionModal").modal('toggle')
-                    $("#sectionName").val('')
-                    // $("#sectionDuration").val('')
+                        element = document.createElement("tbody");
+                        element.innerHTML = HTMLString;
+                        document.getElementById('BudgetElements').appendChild(element)
+                        $("#sectionModal").modal('toggle')
+                        $("#sectionName").val('')
+                            // $("#sectionDuration").val('')
 
-                })
-                    .catch(function (err) {
+                    })
+                    .catch(function(err) {
                         console.log(err);
                     });
-            }
-            else {
+            } else {
                 console.log("No se puede agregar otra sección. No tiene sentido.");
 
                 var alert = document.createElement('div')
@@ -909,28 +851,27 @@
         })
 
         /* Add product to table */
-        $("#addProduct").click(function () {
+        $("#addProduct").click(function() {
             var lastSectionID = parseInt($("tr[data-type='section']:last").data('sectionid'))
             var form = document.getElementById("productForm");
             const data = new FormData(form);
             /* Sadly I have to write the URL in this way and not with the Django tag URL */
             var url = `/api/budget/{{budget.id}}/add-subitem/${lastSectionID}`;
             fetch(url, {
-                method: 'POST',
-                body: data
-            }).then(function (response) {
-                if (response.ok) {
-                    return response.json()
-                }
-                else {
-                    throw "Error en la llamada ajax";
-                }
-            }).then(function (data) {
+                    method: 'POST',
+                    body: data
+                }).then(function(response) {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        throw "Error en la llamada ajax";
+                    }
+                }).then(function(data) {
 
-                // console.log("Texto: ", data);
-                var lastSection = $("#BudgetElements tbody:last")
-                var HTMLString =
-                    `
+                    // console.log("Texto: ", data);
+                    var lastSection = $("#BudgetElements tbody:last")
+                    var HTMLString =
+                        `
                         <td class="p-2" style="width: 50%;">
                             <p class="m-0">${data.description}</p>
                         </td>
@@ -957,18 +898,18 @@
                         </td>
                     `
 
-                element = document.createElement("tr");
-                // element.classList.add("grey")
-                element.classList.add("lighten-3")
-                element.setAttribute("data-type", "product")
-                element.setAttribute("data-productid", `${data.id}`)
-                element.setAttribute("data-budgetCode", "{{budget.id}}")
-                element.innerHTML = HTMLString;
+                    element = document.createElement("tr");
+                    // element.classList.add("grey")
+                    element.classList.add("lighten-3")
+                    element.setAttribute("data-type", "product")
+                    element.setAttribute("data-productid", `${data.id}`)
+                    element.setAttribute("data-budgetCode", "{{budget.id}}")
+                    element.innerHTML = HTMLString;
 
-                $(element).appendTo(lastSection)
+                    $(element).appendTo(lastSection)
 
-            })
-                .catch(function (err) {
+                })
+                .catch(function(err) {
                     console.log(err);
                 });
             $("#productModal").modal('toggle')
@@ -980,9 +921,9 @@
         })
 
         /* Delete product */
-        $("#BudgetElements").on('click', 'tbody tr td .delProduct', function (e) {
+        $("#BudgetElements").on('click', 'tbody tr td .delProduct', function(e) {
             var container = document.getElementById('delProductContent')
-            // Reset modal content
+                // Reset modal content
             container.innerHTML = "";
             // console.log("EEEEE",e);
 
@@ -1012,39 +953,38 @@
             // Show modal
             $("#deleteProductModal").modal('toggle')
 
-            $("#delProduct").click(function () {
-                var form = document.getElementById("deleteProductForm");
-                const data = new FormData(form);
-                var url = `{% url 'api_rest:del-subitem' budget.id %}`;
-                fetch(url, {
-                    method: 'POST',
-                    body: data
-                }).then(function (response) {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    else {
-                        throw "Error en la llamada ajax";
-                    }
+            $("#delProduct").click(function() {
+                    var form = document.getElementById("deleteProductForm");
+                    const data = new FormData(form);
+                    var url = `{% url 'api_rest:del-subitem' budget.id %}`;
+                    fetch(url, {
+                            method: 'POST',
+                            body: data
+                        }).then(function(response) {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                throw "Error en la llamada ajax";
+                            }
+                        })
+                        .then(function(data) {
+                            console.log(data.status);
+                            row.remove()
+                            $("#deleteProductModal").modal('toggle')
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
                 })
-                    .then(function (data) {
-                        console.log(data.status);
-                        row.remove()
-                        $("#deleteProductModal").modal('toggle')
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-            })
-            /* End del product on click */
+                /* End del product on click */
 
         });
         /* End del product */
 
         /* Delete section */
-        $("#BudgetElements").on('click', 'tbody tr td .delSection', function (e) {
+        $("#BudgetElements").on('click', 'tbody tr td .delSection', function(e) {
             var container = document.getElementById('delSectionContent')
-            // Reset modal content
+                // Reset modal content
             container.innerHTML = "";
 
             var section_name = $(this).parent().parent().find('p').first().text().trim();
@@ -1077,105 +1017,103 @@
             // Show modal
             $("#deleteSectionModal").modal('toggle')
 
-            $("#delSection").click(function () {
-                var form = document.getElementById("deleteSectionForm");
-                const data = new FormData(form);
-                var url = `{% url 'api_rest:del-item' budget.id %}`;
-                fetch(url, {
-                    method: 'POST',
-                    body: data
-                }).then(function (response) {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    else {
-                        throw "Error en la llamada ajax";
-                    }
+            $("#delSection").click(function() {
+                    var form = document.getElementById("deleteSectionForm");
+                    const data = new FormData(form);
+                    var url = `{% url 'api_rest:del-item' budget.id %}`;
+                    fetch(url, {
+                            method: 'POST',
+                            body: data
+                        }).then(function(response) {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                throw "Error en la llamada ajax";
+                            }
+                        })
+                        .then(function(data) {
+                            // console.log(data.status);
+                            block.remove()
+                            $("#deleteSectionModal").modal('toggle')
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
                 })
-                    .then(function (data) {
-                        // console.log(data.status);
-                        block.remove()
-                        $("#deleteSectionModal").modal('toggle')
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-            })
-            /* End del section on click */
+                /* End del section on click */
 
         });
         /* End del section */
 
         /* Update section */
-        $("#BudgetElements").on('click', 'tbody tr td .updateSection', function (e) {
+        $("#BudgetElements").on('click', 'tbody tr td .updateSection', function(e) {
             // console.log(this);
             var section_name = $(this).parent().parent().find('p').first().text().trim();
             var section_pk = $(this).parent().parent().data('sectionid')
-            
+
             // Clear description input in modal
             $("#updateSectionName").val("")
-            
+
             // Show modal
             $("#updateSectionModal").modal('toggle')
 
             // Change description in database and in the template
-            $("#updateSection").click(function () {
-                var form = document.getElementById("updateSectionForm");
-                const data = new FormData(form);
-                var url = `/api/budget/{{budget.id}}/update/item/${section_pk}`;
-                fetch(url, {
-                    method: 'POST',
-                    body: data
-                }).then(function (response) {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    else {
-                        throw "Error en la llamada ajax";
-                    }
+            $("#updateSection").click(function() {
+                    var form = document.getElementById("updateSectionForm");
+                    const data = new FormData(form);
+                    var url = `/api/budget/{{budget.id}}/update/item/${section_pk}`;
+                    fetch(url, {
+                            method: 'POST',
+                            body: data
+                        }).then(function(response) {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                throw "Error en la llamada ajax";
+                            }
+                        })
+                        .then(function(data) {
+                            // Reload page
+                            location.reload()
+                                // Toggle modal
+                            $("#updateSectionModal").modal('toggle')
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
                 })
-                .then(function (data) {
-                    // Reload page
-                    location.reload()
-                    // Toggle modal
-                    $("#updateSectionModal").modal('toggle')
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-            })
-            /* End del section on click */
+                /* End del section on click */
 
         });
         /* End update section */
 
         /* Update product */
-        $("#BudgetElements").on('click', 'tbody tr td .updateProduct', function (e) {
-            
+        $("#BudgetElements").on('click', 'tbody tr td .updateProduct', function(e) {
+
             var subitem_pk = $(this).parent().parent().data('id')
             var description = $(this).parent().parent().children().first().text().trim()
             $("#updateProductDescription").val(description)
-            
+
             var unit = $(this).parent().parent().children().first().next().text().trim()
-            $('#updateProductUnit option').filter(function(){
+            $('#updateProductUnit option').filter(function() {
                 var option = $(this).text().trim()
-                if(option == `${unit}` ){
+                if (option == `${unit}`) {
                     return $(this)
                 }
             }).prop('selected', true);
-            
+
             var amount = $(this).parent().parent().children().first().next().next().text().trim()
             $("#updateProductAmount").val(amount)
-            
+
             "{% if not budget.typeOf.slug == 'apu' %}"
-                var budget_slug = '{{budget.slug}}'
-                var item_slug = $(this).parent().parent().data('itemslug')
-                
-                $.get(`/api/budget/${budget_slug}/item/${item_slug}/subitems`, 
-                function(data){
+            var budget_slug = '{{budget.slug}}'
+            var item_slug = $(this).parent().parent().data('itemslug')
+
+            $.get(`/api/budget/${budget_slug}/item/${item_slug}/subitems`,
+                function(data) {
                     // Filter method iterate over every json object in the json query result
                     return data.filter(
-                        function(data){
+                        function(data) {
                             // find object in json
                             if (data.id == subitem_pk) {
                                 $("#updateProductUnitValue").val(data.unit_value)
@@ -1184,10 +1122,10 @@
                     )
                 })
             "{% else %}"
-                var duration = $(this).parent().parent().children().first().next().next().next().text().trim()
-                $("#updateProductDuration").val(duration)
+            var duration = $(this).parent().parent().children().first().next().next().next().text().trim()
+            $("#updateProductDuration").val(duration)
             "{% endif %}"
-            
+
 
 
 
@@ -1196,113 +1134,112 @@
             $("#updateProductModal").modal('toggle')
 
             // Change description in database and in the template
-            $("#updateProduct").click(function () {
-                var form = document.getElementById("updateProductForm");
-                const data = new FormData(form);
-                var url = `/api/budget/{{budget.id}}/update/subitem/${subitem_pk}`;
-                fetch(url, {
-                    method: 'POST',
-                    body: data
-                }).then(function (response) {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    else {
-                        throw "Error en la llamada ajax";
-                    }
+            $("#updateProduct").click(function() {
+                    var form = document.getElementById("updateProductForm");
+                    const data = new FormData(form);
+                    var url = `/api/budget/{{budget.id}}/update/subitem/${subitem_pk}`;
+                    fetch(url, {
+                            method: 'POST',
+                            body: data
+                        }).then(function(response) {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                throw "Error en la llamada ajax";
+                            }
+                        })
+                        .then(function(data) {
+                            // Reload page
+                            location.reload()
+                                // Toggle modal
+                            $("#updateProductModal").modal('toggle')
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
                 })
-                .then(function (data) {
-                    // Reload page
-                    location.reload()
-                    // Toggle modal
-                    $("#updateProductModal").modal('toggle')
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-            })
-            /* End del section on click */
+                /* End del section on click */
 
         });
         /* End update product */
 
         /* ---------- Activities ----------- */
-        $("#activities_table").on('click','tbody tr td a',function(e){
-            var title = $(this).parent().parent().children().first().text()
-            var category = $(this).parent().parent().children().first().next().text()
-            var unit = $(this).parent().parent().children().first().next().next().text()
-            var unit_value = $(this).parent().parent().children().first().next().next().next().text()
-            var hidden_unit_value = $(this).parent().parent().children().last().prev().text()
-            $("#activityUnitValue").val(unit_value)
-            $("#activityDescription").val(category+" - "+title)
-            $("#activityUnit").val(unit)
-            $("#hiddenUnitValue").val(hidden_unit_value)
+        $("#activities_table").on('click', 'tbody tr td a', function(e) {
+                var title = $(this).parent().parent().children().first().text()
+                var category = $(this).parent().parent().children().first().next().text()
+                var unit = $(this).parent().parent().children().first().next().next().text()
+                var unit_value = $(this).parent().parent().children().first().next().next().next().text()
+                var hidden_unit_value = $(this).parent().parent().children().last().prev().text()
+                $("#activityUnitValue").val(unit_value)
+                $("#activityDescription").val(category + " - " + title)
+                $("#activityUnit").val(unit)
+                $("#hiddenUnitValue").val(hidden_unit_value)
 
-            /* Show total value estimated */
-            var total_value = document.getElementsByClassName('total_value')
-            // Store sum of total_value of activities already added to the budget
-            var current_total_value = 0;
-            for (let i = 0; i < total_value.length; i++) {
-                    const element = total_value[i].innerHTML.trim();
-                    current_total_value +=  parseFloat(element)
-            }
-            current_total_value = numeral(current_total_value).format('0,0');
-            document.getElementById('estimatedTotalValue').innerHTML = current_total_value;
-            
-            /* Estimate the budget total value */
-            function estimateBudgetTotalValue(html_element) {
-                var amount = html_element.value;
-                // console.log("Cantidad >>",amount);
-                var unit_price = parseFloat($("#hiddenUnitValue").val())
-                // console.log("Precio unitario >>",unit_price);
+                /* Show total value estimated */
                 var total_value = document.getElementsByClassName('total_value')
-                // Store sum of total_value of activities already added to the budget
-                var aux = 0;
-                // Estimated value of the budget
-                var estimation = 0;
-
+                    // Store sum of total_value of activities already added to the budget
+                var current_total_value = 0;
                 for (let i = 0; i < total_value.length; i++) {
                     const element = total_value[i].innerHTML.trim();
-                    aux +=  parseFloat(element)
+                    current_total_value += parseFloat(element)
                 }
-                // console.log("Aux >>",aux);
-                estimation = (amount * unit_price) + aux;
-                estimation = numeral(estimation).format('0,0');
-                document.getElementById('estimatedTotalValue').innerHTML = estimation;
-            }
+                current_total_value = numeral(current_total_value).format('0,0');
+                document.getElementById('estimatedTotalValue').innerHTML = current_total_value;
 
-            $("#activityAmount").keyup(function(){
-                estimateBudgetTotalValue(this);
-            })
-            $("#activityAmount").change(function(){
-                estimateBudgetTotalValue(this);
-            })
-            
-            /* Add activity */
-            $("#addActivity").click(function(){
-                var last_item_id = parseInt($("tr[data-type='section']:last").data('sectionid'))
-                var form = document.getElementById("addActivityForm")
-                const data = new FormData(form);
-                var url = `/api/budget/{{budget.id}}/add-activity/${last_item_id}`;
-                fetch(url, {
-                method: 'POST',
-                body: data})
-                .then(function (response) {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    else {
-                        throw "Error en la llamada ajax";
-                    }
-                })
-                .then(function(data){
-                    window.location.reload();
-                })
-            })
+                /* Estimate the budget total value */
+                function estimateBudgetTotalValue(html_element) {
+                    var amount = html_element.value;
+                    // console.log("Cantidad >>",amount);
+                    var unit_price = parseFloat($("#hiddenUnitValue").val())
+                        // console.log("Precio unitario >>",unit_price);
+                    var total_value = document.getElementsByClassName('total_value')
+                        // Store sum of total_value of activities already added to the budget
+                    var aux = 0;
+                    // Estimated value of the budget
+                    var estimation = 0;
 
-            
-        })
-        /* ---------- Activities ----------- */
+                    for (let i = 0; i < total_value.length; i++) {
+                        const element = total_value[i].innerHTML.trim();
+                        aux += parseFloat(element)
+                    }
+                    // console.log("Aux >>",aux);
+                    estimation = (amount * unit_price) + aux;
+                    estimation = numeral(estimation).format('0,0');
+                    document.getElementById('estimatedTotalValue').innerHTML = estimation;
+                }
+
+                $("#activityAmount").keyup(function() {
+                    estimateBudgetTotalValue(this);
+                })
+                $("#activityAmount").change(function() {
+                    estimateBudgetTotalValue(this);
+                })
+
+                /* Add activity */
+                $("#addActivity").click(function() {
+                    var last_item_id = parseInt($("tr[data-type='section']:last").data('sectionid'))
+                    var form = document.getElementById("addActivityForm")
+                    const data = new FormData(form);
+                    var url = `/api/budget/{{budget.id}}/add-activity/${last_item_id}`;
+                    fetch(url, {
+                            method: 'POST',
+                            body: data
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                throw "Error en la llamada ajax";
+                            }
+                        })
+                        .then(function(data) {
+                            window.location.reload();
+                        })
+                })
+
+
+            })
+            /* ---------- Activities ----------- */
 
 
     })
