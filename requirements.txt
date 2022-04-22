@@ -19,7 +19,7 @@ Pillow==7.0.0
 pycodestyle==2.5.0
 pycparser==2.20
 pylint==2.4.4
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 Pyphen==0.9.5
 pytz==2019.3
 reportlab==3.5.42
